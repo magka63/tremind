@@ -1,0 +1,63 @@
+//Rules for generating errors
+
+"RHS missing in"
+: lrexpr OP ;
+
+"LHS missing in"
+: OP lrexpr ;
+
+"Operand missing after '+' in"
+: expression ADD
+| expression ADD OP
+| expression ADD RPAR
+| addconst ADD
+| addconst ADD OP
+| addconst ADD RPAR ;
+
+"Operand missing after '-' in"
+: expression NEG
+| expression NEG OP
+| expression NEG RPAR
+| addconst NEG
+| addconst NEG OP
+| addconst NEG RPAR ;
+
+"Operand missing after '*' in"
+: flow MUL
+| flow MUL OP
+| flow MUL RPAR
+| mulconst MUL
+| mulconst MUL OP
+| mulconst MUL RPAR ;
+
+"Operand missing after '/' in" 
+: flow DIV
+| flow DIV OP
+| flow DIV RPAR
+| mulconst DIV
+| mulconst DIV OP
+| mulconst DIV RPAR ;
+
+"Operand missing before '+' in"
+: ADD expression
+| expression OP ADD expression
+| LPAR ADD expression ;
+
+"Operand missing before '*' in"
+: MUL flow
+| expression OP MUL expression
+| LPAR MUL flow ;
+
+"Operand missing before '/' in"
+: DIV flow
+| expression OP DIV expression
+| LPAR DIV flow ;
+
+"Unexpected closing parenthesis in"
+: expression RPAR
+| addconst RPAR ;
+
+"Unexpected opening parenthesis in"
+: LPAR expression
+| LPAR addconst 
+| LPAR expression OP expression ;

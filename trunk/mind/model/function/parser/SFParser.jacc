@@ -1,0 +1,485 @@
+/*
+ * Copyright 2004: 
+ * Marcus Bergendorff <amaebe-1@student.luth.se> 
+ * Jan Sköllermark <jansok-1@student.luth.se>
+ * 
+ * This file is part of reMIND.
+ *
+ * reMIND is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * reMIND is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with reMIND; if not, write to the Free Software Foundation,
+ * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
+
+%package	mind.model.function.parser
+%class SFParser
+%interface SFParserTokens
+
+%{
+    import mind.model.*;
+    import mind.model.function.*;
+    import mind.model.function.parser.*;
+    import java.util.*;
+
+/*
+ * throws Exception - this needs to bee added to the parse() method in the
+ * generatde source code otherwise it will Not compile.
+ */
+
+public%}
+
+%semantic  Object : lexer.semVal
+%get       lexer.token
+%next      lex()
+
+%type <Expr> lrexpr expression flowvar intvar floatvar parenthesis
+%type <SFFloat> addconst mulconst
+%type <String> flow int float
+%token SPACE COMMENT FLOWVAR FLOWVARTSO CONST OP LPAR RPAR INTVAR FLOATVAR INTVARTSO FLOATVARTSO
+%left ADD NEG 
+%left MUL DIV
+%left UMINUS
+
+%%
+/*
+ * Parser rules
+ */
+
+equation	: lrexpr OP lrexpr { sfeq = new SFEquation($1,(String)$2, $3); }
+		;
+
+lrexpr		: addconst { $$ =  new ConstExpr($1.floatValue()); }
+		| expression { $$ = $1; }
+		;
+
+expression	: expression ADD addconst { $$ = new AddExpr($1, new ConstExpr($3.floatValue())); }
+		| expression NEG addconst { $$ = new AddExpr($1, new ConstExpr(-$3.floatValue())); }
+		| addconst ADD expression { $$ = new AddExpr(new ConstExpr($1.floatValue()), $3); }
+		| addconst NEG expression { $3.neg(); $$ = new AddExpr(new ConstExpr($1.floatValue()), $3); }
+		| expression ADD expression { $$ = new AddExpr($1, $3); }
+		| expression NEG expression { $3.neg(); $$ = new AddExpr($1, $3); }
+		| flowvar { $$ = $1; }
+		| intvar { $$ = $1; }
+		| floatvar { $$ = $1; }
+		| parenthesis { $$ = $1; }
+		;
+
+addconst	: addconst ADD addconst { $$ = new SFFloat($1.add($3)); }
+		| addconst NEG addconst { $$ = new SFFloat($1.sub($3)); }
+		| mulconst { $$ = $1;  }
+		;
+
+mulconst	: mulconst MUL mulconst { $$ = new SFFloat($1.mult($3)); }
+		| mulconst DIV mulconst { $$ = new SFFloat($1.div($3)); }
+		| LPAR addconst RPAR { $$ = $2; }
+		| NEG mulconst %prec UMINUS { $$ = new SFFloat(-$2.floatValue()); }
+		| CONST { $$ = $1; }
+		;
+
+flowvar		: mulconst MUL flow MUL mulconst { $$ = new FlowExpr($1.floatValue()*$5.floatValue(), $3, tStepOffset); tStepOffset = 0; }
+		| mulconst MUL flow DIV mulconst { $$ = new FlowExpr($1.floatValue()/$5.floatValue(), $3, tStepOffset); tStepOffset = 0; }
+		| mulconst MUL flow { $$ = new FlowExpr($1.floatValue(), $3, tStepOffset); tStepOffset = 0; }
+		| mulconst MUL NEG flow MUL mulconst { $$ = new FlowExpr(-($1.floatValue()*$6.floatValue()), $4, tStepOffset); tStepOffset = 0; }
+		| mulconst MUL NEG flow DIV mulconst { $$ = new FlowExpr(-($1.floatValue()/$6.floatValue()), $4, tStepOffset); tStepOffset = 0; }
+		| mulconst MUL NEG flow { $$ = new FlowExpr(-$1.floatValue(), $4, tStepOffset); tStepOffset = 0; }
+		| NEG flow MUL mulconst { $$ = new FlowExpr(-$4.floatValue(), $2, tStepOffset); tStepOffset = 0; }
+		| NEG flow DIV mulconst { $$ = new FlowExpr(-1/$4.floatValue(), $2, tStepOffset); tStepOffset = 0; }
+		| NEG flow { $$ = new FlowExpr(-1f, $2, tStepOffset); tStepOffset = 0; }
+		| flow MUL mulconst { $$ = new FlowExpr($3.floatValue(), $1, tStepOffset); tStepOffset = 0; }
+		| flow DIV mulconst { $$ = new FlowExpr(1/$3.floatValue(), $1, tStepOffset); tStepOffset = 0; }
+		| flow { $$ = new FlowExpr(1f, $1, tStepOffset); tStepOffset = 0; }
+		;
+
+flow		: FLOWVAR { $$ = (String)$1; }
+		| FLOWVARTSO { $$ = timestepOffsetCheck((String)$1); }
+		;
+
+intvar		: mulconst MUL int MUL mulconst { $$ = new IntExpr($1.floatValue()*$5.floatValue(), $3, tStepOffset); tStepOffset = 0; }
+		| mulconst MUL int DIV mulconst { $$ = new IntExpr($1.floatValue()/$5.floatValue(), $3, tStepOffset); tStepOffset = 0; }
+		| mulconst MUL int { $$ = new IntExpr($1.floatValue(), $3, tStepOffset); tStepOffset = 0; }
+		| mulconst MUL NEG int MUL mulconst { $$ = new IntExpr(-($1.floatValue()*$6.floatValue()), $4, tStepOffset); tStepOffset = 0; }
+		| mulconst MUL NEG int DIV mulconst { $$ = new IntExpr(-($1.floatValue()/$6.floatValue()), $4, tStepOffset); tStepOffset = 0; }
+		| mulconst MUL NEG int { $$ = new IntExpr(-$1.floatValue(), $4, tStepOffset); tStepOffset = 0; }
+		| NEG int MUL mulconst { $$ = new IntExpr(-$4.floatValue(), $2, tStepOffset); tStepOffset = 0; }
+		| NEG int DIV mulconst { $$ = new IntExpr(-1/$4.floatValue(), $2, tStepOffset); tStepOffset = 0; }
+		| NEG int { $$ = new IntExpr(-1f, $2, tStepOffset); tStepOffset = 0; }
+		| int MUL mulconst { $$ = new IntExpr($3.floatValue(), $1, tStepOffset); tStepOffset = 0; }
+		| int DIV mulconst { $$ = new IntExpr(1/$3.floatValue(), $1, tStepOffset); tStepOffset = 0; }
+		| int { $$ = new IntExpr(1f, $1, tStepOffset); tStepOffset = 0; }
+		;
+
+int		: INTVAR { $$ = (String)$1; }
+		| INTVARTSO { $$ = timestepOffsetCheck((String)$1); }
+		;
+		
+floatvar	: mulconst MUL float MUL mulconst { $$ = new FloatExpr($1.floatValue()*$5.floatValue(), $3, tStepOffset); tStepOffset = 0; }
+		| mulconst MUL float DIV mulconst { $$ = new FloatExpr($1.floatValue()/$5.floatValue(), $3, tStepOffset); tStepOffset = 0; }
+		| mulconst MUL float { $$ = new FloatExpr($1.floatValue(), $3, tStepOffset); tStepOffset = 0; }
+		| mulconst MUL NEG float MUL mulconst { $$ = new FloatExpr(-($1.floatValue()*$6.floatValue()), $4, tStepOffset); tStepOffset = 0; }
+		| mulconst MUL NEG float DIV mulconst { $$ = new FloatExpr(-($1.floatValue()/$6.floatValue()), $4, tStepOffset); tStepOffset = 0; }
+		| mulconst MUL NEG float { $$ = new FloatExpr(-$1.floatValue(), $4, tStepOffset); tStepOffset = 0; }
+		| NEG float MUL mulconst { $$ = new FloatExpr(-$4.floatValue(), $2, tStepOffset); tStepOffset = 0; }
+		| NEG float DIV mulconst { $$ = new FloatExpr(-1/$4.floatValue(), $2, tStepOffset); tStepOffset = 0; }
+		| NEG float { $$ = new FloatExpr(-1f, $2, tStepOffset); tStepOffset = 0; }
+		| float MUL mulconst { $$ = new FloatExpr($3.floatValue(), $1, tStepOffset); tStepOffset = 0; }
+		| float DIV mulconst { $$ = new FloatExpr(1/$3.floatValue(), $1, tStepOffset); tStepOffset = 0; }
+		| float { $$ = new FloatExpr(1f, $1, tStepOffset); tStepOffset = 0; }
+		;
+
+float		: FLOATVAR { $$ = (String)$1; }
+		| FLOATVARTSO { $$ = timestepOffsetCheck((String)$1); }
+		;		
+
+parenthesis	: LPAR expression RPAR { $$ = new Parenthesis(new ConstExpr(1f), $2, new ConstExpr(1f)); }
+		| NEG LPAR expression RPAR { $$ = new Parenthesis(new ConstExpr(-1f), $3, new ConstExpr(1f)); }
+		| mulconst MUL LPAR expression RPAR { $$ = new Parenthesis(new ConstExpr($1.floatValue()), $4, new ConstExpr(1f)); }
+		| LPAR expression RPAR DIV mulconst { $$ = new Parenthesis(new ConstExpr(1f), $2, new ConstExpr(1/$5.floatValue())); }
+		| LPAR expression RPAR MUL mulconst { $$ = new Parenthesis(new ConstExpr(1f), $2, new ConstExpr($5.floatValue())); }
+		| mulconst MUL LPAR expression RPAR MUL mulconst { $$ = new Parenthesis(new ConstExpr($1.floatValue()), $4, new ConstExpr($7.floatValue())); }
+		| mulconst MUL LPAR expression RPAR DIV mulconst { $$ = new Parenthesis(new ConstExpr($1.floatValue()), $4, new ConstExpr(1/$7.floatValue())); }
+		;
+
+%%
+
+/*
+ * Method that handels all errors generated by the parser
+ */
+
+private void yyerror(String msg) throws Exception {
+    throw new Exception((yyerrno<0 ? msg : yyerrmsgs[yyerrno]));
+}
+
+/*
+ * Method that gets the next token from the lexer
+ */
+
+public int lex() throws Exception {
+    int val = 0;
+    try {
+        val = lexer.nextToken();
+    }
+    catch (Exception e) {
+        throw new Exception(e.getMessage());
+    }
+    return val;
+}
+
+/*
+ * Declaration of private variables
+ */
+
+private static SFLexer lexer;
+private Equation eq;
+private SFEquation sfeq;
+private String flow = "";
+private Flow [] c_inFlows;
+private Flow [] c_outFlows;
+private int c_timestep, c_numOfTimesteps, tStepOffset=0;
+private float c_const = 0, tmp_const = 0;
+private Vector c_floatVars, c_intVars;
+
+
+/*
+ * Gets the ID for a flow
+ * @param flow - name of the flow
+ * @return ID for the flow or null if the flow doesn't exist
+ */
+private ID getFlowID(String flow) {
+    
+    for (int i = 0; i<c_inFlows.length;i++) {
+        if(c_inFlows[i].toString().equalsIgnoreCase(flow))
+            return c_inFlows[i].getID();
+    }
+    
+    for (int i = 0; i<c_outFlows.length;i++) {
+        if(c_outFlows[i].toString().equalsIgnoreCase(flow))
+            return c_outFlows[i].getID();
+    }
+    
+    return null;
+}
+
+/*
+ * Checks what kind of offset the variable should be given
+ */
+
+private String timestepOffsetCheck(String var) {
+    
+    StringTokenizer st = new StringTokenizer(var, "[");
+    String s1 = st.nextToken();
+    String s2 = st.nextToken();
+    if (s2.equals("-]")) {
+        tStepOffset = -1;
+    }
+    if (s2.equals("+]")) {
+        tStepOffset = 1;
+    }
+    return s1;
+}
+
+/*
+ * Returns this parsers Equation. Used to get the generated equation
+ * after the parsing is finished.
+ */
+
+public Equation getEquation() throws Exception {
+    try {
+        sfeq.eval();
+    }
+    catch (Exception e) {
+        throw new Exception(e.getMessage());
+    }
+    return eq;
+}
+
+/*
+ * Constructor for SFParser
+ */
+
+public SFParser(SFLexer l, Flow[] inFlows, Flow [] outFlows, int timestep, 
+        int numOfTimesteps, Vector intVars, Vector floatVars){
+    lexer = l;
+    c_outFlows = outFlows;
+    c_inFlows = inFlows;
+    eq = new Equation();
+    c_timestep = timestep;
+    c_numOfTimesteps = numOfTimesteps;
+    c_intVars = intVars;
+    c_floatVars = floatVars;
+}
+
+/*
+ * Parser Tree
+ */
+
+private class SFEquation {
+    Expr rhs;
+    String op;
+    Expr lhs;
+    
+    public SFEquation (Expr LHS, String operator,Expr RHS){
+        rhs = RHS;
+        op = operator;
+        lhs = LHS;
+    }
+    
+    private void eval() throws Exception {
+        rhs.solvePar(1f);
+        lhs.solvePar(1f);
+        /* Set operator and right hand side */
+        eq.setOperator(op);
+        eq.setRHS(rhs.eval(true) - lhs.eval(false));
+    }
+}
+
+
+private abstract class Expr{
+    
+    /* Simplifies paranteses */
+    public abstract float solvePar(float coeff);
+    
+    /* Evaluates RHS constant and generates equation variables */
+    public abstract float eval(boolean isRHS) throws Exception;
+    
+    /* Negates an expression */
+    public abstract void neg();
+}
+
+
+// Repressents an paranthesis with preceding and following multiplication
+private class Parenthesis extends Expr{
+    ConstExpr pre;
+    Expr cont;
+    ConstExpr post;		
+    
+    private Parenthesis(ConstExpr preCoeff, Expr content, ConstExpr postCoeff){
+        pre = preCoeff;
+        post = postCoeff;
+        cont = content;
+    }	
+    
+    public float solvePar(float coeff){
+        float tmp = coeff * pre.solvePar(1f) * post.solvePar(1f);
+        cont.solvePar(tmp);
+        return tmp;
+    }
+    
+    public float eval(boolean isRHS) throws Exception {
+        return cont.eval(isRHS);
+    }
+    
+    public void neg(){
+        pre.neg();
+    }
+    
+}
+
+// flow and coefficient
+private class FlowExpr extends Expr{		
+    private ID flow; 
+    private float c_flowCoeff;
+    private int c_timestepOffset;
+    
+    private FlowExpr(float flowCoeff, String flowName, int timestepOffset){
+        flow = getFlowID(flowName);
+        c_flowCoeff = flowCoeff;
+        c_timestepOffset = timestepOffset;
+    }	
+    
+    public float solvePar(float coeff){
+        c_flowCoeff *= coeff;
+        return 1f;
+    }
+    
+    public float eval(boolean isRHS) throws Exception {
+        if(flow == null)
+            throw new Exception("Invalid Flow in");
+        if(c_timestep+c_timestepOffset < 1 || c_timestep+c_timestepOffset > c_numOfTimesteps)
+            throw new Exception("Invalid timestep reference in");
+        if(isRHS){
+            c_flowCoeff *= -1; // change sign
+        }
+        
+        // Ensure that doubles of variables never occure
+        Vector tmp = eq.getAllVariables();
+        for (int i = 0; i < tmp.size(); i++){
+            Variable var = (Variable) tmp.elementAt(i);
+            if((var.getFlow() != null) && var.getFlow().equals(flow)){
+                var.add(c_flowCoeff);
+                return 0f;
+            }
+        }	    
+        eq.addVariable(new Variable(flow, c_timestep+c_timestepOffset, c_flowCoeff));
+        return 0f;
+    }	
+    
+    public void neg(){
+        c_flowCoeff *=-1f;
+    }
+}
+
+// Constant
+private class ConstExpr extends Expr{
+    private float value;
+    
+    private ConstExpr (float constValue){
+        value = constValue;
+    }
+    
+    public float solvePar(float coeff){
+        value *= coeff;
+        return value;
+    }
+    
+    public float eval(boolean isRHS) throws Exception {
+        return value;
+    }
+    
+    public void neg(){
+        value *=-1f;
+    }	
+}
+
+// Addition 
+private class AddExpr extends Expr{
+    private Expr lhs, rhs;
+    
+    public AddExpr(Expr left, Expr right){
+        lhs = left;
+        rhs = right;
+    }
+    
+    public float solvePar(float coeff){
+        return lhs.solvePar(coeff) + rhs.solvePar(coeff);
+    }
+    
+    public float eval(boolean isRHS) throws Exception {
+        return lhs.eval(isRHS) + rhs.eval(isRHS);
+    }
+    
+    public void neg(){
+        lhs.neg();
+        rhs.neg();
+    }
+}
+
+// Integer Variable 
+private class IntExpr extends Expr{
+    private String c_name;
+    private float c_flowCoeff;
+    private int c_timestepOffset;
+    
+    public IntExpr(float flowCoeff, String name, int timestepOffset){
+        c_name = name;
+        c_flowCoeff = flowCoeff;
+        c_timestepOffset = timestepOffset;
+    }
+    
+    public float solvePar(float coeff){
+        c_flowCoeff *= coeff;
+        return 1f;
+    }
+    
+    public float eval(boolean isRHS) throws Exception {
+        if(isRHS){
+            c_flowCoeff *= -1; // change sign
+        }
+        if(c_timestep+c_timestepOffset < 1 || c_timestep+c_timestepOffset > c_numOfTimesteps)
+            throw new Exception("Invalid timestep reference in");	
+        if(c_intVars.contains(c_name))
+            eq.addVariable(new Variable(c_flowCoeff, c_timestep+c_timestepOffset, c_name));
+        else throw new Exception("Invalid Integer Variable");
+        
+        return 0f;
+    }
+    
+    public void neg(){
+        c_flowCoeff *=-1f;
+    }
+    
+}
+
+// Float Variable 
+private class FloatExpr extends Expr{
+    private String c_name;
+    private float c_flowCoeff;
+    private int c_timestepOffset;
+    
+    public FloatExpr(float flowCoeff, String name, int timestepOffset){
+        c_name = name;
+        c_flowCoeff = flowCoeff;
+        c_timestepOffset = timestepOffset;
+    }
+    
+    public float solvePar(float coeff){
+        c_flowCoeff *= coeff;
+        return 1f;
+    }
+    
+    public float eval(boolean isRHS) throws Exception {
+        if(isRHS){
+            c_flowCoeff *= -1; // change sign
+        }
+        if(c_timestep+c_timestepOffset < 1 || c_timestep+c_timestepOffset > c_numOfTimesteps)
+            throw new Exception("Invalid timestep reference in");
+        if(c_floatVars.contains(c_name))
+            eq.addVariable(new Variable(c_name, c_timestep+c_timestepOffset, c_flowCoeff));
+        else throw new Exception("Invalid Float Variable");
+        
+        return 0f;
+    }
+    
+    public void neg(){
+        c_flowCoeff *=-1f;
+    }
+    
+}
