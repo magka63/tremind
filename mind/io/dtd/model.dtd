@@ -1,0 +1,51 @@
+<!-- Model specification -->
+
+<!ENTITY % node SYSTEM "node.dtd">
+<!ENTITY % guiNode SYSTEM "guiNode.dtd">
+<!ENTITY % guiFlow SYSTEM "guiFlow.dtd">
+%node;
+%guiNode;
+%guiFlow;
+<!ELEMENT model (objectfunction*, resource*, timesteplevel*, node*, flow*, extensions?)>
+
+<!-- specifies objectfunction tags -->
+<!ELEMENT objectfunction (label, k1, k2, boundstring*, limit1value*, limit2value*)>
+<!ELEMENT k1 (#PCDATA)>
+<!ELEMENT k2 (#PCDATA)>
+<!ELEMENT boundstring (#PCDATA)>
+<!ELEMENT limit1value (#PCDATA)>
+<!ELEMENT limit2value (#PCDATA)>
+
+<!-- specifies resource tags -->
+<!ELEMENT resource (unit?, prefix?, colorname?, colorvalue?)>
+<!ATTLIST resource type CDATA #REQUIRED>
+<!ELEMENT unit (#PCDATA)>
+<!ELEMENT prefix (#PCDATA)>
+<!ELEMENT colorname (#PCDATA)>
+<!ELEMENT colorvalue (#PCDATA)>
+
+<!-- specifies timestep tags -->
+<!ELEMENT timesteplevel (divide, labelVector?, lengthVector?)>
+<!ATTLIST timesteplevel name CDATA #REQUIRED>
+<!ELEMENT divide (#PCDATA)>
+<!ELEMENT labelVector (#PCDATA)>
+<!ELEMENT lengthVector (#PCDATA)>
+
+<!-- specifies flow tags -->
+<!ELEMENT flow (label, resource.type?)>
+<!ATTLIST flow id  CDATA #IMPLIED
+	       from CDATA #REQUIRED
+               to   CDATA #REQUIRED>
+
+<!-- specifies extensions, like the gui extension -->
+<!ELEMENT extensions (gui?, guiprefs?)>
+<!ELEMENT gui (guiFlow*, guiNode*)>
+<!ELEMENT guiprefs (zoom)>
+<!ELEMENT zoom (#PCDATA)>
+
+<!-- misc -->
+<!--
+<!ELEMENT resource.type (#PCDATA)>
+<!ELEMENT label (#PCDATA)>
+
+-->

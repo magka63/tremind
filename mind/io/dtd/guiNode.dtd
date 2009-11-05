@@ -1,0 +1,6 @@
+<!-- DTD specification for guiNode  -->
+
+<!ELEMENT guiNode (x, y)>
+<!ATTLIST guiNode id CDATA #REQUIRED>
+<!ELEMENT x (#PCDATA)>
+<!ELEMENT y (#PCDATA)>

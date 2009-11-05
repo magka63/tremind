@@ -1,0 +1,9 @@
+<!-- DTD specification for Boundary function  -->
+<!-- inflows and outflows added by Nawzad Mardan 080910:  -->
+<!ELEMENT boundary (label, inflows?, outflows?,resource.type?, timestep.boundary+)>
+<!ELEMENT inflows  (#PCDATA)>
+<!ELEMENT outflows  (#PCDATA)>
+<!ELEMENT timestep.boundary (min?, max?)>
+<!ATTLIST timestep.boundary nr CDATA #REQUIRED>
+<!ELEMENT min (#PCDATA)>
+<!ELEMENT max (#PCDATA)>

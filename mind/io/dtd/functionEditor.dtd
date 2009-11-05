@@ -1,0 +1,16 @@
+<!-- DTD specification for Function Editor alias Super Function  -->
+
+<!ELEMENT functionEditor (label,intVar,floatVar,maxIntVar,maxFloatVar,timestep*)>
+
+<!ELEMENT timestep (rows, columns, row*)>
+
+<!ELEMENT row (cell*)>
+
+<!ELEMENT intVar (#PCDATA)>
+<!ELEMENT floatVar (#PCDATA)>
+<!ELEMENT maxIntVar (#PCDATA)>
+<!ELEMENT maxFloatVar (#PCDATA)>
+<!ELEMENT rows (#PCDATA)>
+<!ELEMENT columns (#PCDATA)>
+<!ELEMENT cell (#PCDATA)>
+

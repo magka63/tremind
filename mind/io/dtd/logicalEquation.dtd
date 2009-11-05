@@ -1,0 +1,16 @@
+<!-- DTD specification for logicalEquation function  -->
+<!ELEMENT logicalEquation (label, timestep.logicalEquation*)>
+<!ELEMENT timestep.logicalEquation (flowid*,
+                                   c_min*, 
+                                   c_max*,
+                                   c_coeff*, 
+					     c_RHSValue,
+                                   c_RHSConstraint)>
+<!ELEMENT flowid (#PCDATA)>
+<!ELEMENT c_min (#PCDATA)>
+<!ELEMENT c_max (#PCDATA)>
+<!ELEMENT c_coeff (#PCDATA)>
+<!ELEMENT c_RHSValue (#PCDATA)>
+<!ELEMENT c_RHSConstraint (#PCDATA)>
+<!ATTLIST timestep.logicalEquation nr CDATA #REQUIRED>
+

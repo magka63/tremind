@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : startStopEquation.dtd
+    Created on : den 20 februari 2008, 09:28
+    Author     : nawma77
+    Description:
+        Purpose of the document follows.
+
+    TODO define vocabulary identification data
+    PUBLIC ID  : -//vendor//vocabulary//EN
+    SYSTEM ID  : http://server/path/startStopEguation.dtd
+-->
+
+<!-- TODO define your own vocabulary/syntax. Example follows:  -->
+<!-- DTD specification for the StartStop function  -->
+
+<!ELEMENT startStopEquation (label, choiceOne?, choiceTwo?, percentageOfPreviousFlow?, thresholdValue?, startCostChoice?, stopCostChoice?, 
+firstStartCostChoice?, firstStopCostChoice?, startCost?, stopCost?, operateCost?)>
+<!ELEMENT choiceOne  (#PCDATA)>
+<!ELEMENT choiceTwo  (#PCDATA)>
+<!ELEMENT percentageOfPreviousFlow (#PCDATA)>
+<!ELEMENT thresholdValue (#PCDATA)>
+<!ELEMENT startCostChoice (#PCDATA)>
+<!ELEMENT stopCostChoice (#PCDATA)>
+<!ELEMENT firstStartCostChoice (#PCDATA)>
+<!ELEMENT firstStopCostChoice (#PCDATA)>
+<!ELEMENT startCost (#PCDATA)>
+<!ELEMENT stopCost (#PCDATA)>
+<!ELEMENT operateCost (#PCDATA)>
+

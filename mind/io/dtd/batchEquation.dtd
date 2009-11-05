@@ -1,0 +1,18 @@
+<!-- DTD specification for batchEquation function  -->
+<!ELEMENT batchEquation (label, timestep.batchEquation*)>
+<!ELEMENT timestep.batchEquation (flowid_in*, flowid_out*,
+                                   c_dblMinBatch, 
+                                   c_dblMaxBatch,
+                                   c_intBatchTime, 
+					     c_intAdjustingTime,
+                                   c_intPredetIntervals)>
+<!--ELEMENT flowid_in (#PCDATA)-->
+<!--ELEMENT flowid_out (#PCDATA)-->
+<!-- Flow batch storage parameters -->
+<!ELEMENT c_dblMinBatch (#PCDATA)>
+<!ELEMENT c_dblMaxBatch (#PCDATA)>
+<!ELEMENT c_intBatchTime (#PCDATA)>
+<!ELEMENT c_intAdjustingTime (#PCDATA)>
+<!ELEMENT c_intPredetIntervals (#PCDATA)>
+<!ATTLIST timestep.batchEquation nr CDATA #REQUIRED>
+

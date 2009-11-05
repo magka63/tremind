@@ -1,0 +1,17 @@
+<!-- DTD specification for FlowEquation function  -->
+
+<!ELEMENT flowEquation (label, timestep.flowEquation*)>
+<!ELEMENT timestep.flowEquation (flowid_in*, coeff_in*, flowid_out*, coeff_out*,  equationvalue*, constrainttype?)>
+<!--ELEMENT timestep.flowEquation (coeff, equationvalue)*-->
+
+
+<!--ELEMENT timestep.flowEquation (flowid*, coeff*, equationvalue)-->
+<!--ELEMENT flowid (#PCDATA)-->
+<!ELEMENT flowid_in (#PCDATA)>
+<!ELEMENT coeff_in (#PCDATA)>
+<!ELEMENT flowid_out (#PCDATA)>
+<!ELEMENT coeff_out (#PCDATA)>
+<!ELEMENT equationvalue (#PCDATA)>
+<!ELEMENT constrainttype (#PCDATA)>
+<!ATTLIST timestep.flowEquation nr CDATA #REQUIRED>
+

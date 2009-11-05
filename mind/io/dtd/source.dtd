@@ -1,0 +1,7 @@
+<!-- DTD specification for Source function  -->
+
+<!-- new source.dtd -->
+<!ELEMENT source (label, resource.type?, timestep.source+)>
+<!ELEMENT timestep.source (label, cost)*>
+<!ATTLIST timestep.source nr CDATA #REQUIRED>
+<!ELEMENT cost (#PCDATA)>

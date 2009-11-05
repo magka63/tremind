@@ -1,0 +1,5 @@
+<!-- DTD specification for guiFlow  -->
+
+<!ELEMENT guiFlow (handle*)>
+<!ATTLIST guiFlow id CDATA #REQUIRED>
+<!ELEMENT handle (#PCDATA)>
