@@ -1,0 +1,42 @@
+<!-- DTD specification for storageEquation function  -->
+<!ELEMENT storageEquation (label, timestep.storageEquation*)>
+<!ELEMENT timestep.storageEquation (flowid_in*, coeff_in_min*, coeff_in_max*, 
+                                    flowid_out*, coeff_out_min*, coeff_out_max*, 
+                                   c_dblInEfficiency*, 
+                                   c_dblTotalInFlowMin*,
+                                   c_dblTotalInFlowMax*, 
+
+                                   c_dblOutEfficiency*, 
+                                   c_dblTotalOutFlowMin*, 
+                                   c_dblTotalOutFlowMax*,
+ 
+                                   c_dblInitialStorage*, 
+                                   c_dblFinalStorage*, 
+                                   c_dblStorageEfficiency*, 
+                                   c_dblMinStorage*, 
+                                   c_dblMaxStorage*, 
+                                   c_intMaxStorageTime*)>
+<!--ELEMENT timestep.storageEquation (coeff, equationvalue)*-->
+<!--ELEMENT timestep.storageEquation (flowid*, coeff*, equationvalue)-->
+<!--ELEMENT flowid (#PCDATA)-->
+<!--ELEMENT flowid_in (#PCDATA)-->
+<!ELEMENT coeff_in_min (#PCDATA)>
+<!ELEMENT coeff_in_max (#PCDATA)>
+<!--ELEMENT flowid_out (#PCDATA)-->
+<!ELEMENT coeff_out_min (#PCDATA)>
+<!ELEMENT coeff_out_max (#PCDATA)>
+<!-- Flow storage parameters -->
+<!ELEMENT c_dblInEfficiency (#PCDATA)>
+<!ELEMENT c_dblOutEfficiency (#PCDATA)>
+<!ELEMENT c_dblTotalInFlowMin (#PCDATA)>
+<!ELEMENT c_dblTotalInFlowMax (#PCDATA)>
+<!ELEMENT c_dblTotalOutFlowMin (#PCDATA)>
+<!ELEMENT c_dblTotalOutFlowMax (#PCDATA)>
+<!ELEMENT c_dblInitialStorage (#PCDATA)>
+<!ELEMENT c_dblFinalStorage (#PCDATA)>
+<!ELEMENT c_dblStorageEfficiency (#PCDATA)>
+<!ELEMENT c_dblMinStorage (#PCDATA)>
+<!ELEMENT c_dblMaxStorage (#PCDATA)>
+<!ELEMENT c_intMaxStorageTime (#PCDATA)>
+<!ATTLIST timestep.storageEquation nr CDATA #REQUIRED>
+

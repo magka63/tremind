@@ -1,0 +1,15 @@
+<!-- DTD specification for FlowDependency function  -->
+
+<!ELEMENT flowDependency (label, resourceX.type?, resourceY.type?, x_in, y_in, timestep.flowDependency*)>
+<!ELEMENT resourceX.type (#PCDATA)>
+<!ELEMENT resourceY.type (#PCDATA)>
+<!ELEMENT x_in (#PCDATA)>
+<!ELEMENT y_in (#PCDATA)>
+
+<!ELEMENT timestep.flowDependency (start, end, slope, offset)*>
+<!ATTLIST timestep.flowDependency nr CDATA #REQUIRED>
+
+<!ELEMENT start (#PCDATA)>
+<!ELEMENT end (#PCDATA)>
+<!ELEMENT slope (#PCDATA)>
+<!ELEMENT offset (#PCDATA)>

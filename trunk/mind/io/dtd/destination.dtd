@@ -1,0 +1,3 @@
+<!-- DTD specification for Destination function  -->
+
+<!ELEMENT destination (label, resource.type?)>

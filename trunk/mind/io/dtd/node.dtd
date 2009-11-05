@@ -1,0 +1,51 @@
+<!-- DTD for the nodes.  -->
+<!-- New function(StartStopEquation) added bay Nawzad Mardan 2008-02-20 for the nodes.  -->
+<!ENTITY % source SYSTEM "source.dtd">
+<!ENTITY % destination SYSTEM "destination.dtd">
+<!ENTITY % boundary SYSTEM "boundary.dtd">
+<!ENTITY % boundaryTOP SYSTEM "boundaryTOP.dtd">
+<!ENTITY % flowDependency SYSTEM "flowDependency.dtd">
+<!ENTITY % flowRelation SYSTEM "flowRelation.dtd">
+<!ENTITY % flowEquation SYSTEM "flowEquation.dtd">
+<!ENTITY % investmentCost SYSTEM "investmentCost.dtd">
+<!ENTITY % storageEquation SYSTEM "storageEquation.dtd">
+<!ENTITY % batchEquation SYSTEM "batchEquation.dtd">
+<!ENTITY % logicalEquation SYSTEM "logicalEquation.dtd">
+<!ENTITY % functionEditor SYSTEM "functionEditor.dtd">
+<!ENTITY % startStopEquation SYSTEM "startStopEquation.dtd">
+%source;
+%destination;
+%boundary;
+%boundaryTOP;
+%flowDependency;
+%flowRelation;
+%flowEquation;
+%investmentCost;
+%storageEquation;
+%batchEquation;
+%logicalEquation;
+%functionEditor;
+%startStopEquation;
+<!-- New function(StartStopEquation) added bay Nawzad Mardan 2008-02-20 for the nodes.  -->
+
+<!ELEMENT node (label, note, tLevel, functions?)>
+<!ATTLIST node id CDATA #IMPLIED>
+<!ELEMENT tLevel (#PCDATA)>
+<!ELEMENT functions (source*, 
+			destination*, 
+			boundary*, 
+			boundaryTOP*, 
+			flowDependency*, 
+			flowRelation*, 
+			flowEquation*, 
+			investmentCost*, 
+			storageEquation*, 
+			batchEquation*,
+            logicalEquation*, 
+            functionEditor*,startStopEquation*)>
+
+<!-- misc -->
+
+<!ELEMENT resource.type (#PCDATA)>
+<!ELEMENT label (#PCDATA)>
+<!ELEMENT note (#PCDATA)>

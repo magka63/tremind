@@ -1,0 +1,9 @@
+<!-- DTD specification for FlowRelation function  -->
+<!ELEMENT flowRelation (label, direction, resource.type?, timestep.flowRelation*)>
+<!ELEMENT direction (#PCDATA)>
+<!ELEMENT timestep.flowRelation (flowData*)>
+<!ATTLIST timestep.flowRelation nr CDATA #REQUIRED>
+<!ELEMENT flowData (operator,limit*)>
+<!ATTLIST flowData flow CDATA #REQUIRED>
+<!ELEMENT operator (#PCDATA)>
+<!ELEMENT limit (#PCDATA)>
