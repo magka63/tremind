@@ -1,18 +1,18 @@
 /*
  * Copyright 2004:
  * Marcus Bergendorff <amaebe-1@student.luth.se>
- * Jan Skï¿½llermark <jansok-1@student.luth.se>
+ * Jan Sköllermark <jansok-1@student.luth.se>
  * Nils-Oskar Spett <nilspe-1@student.luth.se>
  * Richard Harju <richar-1@student.luth.se>
  *
  * Copyright 2007:
  * Per Fredriksson <perfr775@student.liu.se>
- * David Karlslï¿½tt <davka417@student.liu.se>
+ * David Karlslätt <davka417@student.liu.se>
  * Tor Knutsson	<torkn754@student.liu.se>
- * Daniel Kï¿½llming <danka053@student.liu.se>
+ * Daniel Källming <danka053@student.liu.se>
  * Ted Palmgren <tedpa175@student.liu.se>
  * Freddie Pintar <frepi150@student.liu.se>
- * Mï¿½rten Thurï¿½n <marth852@student.liu.se> 
+ * Mårten Thurén <marth852@student.liu.se> 
  *
  * This file is part of reMIND.
  *
@@ -59,7 +59,7 @@ import mind.model.function.parser.SFParser;
 /**
  * FunctionEditor
  * @version 2007-12-12
- * @author Marcus Bergendorff and Jan Skï¿½llermark
+ * @author Marcus Bergendorff and Jan Sköllermark
  * @author Freddie Pintar
  * @author Tor Knutsson
  */
@@ -428,7 +428,7 @@ public class FunctionEditor extends NodeFunction {
 		} catch (ModelException e) {
 			throw new ModelException(e.getMessage());
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			tserr = timestep_count;
 			if (lexer.celref == true)
 				throw new ModelException(e.getMessage() + " cell "
@@ -679,7 +679,7 @@ public class FunctionEditor extends NodeFunction {
 	}
 
     /**
-    * Implementera den hï¿½r den som kan!!!!
+    * Implementera den här den som kan!!!!
     * Should return the answer to the question: "does this function use the Flow 'flow'
     * by any means in any timestep?" This info is needed to find out if it is okey to delete the flow without causing
     * any problems. This function however, shall not perform any actual deletion, just check for any relations.
@@ -687,8 +687,6 @@ public class FunctionEditor extends NodeFunction {
     * @return
     */
   public boolean isRelatedToFlow(ID flow) {
-    // josa
-    // false -> true
-    return true;
+    return false;
   }
 }

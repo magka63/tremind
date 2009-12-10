@@ -1461,7 +1461,62 @@ public class GUI
             c_app.settingsUpdated();
         }
     }
+/* Added by Nawzad Mardan 090304*/
+    public void openArgAction(File fSel)
+    {
+            //Create new model
+            c_eventHandler.createNewModel();
+            c_app.getGraphArea().createNewModel();
+            setChanged(false);
 
+            //Load model from disk
+            //File   fSel = openDialog.getSelectedFile();
+            //openDialog.
+            //Added by PUM5 2007-11-30
+            rmdFileName = fSel.getName(); //Needed if EXML file is supposed to have the same name
+            rmdFileName = rmdFileName.substring(0, rmdFileName.length() - 4);
+            //End PUM5
+            File   fDir = fSel.getParentFile();
+            String sDir = (fDir == null) ? null : fDir.getAbsolutePath();
+            zoomAction("100 %");
+            try {
+                c_fileInteraction.load(c_eventHandler.getModel(),c_app.getGraphArea().getModel(),FileInteraction.RMD,fSel);
+                c_savedModel = fSel.getAbsolutePath();
+                c_app.setTitleAddon(c_savedModel); // long name incl. path
+
+                if (sDir != null) 
+                    {
+                    if ((c_modelsDir == null) || (!sDir.equals(c_modelsDir))) 
+                        {
+                        c_modelsDir  = sDir;
+                        c_userSettings.setProperty(RMD_MODEL_FOLDER, c_modelsDir);
+                        }
+                    }
+                // c_app.setTitleAddon(openDialog.getSelectedFile().getName()); // short name excl. path
+                zoomAction(c_topToolbar.c_combo.getSelectedItem().toString());
+                
+                }
+            catch (FileInteractionException e) 
+                {
+                //Erase the model so we don't get a "half finished" model
+                try {
+                    c_eventHandler.close();
+                    }
+                catch (ModelException e2) 
+                    {
+                    e2.printStackTrace(System.out);
+                    System.err.println("Database couldn't be closed");
+                    };
+                c_eventHandler.createNewModel();
+                c_app.getGraphArea().createNewModel();
+                c_isChanged = false;
+
+                showWarningDialog(e.getMessage());
+                }
+            
+            c_app.settingsUpdated();
+        }
+    
     /**
      * Optimizes the model.
      * PUM16 reMind 2004
@@ -1720,7 +1775,7 @@ public class GUI
 	dialog.setLocation(x, y);
 
 	dialog.setVisible(true);
-        setChanged(false);
+        setChanged(true);
     }
 
 
@@ -2488,6 +2543,17 @@ public class GUI
 		else
 			return true;	
 	}
+    // Added by Nawzad Mardan 090319
+
+   /*
+	 * Get User setting
+	 */
+	public Ini getUserSetting()
+    {
+		return c_userSettings;
+	}
+
+
 	/*
 	 * Get current model
 	 */

@@ -201,8 +201,8 @@ public class NodeInteraction
         if (xmlName.equals("functionEditor"))
     	    return new String("Function Editor");
         // Added by Nawzad Mardan 2008-02-01
-       // if (xmlName.equals("startStopEquation"))
-    	 //   return new String("StartStop Equation");
+        //if (xmlName.equals("startStopEquation"))
+    	  //  return new String("StartStop Equation");
 
 	throw new IllegalArgumentException("Function '" + xmlName +
 					   "' does not exist.");
@@ -247,9 +247,9 @@ public class NodeInteraction
         if (function.equals("Function Editor"))
     	    return new FunctionEditor();
         // Added by Nawzad Mardan 2008-02-01
-       // if (function.equals("StartStop Equation"))
-        //{
-    	  //  return new StartStopEquation();
+     //   if (function.equals("StartStop Equation"))
+       // {
+    	 //   return new StartStopEquation();
             //System.out.println("Start stop equation");
         //}
 

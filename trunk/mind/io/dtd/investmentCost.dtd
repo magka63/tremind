@@ -1,16 +1,12 @@
 <!-- DTD specification for InvestmentCost function  -->
 
-<!ELEMENT investmentCost (label, technicallifespan?, economiclifespan?,percentagescrapvalue?, fastscrapvalue?, rate?, analysPeriod?, tableHead?, dataLength?, dataVector?, c,timestep.investmentCost*,costfunlist*)>
+<!ELEMENT investmentCost (label, technicallifespan?, economiclifespan?, annualRateValue?, percentagescrapvalue?, fastscrapvalue?, c,timestep.investmentCost*,costfunlist*)>
 <!-- Added by Nawzad Mardan 2008-06-27-->
 <!ELEMENT technicallifespan (#PCDATA)>
 <!ELEMENT economiclifespan (#PCDATA)>
+<!ELEMENT annualRateValue (#PCDATA)>
 <!ELEMENT percentagescrapvalue (#PCDATA)>
 <!ELEMENT fastscrapvalue (#PCDATA)>
-<!ELEMENT rate (#PCDATA)>
-<!ELEMENT analysPeriod (#PCDATA)>
-<!ELEMENT tableHead (#PCDATA)>
-<!ELEMENT dataLength (#PCDATA)>
-<!ELEMENT dataVector (#PCDATA)>
 <!-- Nawzad Mardan 2008-08-15-->
 <!ELEMENT costfunlist (start, end, slope, offset)>
 <!--ELEMENT start (#PCDATA)-->

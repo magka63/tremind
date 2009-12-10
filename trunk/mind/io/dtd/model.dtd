@@ -6,7 +6,7 @@
 %node;
 %guiNode;
 %guiFlow;
-<!ELEMENT model (objectfunction*, resource*, timesteplevel*, node*, flow*, extensions?)>
+<!ELEMENT model (objectfunction*, resource*, timesteplevel*,  node*, flow*,discountSystemCost*, extensions?)>
 
 <!-- specifies objectfunction tags -->
 <!ELEMENT objectfunction (label, k1, k2, boundstring*, limit1value*, limit2value*)>
@@ -30,6 +30,14 @@
 <!ELEMENT divide (#PCDATA)>
 <!ELEMENT labelVector (#PCDATA)>
 <!ELEMENT lengthVector (#PCDATA)>
+
+<!-- specifies discountSystemCost tags -->
+<!ELEMENT discountSystemCost (ratein?, analysesPeriod?, tablesHead?, dataLengths?,dataVectors?)>
+<!ELEMENT ratein (#PCDATA)>
+<!ELEMENT analysesPeriod (#PCDATA)>
+<!ELEMENT tablesHead (#PCDATA)>
+<!ELEMENT dataLengths (#PCDATA)>
+<!ELEMENT dataVectors (#PCDATA)>
 
 <!-- specifies flow tags -->
 <!ELEMENT flow (label, resource.type?)>

@@ -56,6 +56,9 @@ public class OutputFlowChooserDialog
     private static OutputFlowChooserDialog c_instance = null;
     private Ini c_userSettings;
     private GUI gui;
+    // Added by Nawzad Mardan 090319
+    private boolean c_model;
+    private Frame  c_frame;//END
     //private javax.swing.JTabbedPane c_tabbedPane;
 
     /** Creates new form OutputFlowChooserDialog */
@@ -65,6 +68,8 @@ public class OutputFlowChooserDialog
 	super (parent, modal);
 	c_userSettings = userSettings;
 	gui = GUI.getInstance();
+    c_model =modal;
+    c_frame = parent;
 	initComponents();
 	pack();
     }
@@ -139,6 +144,7 @@ public class OutputFlowChooserDialog
 	selectAll.setPreferredSize(new Dimension(49,20));
 	btnOK = new javax.swing.JButton("OK");
 	btnCancel = new javax.swing.JButton("Cancel");
+    btnOpenWith = new javax.swing.JButton("Open With..");
 
 	separator = new javax.swing.JSeparator();
 
@@ -293,16 +299,20 @@ public class OutputFlowChooserDialog
 		buttonOKPressed(evt);
 	    }
 	});
-
+btnOpenWith.addActionListener(new ActionListener() {
+	    public void actionPerformed(ActionEvent evt) {
+		buttonOPenWithPressed(evt);
+	    }
+	});
 	bottomPanel.add(btnOK);
 	bottomPanel.add(btnCancel);
-
+    bottomPanel.add(btnOpenWith);
 	constraints = new GridBagConstraints ();
 	constraints.gridx = 0;
 	constraints.gridy = 5;
 	constraints.gridwidth = 3;
 	constraints.fill = GridBagConstraints.BOTH;
-	constraints.insets = new Insets (10, 0, 5, 5);
+	constraints.insets = new Insets (10, 0, 5, 85);
         mainPanel.add (bottomPanel, constraints);
 
         getContentPane().add(mainPanel);
@@ -392,7 +402,37 @@ public class OutputFlowChooserDialog
 	gui.output(textFilename.getText(), optres);
 	closeDialog(null);
     }
+    // Added by Nawzad Mardan 090319
+    private void buttonOPenWithPressed(ActionEvent evt)
+    {
+     boolean fileOpen = false;
+    try {
+        gui.getEventHandlerClient().output(textFilename.getText(), optres);
+        }
+    catch(Exception e)
+        {
+        fileOpen = true;
+	    JOptionPane.showMessageDialog(null, "The file :"+textFilename.getText()+" is already open."+"\nUnable to write file." +
+                " Close the file first ");
+        }
+    if(!fileOpen)
+        {
+        closeDialog(null);
+        JDialog dialog ;
+        dialog = new OpenWithDialog(c_frame,c_model, c_userSettings, textFilename.getText());
+        if (dialog != null)
+            {
+            int height = getLocation().y + getSize().height/2;
+            int width = getLocation().x + getSize().width/2;
+            int x = (int) (width - dialog.getSize().width/2);
+            int y = (int) (height - dialog.getSize().height/2);
+            dialog.setLocation(x, y);
+                //System.out.println(functionType);
 
+            dialog.setVisible(true);
+            }
+        }
+    }
     /** Closes the dialog */
     private void closeDialog(WindowEvent evt) {
 	setVisible (false);
@@ -409,6 +449,7 @@ public class OutputFlowChooserDialog
     private JButton selectOne, selectAll, unselectOne, unselectAll;
     private JButton btnCancel;
     private JButton btnOK;
+    private JButton btnOpenWith;
     private DataListFlows selectedData, unselectedData;
     private JSeparator separator;
 

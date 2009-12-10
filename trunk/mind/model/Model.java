@@ -585,40 +585,39 @@ public class Model implements UserSettingConstants {
 		}
 
 		if (exportall.equals("true"))
-			maxTimesteps = c_lastTimesteplevel
-					.timestepDifference(c_topTimesteplevel);
+			maxTimesteps = c_lastTimesteplevel.timestepDifference(c_topTimesteplevel);
 		else
 			maxTimesteps = getMostDetailedTSLUsed().timestepDifference(null);
 
 		// Iterate over all nodes
-		for (Enumeration e = c_nodeControl.elements(); e.hasMoreElements();) {
-			Node node = (Node) e.nextElement();
-                        // Added by Nawzad Mardan 2007-07-07 if user select discount system cost from the model menu
-                        if(c_discountedsystemcostExecutetable)
-                        {
-                            node.setDiscountSystemParameter(c_discountedsystemcostControl);
-                        }
+		for (Enumeration e = c_nodeControl.elements(); e.hasMoreElements();)
+        {
+		Node node = (Node) e.nextElement();
+        // Added by Nawzad Mardan 2007-07-07 if user select discount system cost from the model menu
+        if(c_discountedsystemcostExecutetable)
+         {
+         node.setDiscountSystemParameter(c_discountedsystemcostControl);
+         }
 //                        node.setDiscountRun(true);
-			toFlows = c_connections.getToFlows(node.getID());
-			fromFlows = c_connections.getFromFlows(node.getID());
-			toFlowsVec = new Vector(0);
-			fromFlowsVec = new Vector(0);
-			if (toFlows != null)
-				for (int i = 0; i < toFlows.length; i++)
-					toFlowsVec.addElement(c_flowControl.get(toFlows[i]));
-			if (fromFlows != null)
-				for (int i = 0; i < fromFlows.length; i++)
-					fromFlowsVec.addElement(c_flowControl.get(fromFlows[i]));
+        toFlows = c_connections.getToFlows(node.getID());
+		fromFlows = c_connections.getFromFlows(node.getID());
+		toFlowsVec = new Vector(0);
+		fromFlowsVec = new Vector(0);
+		if (toFlows != null)
+            for (int i = 0; i < toFlows.length; i++)
+                toFlowsVec.addElement(c_flowControl.get(toFlows[i]));
+		if (fromFlows != null)
+			for (int i = 0; i < fromFlows.length; i++)
+				fromFlowsVec.addElement(c_flowControl.get(fromFlows[i]));
 
-			EquationControl nodeEquations = node.getEquationControl(toFlowsVec,
+		EquationControl nodeEquations = node.getEquationControl(toFlowsVec,
 					fromFlowsVec, maxTimesteps);
 
-			// Merge with result
-			allEquations.mergeWith(nodeEquations);
+		// Merge with result
+		allEquations.mergeWith(nodeEquations);
 		}
 		//	add object-function boundary inequalities
-		EquationControl objEquations = c_objectFunction
-				.getEquationControl(maxTimesteps);
+		EquationControl objEquations = c_objectFunction.getEquationControl(maxTimesteps);
 		allEquations.mergeWith(objEquations);
 
 		return allEquations;
@@ -1069,9 +1068,22 @@ public class Model implements UserSettingConstants {
        public void setDiscountedsystemcostControl(Float rate, Long year, String head [], Object [][] data, Vector timestepValues)
         {
           c_discountedsystemcostControl = new DiscountedsystemcostControl(rate, year , head, data, timestepValues);
-          c_discountedsystemcostExecutetable = true;
+          if((rate != 0) && (year != 1))
+            c_discountedsystemcostExecutetable = true;
+          
         } 
         
+       /**
+        *Added by Nawzad Mardan 2008-12-12 Reads from rmd file
+        * Sets the rate, period analyses, tabelHeader and the table data in the DiscountedsystemcostControl
+        */
+    
+       public void setDiscountedsystemcostParameter(Float rate, Long year, String head [], Object [][] data, Vector timestepsVector)
+        {
+          c_discountedsystemcostControl = new DiscountedsystemcostControl(rate, year , head, data, timestepsVector);
+          if((rate != 0) && (year != 1))
+          c_discountedsystemcostExecutetable = true;
+        } 
 	/**
 	 * Return a Vector of labels to the source-dialog object
 	 * @return Vector of labels
@@ -1085,7 +1097,9 @@ public class Model implements UserSettingConstants {
 				+ c_resourceControl.toXML(indent) + XML.nl()
 				+ c_topTimesteplevel.toXML(indent) + XML.nl()
 				+ c_nodeControl.toXML(c_resourceControl, indent) + XML.nl()
-				+ c_flowControl.toXML(c_connections, c_resourceControl, indent);
+				+ c_flowControl.toXML(c_connections, c_resourceControl, indent)+ XML.nl()
+                                + c_discountedsystemcostControl.toXML(indent);
+                // c_discountedsystemcostControl.toXML(indent) Added by Nawzad 20081211
 
 		return xml;
 	}

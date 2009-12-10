@@ -432,6 +432,7 @@ public class GlobalActions {
 	    };
 
        /* Added by Nawzad Mardan 2007-06-01*/
+            
         c_discountedsystemcost = new AbstractAction("Discounted system cost..", null)
 	    {
 		public void actionPerformed(ActionEvent e) {

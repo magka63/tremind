@@ -74,10 +74,13 @@ public class Node
     //Added by Nawzad Mardan 070801 
     //Annualy rate initiate by Discount function when it runs
     private Vector c_annualRate = null;
-    
+
+    private float c_rate;
     //Added by Nawzad Mardan 070801 
     //Timesteps length for each timestep nummber in the data array, initiate by Discount function when it runs
     private Vector c_timeStepLength = null;
+
+    //private  Vector c_
     /**
      * This class is used for generating equations to connect the in flows of
      * to a node with resource X with the out flows of the same resource.
@@ -529,9 +532,10 @@ public class Node
                 // In case the user running Discountsystemcost function we have different
                 // timesteps and different coefficient
                 // Added by Nawzad Mardan 070801
-                //if(((nf.getFunctionType().equals("Source")) || (nf.getFunctionType().equals("InvestmentCost"))) && (c_discountRun == true))
-                if((nf.getFunctionType().equals("Source")) && (c_discountRun == true))
-                    nodeEquations = nf.getEquationControl2(c_data,c_annualRate,c_timeStepLength ,c_ID, toFlows, fromFlows);
+                if(((nf.getFunctionType().equals("Source")) || (nf.getFunctionType().equals("InvestmentCost"))) && (c_discountRun == true))
+                {
+                    nodeEquations = nf.getEquationControl2(c_data,c_rate,c_timeStepLength ,c_ID, toFlows, fromFlows);
+                }
                 else
 	    	nodeEquations = nf.getEquationControl(maxTimesteps,c_ID, toFlows, fromFlows);
                 
@@ -662,8 +666,10 @@ public class Node
     {
         c_data = dc.getTableData();
         c_discountRun = true;
-        c_annualRate = dc.getAnnualRate();
+        //c_annualRate = dc.getAnnualRate();
+        c_rate = (dc.getRate()).floatValue();
         c_timeStepLength = dc.getTimestepValues();
+
         
         
     }

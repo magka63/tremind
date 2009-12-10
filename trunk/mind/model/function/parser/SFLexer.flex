@@ -109,7 +109,7 @@ import javax.swing.table.*;
  */
 
 "#"[a-zA-Z]+[0-9]+		{ try { yypushStream(new StringReader(getCellContent(yytext().substring(1)))); } 
-				  catch (Exception e) { throw new ModelException(e.getMessage()); }  = true;} 
+				  catch (Exception e) { throw new ModelException(e.getMessage()); } celref = true;} 
 [Ff][1-9][0-9]*			{ semVal = yytext(); return token = FLOWVAR; }
 [Ff][1-9][0-9]*"["[+-]"]"	{ semVal = yytext(); return token = FLOWVARTSO; }
 ([0-9]*"."[0-9]+)|[0-9]+ 	{ semVal = new SFFloat(yytext()); return token = CONST; }

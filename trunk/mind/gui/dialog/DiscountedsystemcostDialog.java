@@ -42,20 +42,11 @@ package mind.gui.dialog;
  */
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.Rectangle2D;
-import java.util.Arrays;
 import java.util.*;
 
 import javax.swing.*;
-import javax.swing.event.TableModelListener;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableColumn;
 import mind.model.function.*;
 import mind.gui.*;
 import mind.model.*;
@@ -80,9 +71,11 @@ public class DiscountedsystemcostDialog extends javax.swing.JDialog
   private JTable c_table;
   private JButton btnDefault;
   private JButton btnAddColumn;
+  private JButton btnAddRow;
+  private JButton btnDeleteRow;
+  private JButton btnDeleteColumn;
   private JButton btnOk;
   private JButton btnCancel;
-  private JButton btnManually;
   private JScrollPane c_scrollPane;
   private int c_maxTimeSteps = 1;
   private JSeparator sep1;
@@ -93,9 +86,13 @@ public class DiscountedsystemcostDialog extends javax.swing.JDialog
   private Long c_analysperiod ;
   private Integer c_rate = 0;
   private Vector c_timeStepValues;
-  private InvestmentCost c_investmentCost;
-  boolean c_investment;
- 
+  //private InvestmentCost c_investmentCost;
+  //boolean c_investment;
+  private JTextField exprTxt;
+  private JTextField editorText;
+  private boolean editedLast = false;
+  private String discardText = "";
+  private DefaultCellEditor editor;
     /** Creates a new instance of DiscountedsystemcostDialog */
     public DiscountedsystemcostDialog() {
     }
@@ -125,9 +122,11 @@ public class DiscountedsystemcostDialog extends javax.swing.JDialog
             }
          initComponents();
          updateTable();
+         //c_table.setRowSelectionAllowed(true);
+         //c_table.setColumnSelectionAllowed(true);
         }
      
-     /** Creates new form DiscountedsystemcostDialog */
+     /** Creates new form DiscountedsystemcostDialog *
     public DiscountedsystemcostDialog(JDialog parent , boolean modal, GUI gui, InvestmentCost inves) 
         {
         super(parent, modal);
@@ -154,7 +153,7 @@ public class DiscountedsystemcostDialog extends javax.swing.JDialog
             }
          initComponents();
          updateTable();
-        }
+        }*/
    
     /**
      * MyTableModel is inner klass that hold its data in an array and kan  get the data from an outside source such as a database. 
@@ -215,7 +214,11 @@ public class DiscountedsystemcostDialog extends javax.swing.JDialog
     public boolean isCellEditable(int row, int col) 
     {
     if (col>0)
+    {
+        //CalculateTimestepLength(data, getRowCount() ,getColumnCount());
         return true;
+    }
+        
     else
         return false;
     }
@@ -241,8 +244,9 @@ public class DiscountedsystemcostDialog extends javax.swing.JDialog
     public void setValueAt(Object value, int row, int col) 
     {
     data[row][col] = value;
+    //CalculateTimestepLength(data, getRowCount() ,getColumnCount());
     fireTableCellUpdated(row, col);
-   // CalculateTimestepLength(data, getRowCount() ,getColumnCount());
+    
     
     }
     
@@ -298,7 +302,7 @@ public class DiscountedsystemcostDialog extends javax.swing.JDialog
     // The table
     c_tableModel = new MyTableModel();
  
-
+    //c_tableModel.
     JSeparator separator = new JSeparator(JSeparator.HORIZONTAL);
   
     // Add rate label and rate field 
@@ -329,11 +333,15 @@ public class DiscountedsystemcostDialog extends javax.swing.JDialog
     getContentPane().add(sep1, gridBagConstraints1);
     
     btnDefault = new JButton("Default");
-    btnAddColumn = new JButton("Add Timesteps");
-    btnManually = new JButton("Input manually");
+    btnAddColumn = new JButton("Add Column");
+    btnAddRow = new JButton("Add Row");
+    btnDeleteRow = new JButton("Delete Row");
+    btnDeleteColumn = new JButton("Delete Column");
     showPanel.add(btnDefault);
     showPanel.add(btnAddColumn);
-    showPanel.add(btnManually);
+    showPanel.add(btnAddRow);
+    showPanel.add(btnDeleteColumn);
+    showPanel.add(btnDeleteRow);
     btnDefault.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
                             btnDefaultActionPerformed();
@@ -346,9 +354,19 @@ public class DiscountedsystemcostDialog extends javax.swing.JDialog
 			}
 		});
                 
-    btnManually.addActionListener(new ActionListener() {
+    btnAddRow.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				btnManuallyActionPerformed();
+				btnAddRowActionPerformed();
+			}
+		});
+    btnDeleteColumn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				btnDeleteColumnActionPerformed();
+			}
+		});
+    btnDeleteRow.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				btnDeleteRowActionPerformed();
 			}
 		});
     gridBagConstraints1 = new java.awt.GridBagConstraints();
@@ -365,19 +383,120 @@ public class DiscountedsystemcostDialog extends javax.swing.JDialog
     gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
     getContentPane().add(sep2, gridBagConstraints1);
     c_table = new JTable(c_tableModel);
-    c_table.addKeyListener(new KeyListener(){
+  /*  c_table.addKeyListener(new KeyListener(){
 			public void keyPressed(KeyEvent e) { }
                         public void keyReleased(KeyEvent e){
                             CalculateTimestepLength(c_tableModel.getData(), c_tableModel.getRowCount() ,c_tableModel.getColumnCount());
                             }
                         public void keyTyped(KeyEvent e){}
                         
-		});
-    c_table.setPreferredScrollableViewportSize(new Dimension(800, 100));
+		});*/
+    c_table.setRowSelectionAllowed(false);
+    c_table.setColumnSelectionAllowed(false);
+    c_table.setPreferredScrollableViewportSize(new Dimension(500, 145));
+    //ToolTipManager.sharedInstance().unregisterComponent(c_table);
+    //ToolTipManager.sharedInstance().unregisterComponent(c_table.getTableHeader());
+   // c_table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+    //c_table.setPreferredScrollableViewportSize(new Dimension(800, 100));
     //c_table.setAutoResizeMode(5);
     //c_table.setPreferredSize(new Dimension(300, 200));
     //Create the scroll pane and add the table to it.
-    c_scrollPane = new JScrollPane(c_table);
+    
+   //"excell behavior"
+    // expression text panel (to simplifie use of long expressions)
+    exprTxt = new JTextField(30);
+    editorText = new JTextField();
+    exprTxt.addKeyListener(new KeyAdapter(){
+                                public void keyReleased(KeyEvent e)
+                                    {
+                                        if(exprTxt.hasFocus())
+                                            {
+                                            editorText.setText(exprTxt.getText());
+                                            editedLast = false;
+                                            }
+                                      //  CalculateTimestepLength(c_tableModel.getData(), c_tableModel.getRowCount() ,c_tableModel.getColumnCount());
+                                       // editorText.grabFocus();
+                                    }
+                        	});
+
+    exprTxt.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				int row = 0, column = 0;
+				column = c_table.getEditingColumn();
+				row = c_table.getEditingRow();
+				if( row != -1 && column != -1 ){
+					row++;
+					if (row > c_table.getRowCount() - 1){
+						row = 0;
+						column++;
+						if (column > c_table.getColumnCount() - 1) column = 0;
+					}
+					c_table.editCellAt(row, column);
+					exprTxt.setText(editorText.getText());
+					}
+				}
+		    });
+    
+
+    editorText.addKeyListener(new KeyAdapter(){
+                                public void keyReleased(KeyEvent e)
+                                        {
+                                        if(editorText.hasFocus())
+                                            {
+                                            exprTxt.setText(editorText.getText());
+                                            editedLast = true;
+                                            }
+                                        }
+                                        });
+
+    editorText.addFocusListener(new FocusAdapter(){
+			public void focusGained(FocusEvent e)
+                                {
+                            	if(c_table.isEditing())
+                                    {
+				    editorText.setBackground(Color.WHITE);
+                                    exprTxt.setText(editorText.getText());
+                                    discardText = editorText.getText();
+					editedLast = true;
+				}
+                               // CalculateTimestepLength(c_tableModel.getData(), c_tableModel.getRowCount() ,c_tableModel.getColumnCount());
+                               // editorText.grabFocus();
+                                //editorText.notifyAll();
+                                //editorText.removeNotify();
+                                //editorText.requestFocus(true);
+                                //editorText.setFocusable(true);
+                               
+			}
+		});
+
+		editor = new DefaultCellEditor (editorText);
+		c_table.setDefaultEditor(Object.class, editor);
+		c_table.setCellEditor(editor);
+		c_table.setSurrendersFocusOnKeystroke(true);
+		editor.setClickCountToStart(1);
+
+		//copy cell contents to expression field when user selects with arrow keys
+		c_table.addKeyListener(new KeyAdapter(){
+			public void keyReleased(KeyEvent e){
+                            
+				if(!c_table.isEditing()){
+                                    
+					int row = c_table.getSelectedRow();
+					int column = c_table.getSelectedColumn();
+                                        //CalculateTimestepLength(c_tableModel.getData(), c_tableModel.getRowCount() ,c_tableModel.getColumnCount());
+					if(row > -1 && column > -1){
+                                           // CalculateTimestepLength(c_tableModel.getData(), c_tableModel.getRowCount() ,c_tableModel.getColumnCount());
+						String str = (String) c_table.getValueAt(row,column);
+						exprTxt.setText(str);
+					}
+				}
+                                
+			}
+                       
+		});
+    //c_scrollPane = new JScrollPane(c_table);
+    c_scrollPane = new JScrollPane(c_table,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+					JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
     JScrollBar jb = new JScrollBar();
     c_scrollPane.setHorizontalScrollBar(jb);
     gridBagConstraints1 = new java.awt.GridBagConstraints();
@@ -622,6 +741,12 @@ public class DiscountedsystemcostDialog extends javax.swing.JDialog
            return;
        }
        
+       if(c_analysperiod <=  1)
+       {
+           JOptionPane.showMessageDialog(null, "Please enterthe length of analyses period.\n "+"Analays period value error!" ,
+					"Analays period should be larger than 1", JOptionPane.WARNING_MESSAGE);
+           return;
+       }
        // Calculate number of columns
       timestepColNum = c_maxTimeSteps/c_analysperiod.intValue();
      
@@ -671,7 +796,7 @@ public class DiscountedsystemcostDialog extends javax.swing.JDialog
      c_tableModel.setData(data);
     
     // Calulate the length of timesteps for each year an put it in the first cell in each row 
-    CalculateTimestepLength(data, numberOfRows, timestepColNum+1);
+    //CalculateTimestepLength(data, numberOfRows, timestepColNum+1);
       
       c_tableModel.fireTableDataChanged();
       c_tableModel.fireTableStructureChanged();      
@@ -807,6 +932,14 @@ public class DiscountedsystemcostDialog extends javax.swing.JDialog
            return;
        }
        
+    // Check if number of row is equal to the analyses period is correct
+       if(rowNumber > c_analysperiod)
+       {
+           JOptionPane.showMessageDialog(null, "Nubmer of Rows are larger than Analays period\nCann't optimize",
+					"Analays period smallar than number of rows", JOptionPane.WARNING_MESSAGE);
+           return;
+       }
+    
        for(int i = 0;  i < rowNumber; i++)
         {
             for(int j = 0; j < columnNumber; j++)
@@ -822,60 +955,253 @@ public class DiscountedsystemcostDialog extends javax.swing.JDialog
       {
        
        if(c_interestField.getText().equals(""))
-       {
+        {
            JOptionPane.showMessageDialog(null, "Pleas write a mount of the annually interest ",
 					"Empty Interest", JOptionPane.WARNING_MESSAGE);  
         return; 
-       }
+        }
        
-        try
-      {
+       try
+        {
         rate = Float.parseFloat(c_interestField.getText());
-      }
-      catch(Exception e)
-      {
+        }
+       catch(Exception e)
+        {
           JOptionPane.showMessageDialog(null, "Please enter correct value of annual interest.\n "+"Decimal numbers writes with dot(.) not comma (,)",
 					"Wrong format of the Annually interest", JOptionPane.WARNING_MESSAGE);
-      return;
-      }
+        return;
+        }
        
        Long  analysperiod = Long.parseLong(c_periodField.getText());
        
-       //if(c_investment)
-       //{
-         //c_investmentCost.setDiscountedsystemcost(rate,analysperiod,c_tableModel.getTableHedar(),c_tableModel.getData(), c_timeStepValues);  
-       //}
-       //else
+       /*if(c_investment)
+       {
+         c_investmentCost.setDiscountedsystemcost(rate,analysperiod,c_tableModel.getTableHedar(),c_tableModel.getData(), c_timeStepValues);  
+       }
+       else*/
        c_gui.setDiscountedsystemcostControl(rate,analysperiod,c_tableModel.getTableHedar(),c_tableModel.getData(), c_timeStepValues);
-      }
+      } // end if
       else
       {
          JOptionPane.showMessageDialog(null,tableDataControl);
         return; 
       }
+      //CalculateTimestepLength(c_tableModel.getData(), c_tableModel.getRowCount() ,c_tableModel.getColumnCount());
       setVisible(false);
        dispose();
     }
   
-  /**
-  *Button Input Manually is pressd
+  /**t
+  *Button Add Row is pressd
   */ 
   
-  private void btnManuallyActionPerformed()
+  private void btnAddRowActionPerformed()
   {
-    //Check if the model is load it
+      int numberOfColumns = c_tableModel.getColumnCount();
+      int numberOfRows = c_tableModel.getRowCount();
+      
+       //Check if the model is load it
       if(c_maxTimeSteps==0)
       {
             JOptionPane.showMessageDialog(null, "The medel haven't any Timesteps or have only one Timesteps, Load a model to"
 					  + " optimize first.");
             return;
       }
-    if(c_periodField.getText().equals("")|| c_periodField.getText().equals("0"))
-        setDefaultTable();
-    else
-        defaultTable();
-  } 
+      String textPeriod = c_periodField.getText();
+      String rateString = c_interestField.getText();
+       if(rateString.equals("") || rateString==null ||textPeriod == null || textPeriod.equals(""))
+      {
+        if(rateString.equals(""))
+        JOptionPane.showMessageDialog(null, "Pleas write a mount of the annually interest ",
+					"Empty Interest", JOptionPane.WARNING_MESSAGE);  
+    
+      if(textPeriod.equals("") || textPeriod == null)
+      {
+        JOptionPane.showMessageDialog(null, "Pleas write the length of analyses period ",
+					"Empty period analayses", JOptionPane.WARNING_MESSAGE);  
+      }
+      }
+      else
+      {
+      Object[][] data = new Object[numberOfRows+1][numberOfColumns];
+      int yearNum = 1;
+      // Add new Row           
+      for (int i = 0; i < numberOfRows; i++) 
+          {
+          for (int j = 0; j < numberOfColumns; j++)
+              {
+              if(j == 0)
+               data[i][j]="Year"+ yearNum++;
+              else
+               data[i][j] = c_tableModel.getValueAt(i, j);
+              }
+           }
+         
+      for(int i = 0; i < numberOfColumns;i++)
+      {
+           if(i == 0)
+               data[numberOfRows][i]="Year"+ yearNum++;
+           else
+            data[numberOfRows][i]= "";
+      }
+    
+     c_tableModel.setData(data);
+     c_tableModel.fireTableDataChanged();
+     c_tableModel.fireTableStructureChanged();
+    
+  }
+  }
   
+  
+   /**
+  *Button Delete Column is pressd
+  */ 
+  
+private void btnDeleteColumnActionPerformed()
+{
+      int numberOfColumns = c_tableModel.getColumnCount();
+      int numberOfRows = c_tableModel.getRowCount();
+      //boolean accept = true;
+      String textPeriod = c_periodField.getText();
+      String rateString = c_interestField.getText();
+       if(rateString.equals("") || rateString==null ||textPeriod == null || textPeriod.equals(""))
+      {
+        if(rateString.equals(""))
+        JOptionPane.showMessageDialog(null, "Pleas write a mount of the annually interest ",
+					"Empty Interest", JOptionPane.WARNING_MESSAGE);  
+    
+      if(textPeriod.equals("") || textPeriod == null)
+      {
+        JOptionPane.showMessageDialog(null, "Pleas write the length of analyses period ",
+					"Empty period analayses", JOptionPane.WARNING_MESSAGE);  
+      }
+      }
+      else
+      {
+      
+      c_analysperiod = Long.parseLong(textPeriod);//Integer.parseInt(textPeriod);/
+      
+      // Check number of columns
+      if(numberOfColumns > 2)
+       {
+        Object[][] data = new Object[numberOfRows][numberOfColumns-1];
+      
+     	// check if last column is empty
+    	for ( int row = 0; row < numberOfRows; row++ ) 
+        {
+    		String str = (String) c_tableModel.getValueAt(row, numberOfColumns-1);//table.getModel().getValueAt(row, lastCol);
+    		if (!(str == null || str.equals("")))
+                {
+    			int sel = JOptionPane.showConfirmDialog(null, "You are trying to " +"delete a column with contents. " +
+    							"Data will be lost.\nDo you want to " +"continue?",
+    						"Warning", JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
+    			if (sel == JOptionPane.YES_OPTION)
+                            break;
+                        else
+                            return;
+    		}
+    	} // END FOR
+
+        // Delete column
+       
+        for (int i = 0; i < numberOfRows; i++) 
+                {
+                for (int j = 0; j < numberOfColumns-1; j++)
+                    {
+                    data[i][j] = c_tableModel.getValueAt(i, j);
+                    }
+                }
+              
+      
+        int stringLength = c_tableModel.getTableHedar().length-1;
+     
+        String tempString[] = c_tableModel.getTableHedar();
+        String tableHeder[]= new String [stringLength];
+        for(int i = 0; i < stringLength; i++)
+            {
+            tableHeder[i]= tempString[i];
+            }
+     
+        // Update the table
+        c_tableModel.setColumnName(tableHeder);
+        c_tableModel.setData(data);
+        c_tableModel.fireTableDataChanged();
+        c_tableModel.fireTableStructureChanged();
+      } // END if(numberOfColumns > 2)
+     }// END ELSE
+}
+ 
+/**
+  *Button Delete is pressd
+  */ 
+  
+private void btnDeleteRowActionPerformed()
+{
+      int numberOfColumns = c_tableModel.getColumnCount();
+      int numberOfRows = c_tableModel.getRowCount();
+      //boolean accept = true;
+      String textPeriod = c_periodField.getText();
+      String rateString = c_interestField.getText();
+       if(rateString.equals("") || rateString==null ||textPeriod == null || textPeriod.equals(""))
+      {
+        if(rateString.equals(""))
+        JOptionPane.showMessageDialog(null, "Pleas write a mount of the annually interest ",
+					"Empty Interest", JOptionPane.WARNING_MESSAGE);  
+    
+      if(textPeriod.equals("") || textPeriod == null)
+      {
+        JOptionPane.showMessageDialog(null, "Pleas write the length of analyses period ",
+					"Empty period analayses", JOptionPane.WARNING_MESSAGE);  
+      }
+      }
+      else
+      {
+      
+      c_analysperiod = Long.parseLong(textPeriod);//Integer.parseInt(textPeriod);/
+      
+      // Check number of columns
+      if(numberOfRows > 1)
+       {
+          //if(numberOfRows == 1)
+            //  return;
+        Object[][] data = new Object[numberOfRows-1][numberOfColumns];
+      
+     	// check if last Row is empty
+    	for ( int col = 1; col < numberOfColumns; col++ ) 
+        {
+    		String str = (String) c_tableModel.getValueAt(numberOfRows-1, col);//table.getModel().getValueAt(row, lastCol);
+    		if (!(str == null || str.equals("")))
+                {
+    			int sel = JOptionPane.showConfirmDialog(null, "You are trying to " +"delete a row with contents. " +
+    							"Data will be lost.\nDo you want to " +"continue?",
+    						"Warning", JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
+    			if (sel == JOptionPane.YES_OPTION)
+                            break;
+                        else
+                            return;
+    		}
+    	} // END FOR
+
+        // Delete Row
+       
+        for (int i = 0; i < numberOfRows-1; i++) 
+                {
+                for (int j = 0; j < numberOfColumns; j++)
+                    {
+                    data[i][j] = c_tableModel.getValueAt(i, j);
+                    }
+                }
+              
+      
+        
+        // Update the table
+        //c_tableModel.setColumnName(tableHeder);
+        c_tableModel.setData(data);
+        c_tableModel.fireTableDataChanged();
+        c_tableModel.fireTableStructureChanged();
+      } // END if(numberOfColumns > 2)
+     }// END ELSE
+}
    /** This method is called the user clicks or presses the  Manually button
      * or the model have not binge constructed yet;
   */
@@ -897,7 +1223,7 @@ public class DiscountedsystemcostDialog extends javax.swing.JDialog
   
   private void updateTable()
   {
-     /* if(c_investment)
+      /*if(c_investment)
       {
           c_tableModel.setColumnName(c_investmentCost.getTableHedar());
           c_tableModel.setData(c_investmentCost.getTableData());

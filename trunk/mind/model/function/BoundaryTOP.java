@@ -376,7 +376,9 @@ public class BoundaryTOP
 		//Add function header
 		sheet.addFunctionHeader("BoundaryTOP", label);
                 // Added by Nawzad Mardan 080910
-                sheet.addRow(sheet.addLockedCell("Inflows")+sheet.addCell((new Boolean(c_radin))));		
+                if(c_radin)
+                sheet.addRow(sheet.addLockedCell("Inflows")+sheet.addCell((new Boolean(c_radin))));
+                if(c_radout)
 		sheet.addRow(sheet.addLockedCell("Outflows")+sheet.addCell((new Boolean(c_radout))));
 		
 		//Add Resource description

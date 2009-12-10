@@ -14,11 +14,21 @@
 
 <!-- TODO define your own vocabulary/syntax. Example follows:  -->
 <!-- DTD specification for the StartStop function  -->
-
-<!ELEMENT startStopEquation (label, choiceOne?, choiceTwo?, percentageOfPreviousFlow?, thresholdValue?, startCostChoice?, stopCostChoice?, 
-firstStartCostChoice?, firstStopCostChoice?, startCost?, stopCost?, operateCost?)>
+<!ELEMENT startStopEquation (label,  resource.type?, choiceOne?, choiceTwo?,choiceThree?,choiceFour?, startAltOne?, stopAltOne?, startFirstTimestepAltOne?,
+stopLastTimestepAltOne?, percentageOfPreviousFlow?, thresholdValue?, startCostChoice?, stopCostChoice?, firstStartCostChoice?, firstStopCostChoice?, startCost?, 
+stopCost?, operateCost?, miniFlowAltTwo?, startAltThree?, stopAltThree?, startFirstTimestepAltThree?, stopLastTimestepAltThree?, operateCost3?, minimumFlow? , operator3?, lim1?,
+lim2?, continueProcess?, batchProcess?, startWasteChoice?, stopWasteChoice?, startWasteOfFirstTimestepChoice?, stopWasteOfLastTimestepChoice?,
+percentageWasteValue?,fixedWasteValue?, operateCostAltFour?, miniFlowAltFour?, outFlowValue? )>
+<!-- specifies choiceThreeParam tags -->
+<!-- !ELEMENT choiceThreeParam (percentageOfPreviousFlow3?, operateCost3?, operator3?, limit1?,limit2?)-->
 <!ELEMENT choiceOne  (#PCDATA)>
 <!ELEMENT choiceTwo  (#PCDATA)>
+<!ELEMENT choiceThree  (#PCDATA)>
+<!ELEMENT choiceFour  (#PCDATA)>
+<!ELEMENT startAltOne  (#PCDATA)>
+<!ELEMENT stopAltOne  (#PCDATA)>
+<!ELEMENT startFirstTimestepAltOne  (#PCDATA)>
+<!ELEMENT stopLastTimestepAltOne  (#PCDATA)>
 <!ELEMENT percentageOfPreviousFlow (#PCDATA)>
 <!ELEMENT thresholdValue (#PCDATA)>
 <!ELEMENT startCostChoice (#PCDATA)>
@@ -28,4 +38,24 @@ firstStartCostChoice?, firstStopCostChoice?, startCost?, stopCost?, operateCost?
 <!ELEMENT startCost (#PCDATA)>
 <!ELEMENT stopCost (#PCDATA)>
 <!ELEMENT operateCost (#PCDATA)>
-
+<!ELEMENT miniFlowAltTwo (#PCDATA)>
+<!ELEMENT startAltThree (#PCDATA)>
+<!ELEMENT stopAltThree (#PCDATA)>
+<!ELEMENT startFirstTimestepAltThree (#PCDATA)>
+<!ELEMENT stopLastTimestepAltThree (#PCDATA)>
+<!ELEMENT operateCost3 (#PCDATA)>
+<!ELEMENT minimumFlow (#PCDATA)>
+<!ELEMENT operator3 (#PCDATA)>
+<!ELEMENT lim1 (#PCDATA)>
+<!ELEMENT lim2 (#PCDATA)>
+<!ELEMENT continueProcess (#PCDATA)>
+<!ELEMENT batchProcess (#PCDATA)>
+<!ELEMENT startWasteChoice (#PCDATA)>
+<!ELEMENT stopWasteChoice (#PCDATA)>
+<!ELEMENT startWasteOfFirstTimestepChoice (#PCDATA)>
+<!ELEMENT stopWasteOfLastTimestepChoice (#PCDATA)>
+<!ELEMENT percentageWasteValue (#PCDATA)>
+<!ELEMENT fixedWasteValue (#PCDATA)>
+<!ELEMENT operateCostAltFour (#PCDATA)>
+<!ELEMENT miniFlowAltFour (#PCDATA)>
+<!ELEMENT outFlowValue (#PCDATA)>

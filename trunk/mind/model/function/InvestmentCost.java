@@ -32,17 +32,21 @@
  * You should have received a copy of the GNU General Public License
  * along with reMIND; if not, write to the Free Software Foundation,
  * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *
+
+ * Nawzad Mardan 2008-2009-05-20<nawzad.mardan@liu.se>
+ *
  */
 
 package mind.model.function;
 
-import java.util.LinkedList;
-import java.util.Vector;
-import java.util.Iterator;
 
+import mind.model.function.helpers.*;
 import mind.model.*;
 import mind.io.*;
-import mind.model.function.helpers.*;
+import mind.gui.GUI;
+import mind.gui.UserSettingConstants;
+import java.util.*;
 
 
 /**
@@ -53,9 +57,16 @@ import mind.model.function.helpers.*;
  * @author Tor Knutsson
  * @version 2007-12-12
  */
+
+/**
+ * The function InvestmentCost
+ *
+ * @author Nawzad Mardan
+ * @version 2008-06-24
+ */
 public class InvestmentCost
     extends NodeFunction
-    implements Cloneable
+    implements Cloneable,UserSettingConstants
 {
     private Vector c_timesteps = null;
 
@@ -73,6 +84,30 @@ public class InvestmentCost
      * timestep.
      */
     private Vector c_costFunction;
+    // Added by Nawzad Mardan 080624
+    //private Discountedsystemcost c_discountedsystemcost;
+    // Annually rate
+    //private Float c_intrate;
+    // Number of years
+    //private Long c_analysPeriod;
+    // A Vector containing calculated  rate for each year
+    //private Vector c_annualRateVector;
+    // The header of the table 
+    //private String c_tableHead []= {"Year", "Timestep nr."};
+    // An empety table data
+   // private Object [][] c_data ={ { "Year1", ""},{ "Year2", ""}, {"Year3",""},{"Year4",""},{"Year5",""},{"Year6", ""},}; 
+    //int c_dataLength;
+    //Vector containing the selected timesteps number
+    private Vector c_timestepValues;
+    private float c_technicallifespan = 0.f;
+    private float c_economiclifespan = 0.f;
+    private float c_percentagescrapvalue=0.f;
+    private float c_fastscrapvalue=0.f;
+    private boolean c_annualrateCBState, c_fixedValueCB, c_percentageValueCB, c_discountSystemCost;
+    private float c_annualratevalue =0.f;
+   // boolean c_discountOk = false;
+    private float c_infinity;
+    private float c_diminutive;
 
     /*
      * The cost when no investment is made.
@@ -221,9 +256,39 @@ public class InvestmentCost
 	super(new ID(ID.FUNCTION), "InvestmentCost", null);
 	c_timesteps = new Vector();
 	c_costFunction = new Vector();
+      //  c_discountedsystemcost = new Discountedsystemcost();
 
 	TimestepInfo info = new TimestepInfo();
 	c_timesteps.add(info);
+         
+        /* get the infinity definition from the ini-file */
+        Ini inifile = new Ini();
+
+        String inf = inifile.getProperty(MPS_INFINITY_DEFINITIION, "1E10");
+
+        try {
+            c_infinity = Float.parseFloat(inf);
+            }
+        catch (NumberFormatException ex) 
+            {
+            GUI.getInstance().showMessageDialog("Invalid value in settings.ini. " +
+                                          MPS_INFINITY_DEFINITIION + "= " +
+                                          inf + "\n Using 1e10 as infinity");
+            c_infinity = 1E10f;
+            }
+    //MPS_DIMINUTIVE_DEFINITIION c_diminutive
+        String infof = inifile.getProperty(MPS_DIMINUTIVE_DEFINITIION, "1E-6");
+
+        try {
+            c_diminutive= Float.parseFloat(infof);
+            }
+        catch (NumberFormatException ex) 
+            {
+            GUI.getInstance().showMessageDialog("Invalid value in settings.ini. " +
+                                          MPS_DIMINUTIVE_DEFINITIION + "= " +
+                                          infof + "\n Using 1E-6 as minimum");
+            c_diminutive = 1E-6f;
+            }
     }
 
 
@@ -240,7 +305,49 @@ public class InvestmentCost
 	    xml = xml + XML.indent(indent + 1) + "<label>" + getLabel()
 		+ "</label>" + XML.nl();
 	}
-
+      // Added by Nawzad Mardan 080627
+        //c_dataLength = c_data[0].length;
+        xml = xml + "<technicallifespan>" + Float.toString(c_technicallifespan) + "</technicallifespan>" + XML.nl();
+        xml = xml + "<economiclifespan>" + Float.toString(c_economiclifespan) + "</economiclifespan>" + XML.nl();
+        if(c_annualrateCBState)
+            xml = xml + "<annualRateValue>" + Float.toString(c_annualratevalue) + "</annualRateValue>" + XML.nl();
+        if((c_percentageValueCB) && (c_percentagescrapvalue != 0))
+            xml = xml + "<percentagescrapvalue>" + Float.toString(c_percentagescrapvalue) + "</percentagescrapvalue>" + XML.nl();
+        if((c_fixedValueCB) &&(c_fastscrapvalue != 0))
+            xml = xml + "<fastscrapvalue>" + Float.toString(c_fastscrapvalue) + "</fastscrapvalue>" + XML.nl();
+        /*if((c_intrate > 0) && (c_analysPeriod > 1))
+        {
+        xml = xml + "<rate>" + Float.toString(c_intrate) + "</rate>" + XML.nl();
+        xml = xml + "<analysPeriod>" + Long.toString(c_analysPeriod) + "</analysPeriod>" + XML.nl();
+        //c_tableHead
+        Vector  tableHeadVec = new Vector();
+         for (int i = 0; i < c_tableHead.length; i++) 
+           {
+            tableHeadVec.add(c_tableHead[i]);
+           }
+        
+        xml = xml + "<tableHead>" + tableHeadVec.toString() + "</tableHead>" + XML.nl();
+        xml = xml + "<dataLength>" + c_dataLength + "</dataLength>" + XML.nl();
+        xml = xml + "<timestepValue>" + c_dataLength + "</timestepValue>" + XML.nl();
+        // Add or save all data in the XML FILE
+        String str = "[";
+        for (int i = 0; i < c_data.length; i++) 
+                {
+                   for(int j= 0; j< c_dataLength; j++)
+                   {
+                       str = str+ c_data[i][j]+","; 
+                   }
+                 }
+      String sTmp = (str.length() < 2) ? "" : str.substring(0, str.length() - 1);// sTmp = str without last ","
+               
+      // Check if the last data is an empty string
+      if(c_data[c_data.length-1][c_dataLength-1].equals(""))
+         sTmp = sTmp+" ]";
+      else
+        sTmp = sTmp+"]";
+        xml = xml + "<dataVector>"  + sTmp  + "</dataVector>"  + XML.nl();
+        }*/
+        
         /*
 	 * Save "cost when no invest" variable
 	 */
@@ -301,10 +408,25 @@ public class InvestmentCost
 		//Add function header
 		sheet.addFunctionHeader("InvestmentCost", label);
     	
-    	/*
+        /*
     	 * Save info about the investment cost
     	 * function
+    	 */        
+                
+                
+    	/* Added by Nawzad Mardan 080814
+    	 * Save info about the technical lifespan
+    	 * and economic lifespan
     	 */
+         
+        sheet.addRow(sheet.addLockedCell("Technical lifespan")+sheet.addCell(c_technicallifespan));  
+        sheet.addRow(sheet.addLockedCell("Economic lifespan")+sheet.addCell(c_economiclifespan));
+        if(c_annualrateCBState)
+           sheet.addRow(sheet.addLockedCell("Annual rate value")+sheet.addCell(c_annualratevalue));
+        if(c_percentageValueCB)
+            sheet.addRow(sheet.addLockedCell("Percentage value of the scrap")+sheet.addCell(c_percentagescrapvalue));
+        if(c_fixedValueCB)
+            sheet.addRow(sheet.addLockedCell("Fixed value of the scrap")+sheet.addCell(c_fastscrapvalue));
     	int numberOfFunctions = getNrFunctions();
 		sheet.addRow(sheet.addCell("CostWhenNoInvest")
 				+ sheet.addCell(getCostWhenNoInvest()));
@@ -542,8 +664,7 @@ public class InvestmentCost
      * Creates a new copy of the function.
      * @return A complete copy
      */
-    public Object clone()
-	throws CloneNotSupportedException
+    public Object clone() throws CloneNotSupportedException
     {
 	InvestmentCost clone = (InvestmentCost) super.clone();
 	c_timesteps = new Vector(clone.c_timesteps);
@@ -553,16 +674,15 @@ public class InvestmentCost
 	return clone;
     }
 
-    public int addEquationOfTimestep(EquationControl control,
-                                      int timestep, int index, ID node,
+    public int addEquationOfTimestep(EquationControl control, int timestep, int index, ID node,
                                       Vector inFlows, Vector outFlows)
     {
-                TimestepInfo info = (TimestepInfo) c_timesteps.get(index);
+    TimestepInfo info = (TimestepInfo) c_timesteps.get(index);
 
-                int equation = 1;
+    int equation = 1;
 
-		Vector inflowid = info.getInFlow();
-		Vector outflowid = info.getOutFlow();
+	Vector inflowid = info.getInFlow();
+	Vector outflowid = info.getOutFlow();
 
 		/* Convert from string to id */
 		stringToID( inflowid, inFlows);
@@ -581,7 +701,7 @@ public class InvestmentCost
 					      equation++,Equation.EQUAL,(float)0);
 
 		/* XT1...XTi */
-                String xTiVarString = new String("X" + getID());
+        String xTiVarString = new String("X" + getID());
 		Variable xTi = new Variable(xTiVarString,timestep,(float)1.0);
 
                 /* Add XTi to the XTi equation */
@@ -660,8 +780,35 @@ public class InvestmentCost
      * @throws ModelException if it cannot optimize
      */
     public EquationControl getEquationControl(int maxTimesteps, ID node,
-					      Vector inFlows, Vector outFlows)
-	throws ModelException
+					      Vector inFlows, Vector outFlows) throws ModelException
+    {
+
+	EquationControl control = new EquationControl();
+        
+         // ||(c_discountOk == true) )
+    control =  getEquationControlOldVersion(maxTimesteps, node, inFlows, outFlows);
+        
+            
+    return control;
+        
+    }
+
+
+  
+/**
+     * Returns optimizationinformation from InvestmentCost.
+     * @param maxTimesteps The maximum number of timesteps in the model
+     * @param node The ID for the node that generates the equations
+     * @param inFlows Flows coming in to node
+     * @param outFlows Flows going out from node
+     * @return Some equations that model the source's behaviour
+     * @throws ModelException if it cannot optimize
+     * Added by Nawzad Mardan 20080906
+      *This is an old version of investment cost function calls if user didn't insert a value of
+      *economic lifespan or technical lifespan or rate and analys period
+      *This type of equations didn't take timesteps into consideration
+     */
+    private EquationControl getEquationControlOldVersion(int maxTimesteps, ID node,Vector inFlows, Vector outFlows)throws ModelException
     {
 
 	EquationControl control = new EquationControl();
@@ -696,7 +843,7 @@ public class InvestmentCost
 	 * Really looks like:
 	 * Xmax-Xmax1-Xmax2-...-Xmaxi = 0
 	 */
-        int equation = 1;
+   int equation = 1;
 	Equation xMaxSumEq = new Equation( node, getID(), 0,
 					   equation++/*for the equation*/,Equation.EQUAL,
 					   (float)0);
@@ -771,7 +918,7 @@ public class InvestmentCost
 	 * I0+I1+...Ii = 1
 	 */
 	Equation iiEq = new Equation( node, getID(),0,
-					equation++,Equation.EQUAL,(float)1);
+					equation++,Equation.LOWEROREQUAL,(float)1);
 
 	/* Binary variables */
 	Variable ii;
@@ -885,6 +1032,1204 @@ public class InvestmentCost
 	return control;
     }
 
+
+  /**
+	 * Returns optimizationinformation from source
+	 * @param data The timestep numbers for each year
+         * @param annualRate The annually interest
+         * @param timeStepValues The length of timesteps
+	 * @param node The ID for the node that generates the equations
+	 * @return Some equations that model the source's behaviour
+	 * @throws ModelException when resource does not exist
+	 * @author Added by Nawzad Mardan 080906 calls when Discountedsystemcost Function slected from Model menu
+         * Returns optimizationinformation from the function.
+          */
+
+        /*
+         * This method added in order to generate new type of equations, this is not the same equations
+         * when the Discountedsystemcost function is not used. These equations have
+         * a different timestep numbers and a different coefficient depending on the
+         * length of the analyses period. This method calls when the user trigger
+         * the Discountedsystemcost function from Model menu.
+
+         */
+     /*public EquationControl getEquationControl2(Object [][] data,Vector annualRate,Vector timeStepValues,
+					      ID node, Vector inFlows,Vector outFlows)throws ModelException*/
+    public EquationControl getEquationControl2(Object [][] data,float rateValue,Vector timeStepValues,
+					      ID node, Vector inFlows,Vector outFlows)throws ModelException
+       {
+       
+        EquationControl control = new EquationControl();
+        int maxTimesteps = timeStepValues.size();
+       
+        
+        float my = c_diminutive;
+
+        // Added by Nawzad Mardan 2008-08-28
+        // This is a new case that added to the investment cost
+        // When user inset value of
+        // economic lifespan or technical lifespan or rate and analys period will generate
+        // new type of equations take timesteps into consideration
+         Vector timestepPerYear = new Vector();
+         Vector tDoubelPreemVect = new Vector();
+         Vector wiVector = new Vector();
+         timestepPerYear =  CalculateTimestepPerYear(data);
+        //int maxTimesteps = timeStepValues;
+        int equation = 1;
+        int vectorsize = c_timesteps.size();
+       
+        for (int i = 0; i < maxTimesteps; i++)
+        {
+		/*
+		  for every timestep, we need to generate a variable
+		  First we find out the index of the cost
+		  These two lines makes us use the same value in the vector
+		  many times if we don't have enough information for all
+		  timesteps in the model
+		*/
+		int index =  ((i * vectorsize) / maxTimesteps ) % vectorsize;
+                TimestepInfo info = (TimestepInfo) c_timesteps.get(index);
+                 //TimestepInfo inf = (TimestepInfo) c_timesteps.get(i);
+
+
+		Vector inflowid = info.getInFlow();
+		Vector outflowid = info.getOutFlow();
+
+		/* Convert from string to id */
+		stringToID( inflowid, inFlows);
+		stringToID( outflowid, outFlows);
+        Variable xMax;
+        int timestep = i+1;
+
+		/********************************************/
+
+		/*
+		 * Generate equation (one for each timestep i)
+		 * XTi = F1Ti+F2Ti+...+FnTi
+		 * ( XTi-F1Ti-F2Ti-...-FnTi = 0 )
+		 */
+		Equation xTiEq = new Equation(node,getID(),timestep,
+					      equation++,Equation.EQUAL,(float)0);
+
+		/* XT1...XTi */
+        String xTiVarString = new String("XInv");
+		Variable xTi = new Variable(xTiVarString+getID(),timestep,(float)1.0);
+
+                /* Add XTi to the XTi equation */
+		xTiEq.addVariable(xTi);
+
+		/* Used for both inflows and outflows */
+		Variable fvar;
+
+		/*
+		 * Add one variable to the equation XTi for each
+		 * "selected" inflow
+		 * This means:
+		 * XTi = F1Ti+...FnTi where all F1Ti flows are inflows
+		 * Equation really looks like:
+		 * XTi - F1Ti -...- FnTi = 0
+		 */
+		for(int fin = 0; fin<inflowid.size(); fin++)
+		    {
+			fvar = new Variable( (ID)inflowid.elementAt(fin),
+					      timestep,(float)-1.0);
+			xTiEq.addVariable(fvar);
+		    }
+
+		/*
+		 * Add one variable to the XTi equation for each "selected"
+		 * outflow
+		 */
+		for(int fout = 0; fout<outflowid.size(); fout++)
+		    {
+			fvar = new Variable( (ID)outflowid.elementAt(fout),
+					      timestep,(float)-1.0);
+			xTiEq.addVariable(fvar);
+		    }
+
+		/* Add equation to control */
+		control.add(xTiEq);
+
+		/********************************************/
+
+		/*
+		 * XmaxInvT0 >= XTi
+		 * XmaxInvT0 - XTi >= 0
+		 */
+		Equation xMaxEq = new Equation(node,getID(),timestep,
+					       equation++,Equation.GREATEROREQUAL,(float)0);
+
+		/* independent of which timestep */
+        String xMaxVarString = new String("XMaxInv");
+		xMax = new Variable(xMaxVarString+getID(),0 /*timestep always the same*/,(float)1.0);
+
+		/* Add Xmax to the Xmax equation */
+		xMaxEq.addVariable(xMax);
+
+		/* XT1...XTi */
+		xTi = new Variable(xTiVarString+getID(),timestep,(float)-1.0);
+
+		/* Add XTi to the Xmax equation */
+		xMaxEq.addVariable(xTi);
+
+		/* Add equation to control*/
+		control.add(xMaxEq);
+      }// END FOR
+
+
+        /*******************************************/
+/*
+	 * * Equation XmaxSum
+	 * XmaxInvT0 = XmaxInvT1+XmaxInvT2+...+XmaxInTi
+	 * Really looks like:
+	 * XmaxInvT0-XmaxInvT1-XmaxInvT2-...-XmaxInvTi = 0
+	 */
+	Equation xMaxSumEq = new Equation( node, getID(), 0,
+					   equation++/*for the equation*/,Equation.EQUAL,(float)0);
+
+	Variable xMaxi;
+
+	/* Create XmaxInvT0 equation
+         *XmaxInvT0 = XmaxInv1T1 + XmaxInv1T2 +...+ XmaxInv1Ti + XmaxInv2T1 + XmaxInv2T2 +...+ XmaxInv2Ti +...+ XmaxInvnTi
+	 * XmaxInvT0 - (XmaxInv1T1 + XmaxInv1T2 +...+ XmaxInv1Ti + XmaxInv2T1 + XmaxInv2T2 +...+ XmaxInv2Ti +...+ XmaxInvnTi)  = 0
+         *
+	 */
+    Variable xMax;
+    String xMaxVarString = new String("XMaxInv");
+	xMax = new Variable(xMaxVarString+getID(),0 /*timestep always the same*/,(float)1.0);
+
+	xMaxSumEq.addVariable(xMax);
+    for(int i = 1; i<=getNrFunctions(); i++)
+       {
+       for (int j = 1; j <= maxTimesteps; j++)
+          {
+          String xMaxiVarString = new String("XMaxInv" + i );
+          xMaxi = new Variable(xMaxiVarString+getID(),j/*timestep*/,(float)-1.0);
+          xMaxSumEq.addVariable(xMaxi);
+          }// END FOR LOOP for each timesteps
+       }
+
+	/* Xmax equation is done, add to control */
+	control.add(xMaxSumEq);
+
+        /********************************************/
+        /*
+
+         *YInv0T1+YInv1T1+YInv2T1+...+YInvnT1+...+YInv0T2+YInv1T2+YInv2T2+...+YInvnT2+ YInv0T3+YInv1T3+YInv2T3+...+YInvnT3+...+YInvnTi
+         *YInvtotT0 = YInv0T1+YInv1T1+YInv2T1+...+YInvnT1+...+YInv0T2+YInv1T2+YInv2T2+...+YInvnT2+ YInv0T3+YInv1T3+YInv2T3+...+YInvnT3+...+YInvnTi
+         *
+         **Y0T1+Y1T1+Y2T1+...+YnT1+...+Y0T2+Y1T2+Y2T2+...+YnT2+ Y0T3+Y1T3+Y2T3+...+YnT3+...+YnTi
+
+         *Ytot - Y0T1-Y1T1-Y2T1+...-YnT1-...-Y0T2-Y1T2-Y2T2-...-YnT2-Y0T3-Y1T3-Y2T3-...-YnT3-...-YnTi = 0
+         *
+         *
+         *
+         *Ytot = Y0T1+Y1T1+Y2T1+...+YnT1+...+Y0T2+Y1T2+Y2T2+...+YnT2+ Y0T3+Y1T3+Y2T3+...+YnT3+...+YnTi
+         *Ytot - Y0T1-Y1T1-Y2T1+...-YnT1-...-Y0T2-Y1T2-Y2T2-...-YnT2-Y0T3-Y1T3-Y2T3-...-YnT3-...-YnTi = 0
+         *
+         *
+         *
+         */
+
+	Equation ySumEq = new Equation( node, getID(),0,equation++,Equation.EQUAL,(float)0);
+
+	/*
+	 * Y has same name independent of timestep
+	 */
+    String yVarString = new String("YInvtot");
+	Variable y ;//= new Variable(yVarString,0,(float)1.0);
+
+        /*********************************************/
+
+        /* The Y-variable is the investmentcost, this must be
+         * added to the global equation OBJ, which is the one
+         * the optimizer tries to minimize
+         */
+    Vector rateVect = null ;
+    Equation obj = new Equation(node, getID(), 1, 1, Equation.GOALORFREE);
+	y = new Variable(yVarString+getID(),0,(float)1.0);
+    obj.addVariable(y);
+    control.add(obj);
+       /* Add Y to the ySumEq */
+    ySumEq.addVariable(y);
+    Variable yi;
+        /*********************************************/
+       // Chek if user insert analyse period and rate
+        // Ysum must multiply with the dicountsytem rate factor (1+r)-n
+
+    float rateCoff;
+    int timestepNum, timePeriodLength;
+               // for each timestep, we need to generate a variable
+                // Each year have own rate and a number of time steps
+                // Generate a variable for each timesteps and for each year
+    // For Investment rate equation begin from -(n-1) --> (1+rate)power - (number of year- 1)
+    // For this reason first value for the Annual Rate Vector will be 1 because power(0) = 1
+    int analyperiod = data.length;
+    float actualRate;
+    if((c_annualrateCBState) && (c_annualratevalue > 0))
+        actualRate = c_annualratevalue/100;
+    else
+        actualRate = rateValue/100;
+   
+    rateVect = calculateAnnualRate(analyperiod,actualRate );
+   
+
+    for (int i = 0; i < data.length; i++)
+           {
+           // Get anuualy rate from the annual vector
+           rateCoff = ((Float)rateVect.get(i)).floatValue();
+           timePeriodLength = data[i].length;
+           // Each year have his own time steps
+           for(int j= 1; j< timePeriodLength; j++)
+              {
+                       // Check if the array is not empty
+                       if(!data[i][j].equals(""))
+                       {
+                       // Get timestep number from the array
+                       String value = (String)data[i][j];
+                       timestepNum =Integer.parseInt(value);
+
+                       // Check if the correct timestep insert it
+                       if(timestepNum <= 0)
+                           throw new ModelException("Please insert correct Timestep number in the Discountsystem's table.\n" +
+                                        " Timestep number should be largar than zero.\n Can not optimize.");
+
+                       // Generat new variable for each time step and each flow
+                       for(int k = 0; k<=getNrFunctions(); k++)
+                          {
+                          if(k == 0)
+                            {
+                            if(getCostWhenNoInvest() != 0)
+                             {
+                             String yiVarString = new String("YInv" + k );
+                             yi = new Variable(yiVarString+getID(),timestepNum,(float)-rateCoff);
+                             ySumEq.addVariable(yi);
+                             }
+                            }
+                          else
+                            {
+                            String yiVarString = new String("YInv" + k );
+                            yi = new Variable(yiVarString+getID(),timestepNum,(float)-rateCoff);
+                            ySumEq.addVariable(yi);   
+                            }
+                          } 
+                        }// END IF checking
+               }// END FOR for each year
+          }// END FOR for all timesteps and all years
+
+            /* Y equation is done, add to control */
+	control.add(ySumEq);
+        /*******************************************/
+
+	/********************************************/
+        /* The equation
+           The condition connected to every
+         *Variabler som beskriver de olika ”slopen“:
+           YInv0T1 = C*Iinv0T1
+           YInv0T2 = C*Iinv0T2
+           YInv0T3 = C*Iinv0T3
+            .
+            .
+           YInv0Ti = C*I0Ti
+
+            ..........................................................
+	 *  YInv1T1 = k*XMaxInv1T1+b*Iinv1T1    Z0*my*Iinv1T1<= XMaxInv1T1 <= Z1*Iinv1T1
+            YInv1T2 = k*XMaxInv1T2+b*Iinv1T2    Z0*my*Iinv1T2<= XMaxInv1T2 <= Z1*Iinv1T2
+            .
+            .
+            YInv1Ti = k*XMaxInv1Ti+b*Iinv1Ti    Z0*my *Iinv1Ti<= XMaxInv1Ti <= Z1*Iinv1Ti
+
+
+            YInv2T1 = k*XMaxInv2T2+b*Iinv2T1    Z1*my *Iinv2T1<= XMaxInv2T1 <= Z2*Iinv2T1
+            YInv2T2 = k*XMaxInv2T2+b*Iinv2T2    Z1*my *Iinv2T2<= XMaxInv2T2 <= Z2*Iinv2T2
+                .
+                .
+            YInv2Ti = k*XMaxInv2Ti+b*Iinv2Ti    Z1*my *Iinv2Ti<= XMaxInv2Ti <= Z2*Iinv2Ti
+
+
+            .
+            .
+            .
+            YInvnTi = k*XMaxInvnTi+b*IinvnTi    Z(n-1)*my *IinvnTi<= XMaxInvnTi <= Zn*IinvnTi
+
+
+
+
+         */
+	Equation yiEq;
+    Variable ii;
+	/*
+	    Z0*my*Iinv1T1<= XMaxInv1T1 <= Z1*Iinv1T1
+            Z0*my*Iinv1T2<= XMaxInv1T2 <= Z1*Iinv1T2
+            .
+            .
+            Z0*my *Iinv1Ti<= XMaxInv1Ti <= Z1*Iinv1Ti
+
+            Z1*my *Iinv2T2<= XMaxInv2T2 <= Z2*Iinv2T2
+            .
+            .
+            Z1*my *Iinv2Ti<= XMaxInv2Ti <= Z2*Iinv2Ti
+            .
+            .
+            Z(n-1)*my *IinvnTi<= XMaxInvnTi <= Zn*IinvnTi
+
+	 *  Condition is split into
+	 *  two equations 1 and 2
+	 */
+	Equation yiCond1Eq;
+	Equation yiCond2Eq;
+
+	/*
+	 * Add equations to describe the investment cost
+	 * functions
+	 */
+   boolean upprepning = false;
+       for(int i = 0; i<=getNrFunctions(); i++)
+        {
+            for (int j = 0; j < maxTimesteps; j++)
+            {
+            /* Create yi-variable (coefficient is not changed
+             * in the diff. cases)
+             */
+            String IiVarString = new String("Iinv" + i);
+            String yiVarString = new String("YInv" + i);
+
+            yi = new Variable(yiVarString+getID(),j+1,(float)1.0);
+
+            /* Y0 */
+            if(0 == i)
+            {
+                /* Add the variable C*I0
+                 * in equation Y0 - C*I0 = 0
+                 */
+            if(getCostWhenNoInvest() != 0)
+              {
+                          
+              yiEq = new Equation(node,getID(),0,equation++,Equation.EQUAL,(float)0);
+              ii = new Variable(IiVarString+getID(),j+1,(float)-c_costWhenNoInvest);
+              ii.setIsInteger(true);
+
+              yiEq.addVariable(yi);
+              yiEq.addVariable(ii);
+
+              control.add(yiEq);
+              }
+            }
+            /* Y1...Yi */
+            else
+            {
+                String xMaxiVarString = new String("XMaxInv" + i);
+
+                /* YInv1T1 - k*XmaxInv1T1 - b*Inv1T1 = 0
+                 YInv1T2 - k*XmaxInv1T2 - b*Inv1T2 = 0
+                 ..
+                 .
+                 YInvnTi - k*XmaxInvnTi - b*InvnTi = 0
+                 */
+                yiEq = new Equation(node,getID(),0,equation++,Equation.EQUAL,(float)0);
+                //-k*XmaxInv1T1
+                xMaxi = new Variable(xMaxiVarString+getID(),j+1,(float)-getSlope(i));
+                // -b*Inv1T1
+                ii = new Variable(IiVarString+getID(),j+1,(float)-getOffset(i));
+                ii.setIsInteger(true);
+                yiEq.addVariable(yi);
+                yiEq.addVariable(xMaxi);
+                yiEq.addVariable(ii);
+
+                control.add(yiEq);
+
+                /********************************************/
+
+                /* Condition 1
+                 * XmaxInv1T1-Z1i*Iinv1T1 <= 0
+                 */
+                yiCond1Eq = new Equation(node,getID(),0,equation++,Equation.LOWEROREQUAL,(float)0);
+
+                xMaxi = new Variable(xMaxiVarString+getID(),j+1,(float)1.0);
+                ii = new Variable(IiVarString+getID(),j+1,(float)-getEnd(i));
+                ii.setIsInteger(true);
+                yiCond1Eq.addVariable(xMaxi);
+                yiCond1Eq.addVariable(ii);
+                control.add(yiCond1Eq);
+
+
+                // If the begin of the slop is zero the equation (Xmaxi-Z0i*my*Ii >= 0) must generate only one time
+                if(getBegin(i)== 0)
+                    {
+                    if(j!=0)
+                    upprepning = true;
+                    else
+                    upprepning = false;
+                    }
+
+                if(!upprepning)
+                {
+                /* Condition 2
+                 * Xmaxi-Z0i*my*Ii >= 0
+                 */
+                xMaxi = new Variable(xMaxiVarString+getID(),j+1/*timestep*/,(float)1.0);
+                // XmaxInv1T1-Z0*my*Iinv1T1 >= 0
+                yiCond2Eq = new Equation(node,getID(),0,equation++,Equation.GREATEROREQUAL,(float)0);
+                ii = new Variable(IiVarString+getID(),j+1,(float)-getBegin(i)*my);
+                ii.setIsInteger(true);
+                yiCond2Eq.addVariable(ii);
+                yiCond2Eq.addVariable(xMaxi);
+                control.add(yiCond2Eq);
+                }
+            }// END ELSE
+        }// END FOR LOOP for the all time steps
+      }// END FOR LOOP for the number of functions
+
+       /*--------------------------------------------------*/
+
+        /* The equation
+	 * I0T1+I0T2+I0T3+...+I0Ti+I1T1+I1T2+...+I1Ti+I2T1+I2T2+…+I2Ti+...+InTi  <= 1
+         *Heltal, så att endast max en ”slope” väljs:
+          Iinv0T1+Iinv0T2+Iinv0T3+...+Iinv0Ti+Iinv1T1+Iinv1T2+...+Iinv1Ti+Iinv2T1+Iinv2T2+…+Iinv2Ti+...+IinvnTi <= 1
+
+	 */
+	Equation iiEq = new Equation( node, getID(),0,equation++,Equation.LOWEROREQUAL,(float)1);
+
+	/* Binary variables */
+	//Variable ii;
+    for(int j = 0; j<=getNrFunctions(); j++)
+       {
+       for (int i = 1; i <= maxTimesteps; i++)
+          {
+          if(j == 0)
+            {
+            if(getCostWhenNoInvest() != 0)
+              {
+              String IiVarString = new String("Iinv" + j);
+              ii = new Variable(IiVarString+getID(),i,(float)1.0);
+              ii.setIsInteger(true);
+              iiEq.addVariable(ii);
+              }
+            }
+          else
+            {
+            String IiVarString = new String("Iinv" + j);
+            ii = new Variable(IiVarString+getID(),i,(float)1.0);
+            ii.setIsInteger(true);
+            iiEq.addVariable(ii);  
+            }
+          }
+       }
+	/* Ii equation done, add to control */
+	control.add(iiEq);
+
+
+        /*******************************************/
+        /* The equation
+         *
+          Ser till så att det inte går något flöde i de tidssteg som ligger innan investering liksom efter tekniska livslängden:
+          QInvT1 = Iinv0T1+Iinv1T1+Iinv2T1+...+IinvnT1
+          QInvT2 = Iinv0T2+Iinv1T2+Iinv2T2+...+IinvnT2
+          QInvT3 = Iinv0T3+Iinv1T3+Iinv2T3+...+IinvnT3
+          .
+          .
+          .
+          QInvTi = Iinv0Ti+Iinv1Ti+Iinv2Ti+...+IinvnTi
+
+	 */
+	Equation qiEq ;
+
+	/* Binary variables */
+	Variable qi;
+        for (int i = 0; i < maxTimesteps; i++)
+            {
+            qiEq = new Equation( node, getID(),i,equation++,Equation.EQUAL,(float)0);
+            qi = new Variable("QInv"+getID(),i+1, (float)1.0);
+            qi.setIsInteger(true);
+            qiEq.addVariable(qi);
+            for(int j = 0; j<=getNrFunctions(); j++)
+                {
+                if(j == 0)
+                  {
+                  if(getCostWhenNoInvest() != 0)
+                    {
+                    String IiVarString = new String("Iinv" + j);
+                    ii = new Variable(IiVarString+getID(),i+1,(float)-1.0);
+                    ii.setIsInteger(true);
+                    qiEq.addVariable(ii);
+                    }
+                  }
+                else
+                  {
+                  String IiVarString = new String("Iinv" + j);
+                  ii = new Variable(IiVarString+getID(),i+1,(float)-1.0);
+                  ii.setIsInteger(true);
+                  qiEq.addVariable(ii);  
+                  }
+                }
+            /* Qi equation done, add to control */
+            control.add(qiEq);
+            }// END FOR
+	/*
+         ...........................................................
+        Equations
+        Begränsningsekvationer (beroende på värdet på Ri så kan det gå ett flöde genom respektive flöde under respektive tidssteg)
+        F1T1+	F2T1+… + FmT1 <= RInv1*U
+        F1T2+F2T2+… + FmT2 <= RInv2*U
+        .
+        .
+        .
+        F1Ti+F2Ti+… + FmTi <= RInvi*U
+
+
+
+        F1Ti+F2Ti+… + FmTi - Ri*U <= 0
+         */
+
+        for (int i = 0; i < maxTimesteps; i++)
+         {
+		/*
+		  for every timestep, we need to generate a variable
+		  First we find out the index of the cost
+		  These two lines makes us use the same value in the vector
+		  many times if we don't have enough information for all
+		  timesteps in the model
+		*/
+		int index =  ((i * vectorsize) / maxTimesteps ) % vectorsize;
+                TimestepInfo info = (TimestepInfo) c_timesteps.get(index);
+                 //TimestepInfo inf = (TimestepInfo) c_timesteps.get(i);
+
+
+		Vector inflowid = info.getInFlow();
+		Vector outflowid = info.getOutFlow();
+
+		/* Convert from string to id */
+		stringToID( inflowid, inFlows);
+		stringToID( outflowid, outFlows);
+        Variable rMax;
+        int timestep = i+1;
+
+		/********************************************/
+
+		/*
+		 * Generate equation (one for each timestep i)
+		 * F1Ti+F2Ti+...+FnTi<=R1*U
+		 * (F1Ti+F2Ti+...+FnTi -R1*U <= 0 )
+		 */
+		Equation rTiEq = new Equation(node,getID(),timestep,equation++,Equation.LOWEROREQUAL,(float)0);
+
+		/* RT1...RTi */
+		Variable rTi = new Variable("RInv"+getID(),timestep,(float)-1.0*c_infinity);
+        rTi.setIsInteger(true);
+                /* Add XTi to the XTi equation */
+		rTiEq.addVariable(rTi);
+
+		/* Used for both inflows and outflows */
+		Variable fvar;
+
+		/*
+		 * Add one variable to the equation XTi for each
+		 * "selected" inflow
+		 * This means:
+		 * F1Ti+F2Ti+...+FnTi<=R1*Uwhere all F1Ti flows are inflows
+		 * Equation really looks like:
+		 * F1Ti+F2Ti+...+FnTi -R1*U <= 0
+		 */
+		for(int fin = 0; fin<inflowid.size(); fin++)
+		    {
+			fvar = new Variable( (ID)inflowid.elementAt(fin),
+					      timestep,(float)1.0);
+			rTiEq.addVariable(fvar);
+		    }
+
+		/*
+		 * Add one variable to the XTi equation for each "selected"
+		 * outflow
+		 */
+		for(int fout = 0; fout<outflowid.size(); fout++)
+		    {
+			fvar = new Variable( (ID)outflowid.elementAt(fout),
+					      timestep,(float)1.0);
+			rTiEq.addVariable(fvar);
+		    }
+
+		/* Add equation to control */
+            control.add(rTiEq);
+      }// END FOR
+        /*...................................................
+        *
+         Equations Q = maximum time steps
+         Ser till så att inget flöde går genom ”processen” i tidsstegen innan investeringen gjorts:
+         (För alla i ska följande ekvationer genereras så länge som ((i-Q) >= 1))
+         QInvTi - RInvT(i-1) <= 1
+         QInvTi - RInvT(i-2) <= 1
+            .
+            .
+            .
+         QInvTi - RInvT(i-q) <=1
+
+         QInvT2 - RInvT1 <= 1
+         QInvT2 - RInvT2 <= 1
+         .
+         .
+         .
+         QInvT2 - RInvT(n-Q) <=1
+         Must (n-Q) >= 1
+
+
+         */
+        Variable rTi;
+            for (int i = 1; i <= maxTimesteps; i++)
+            {
+             for(int j = 0; j <= maxTimesteps; j++)
+              {
+                if((i - j) > 0)
+                {
+                 Equation rqTiEq = new Equation(node,getID(),i,equation++,Equation.LOWEROREQUAL,(float)1.0);
+                 qi = new Variable("QInv"+getID(),i, (float)1.0);
+                 qi.setIsInteger(true);
+                 rTi = new Variable("RInv"+getID(),i-j,(float)1.0);
+                 rTi.setIsInteger(true);
+                 rqTiEq.addVariable(qi);
+                 rqTiEq.addVariable(rTi);
+                 control.add(rqTiEq);
+                }
+                else
+                    break;
+              }
+            }
+
+        // Generate equations if technical lifespan is inserted
+        if(c_technicallifespan >0)
+        {
+            /*
+             Beräkning av ti’
+
+            Antag följande:
+            Teknisk livslängd: 2 år => t = 2
+            Analysperiod: 4 år => q = 4 (10 tidssteg => Q = 10)
+            T1, T2, T3 och T4 representerar åren
+            år1 = T1, T2 och T3 dvs = 3 tidsteg
+            år2 = T4 och T5 dvs = 2 tidsteg
+            år3 = T6, T7 och T8 dvs = 3 tidsteg
+            år4 = T9 och T10 dvs = 2 tidsteg
+
+           t1’ = 8 = (T1 - 0) + T2 + T3 = (3 – 0) + 2 + 3
+           t2’ = 7 = (T1 - 1) + T2 + T3 = (3 – 1) + 2 + 3
+           t3’ = 6 = (T1 - 2) + T2 + T3 = (3 – 2) + 2 + 3
+           t4’ = 7 = (T2 - 0) + T3 + T4 = (2 – 0) + 3 + 2
+           t5’ = 6 = (T2 - 1) + T3 + T4 = (2 – 1) + 3 + 2
+
+           För t6’, t7’, t8’, t9’ och t10’ ska inga ekvationer anges, d.v.s. ekvationerna i ekvationen som anges med ** ovan ska genereras för alla tidssteg förutom de tidssteg som ligger sist i analysperioden som avgörs av följande funktion:
+           Q – antalet tidssteg i de t år som ligger sist i analysperioden
+
+            rq2TiEq.addVariable(rTi);
+            control.add(rq2TiEq);
+            if( x < c_technicallifespan)
+             x++;
+            else
+                break;
+            if((x + i) > maxTimesteps)
+                break;
+            }
+            }// END FOR*/
+
+        
+        int tpreemNumber = analyperiod - (int)c_technicallifespan;
+        Vector tPreemVect = new Vector();
+        if(tpreemNumber > 0)
+         for(int i = 0; i < tpreemNumber;i++ )
+         {
+         int numberOfTimesteps = ((Long)timestepPerYear.get(i)).intValue();
+         //if((i+2) < timestepPerYear.size() )
+         for(int j =0; j < numberOfTimesteps; j++)
+            {
+            int tPreemi = numberOfTimesteps - j;//
+            if(i+c_technicallifespan+1 < timestepPerYear.size())
+               {
+                for(int k = 0 ,m = i; k < c_technicallifespan; k++)
+                    {
+                    if( m++ < timestepPerYear.size() )
+                        tPreemi = tPreemi + ((Long)timestepPerYear.get(m)).intValue();
+                    }
+                    tPreemVect.add(new Long(tPreemi));
+               }
+            else
+                break;
+            }
+         }
+        /* ......................................................
+            (För alla i ska följande ekvationer genereras så länge som ((i+ti’+f)<=Q))
+            Se nedan för information om hur länge ekvationerna ska genereras
+            QInvTi + RInvT (i+ti’+0) <= 1
+            QInvTi + RInvT (i+ti’+1) <= 1
+            QInvTi + RInvT (i+ti’+2) <= 1
+            .
+            .
+            .
+            QInvTi + RInvT (i+ti’+f) <=1
+
+            (i+ti+f)<= maxTimesteps
+            
+        */
+       if(tpreemNumber > 0)
+        for (int i = 1; i <= maxTimesteps; i++)
+            {
+            /*
+             Qi + R(i+t+0) <= 1
+             Qi + R(i+t+1) <= 1
+             Qi + R(i+t+2) <= 1
+             */
+            if(i <= tPreemVect.size())
+            {
+            int inValue = ((Long)tPreemVect.get(i-1)).intValue();
+            int x = i + inValue;
+            if(x <= maxTimesteps)
+              {
+                while(x <= maxTimesteps)
+                {
+                Equation rqfTiEq = new Equation(node,getID(),i,equation++,Equation.LOWEROREQUAL,(float)1.0);
+                rTi = new Variable("RInv"+getID(),x, (float)1.0);
+                rTi.setIsInteger(true);
+                qi = new Variable("QInv"+getID(),i, (float)1.0);
+                qi.setIsInteger(true);
+                rqfTiEq.addVariable(qi);
+                rqfTiEq.addVariable(rTi);
+                control.add(rqfTiEq);
+                x++;
+                }
+              }// END IF
+            else
+                break;
+            }
+            else
+                break;
+           }// END FOR
+        }// END IF  technical lifespan is inserted
+
+        
+
+       //  Generate equations if economic lifespan is inserted
+      if(c_economiclifespan > 0)
+        {
+            /*---------------------------------------------------------
+             Följande funktioner ska inkluderas i målfunktionen (Om ingen ekonomisk livslängd anges, ska nedanstående ekvationer inte genereras):
+             RestY0T1+RestY1T1+RestY2T1+...+RestYnT1+...+RestY0T2+RestY1T2+RestY2T2+...
+             + RestYnT2+RestY0T3+RestY1T3+RestY2T3+...+RestYnT3+...+RestYnTi
+             *
+             */
+            // Calculate the percentage value
+            float per = c_percentagescrapvalue/100;
+
+
+            // The last annually rate
+            //float rate = ((Float)rateVect.get(rateVect.size()-1)).floatValue();
+            Equation restSumEq = new Equation( node, getID(),1,equation++,Equation.EQUAL,0);
+
+            /*
+            * Y has same name independent of timestep
+            */
+            String restVaString = new String("RestYTot");
+            Variable restTot = new Variable(restVaString+getID(),0,(float)-1.0);
+            obj.addVariable(restTot);
+            //control.add(obj);
+            /*********************************************/
+
+            /* The restTot-variable in the investmentcost function, this must be
+            * added to the global equation OBJ, which is the one
+            * the optimizer tries to minimize
+            */
+            /* Add restTot to the restSumEq */
+            restTot = new Variable(restVaString+getID(),0,(float)1.0);
+            restSumEq.addVariable(restTot);
+            for (int i = 1; i <= maxTimesteps; i++)
+                {
+                for(int j = 0; j<=getNrFunctions(); j++)
+                   {
+                   if(j == 0)
+                     {
+                     if(getCostWhenNoInvest() != 0)
+                        {
+                        String restVarString = new String("RestInvY" + j);
+                        //String yiVarString = new String("YInv" +j);
+                        //Variable Yi = new Variable(yiVarString+getID(),i,-per*rate);
+                        Variable restyi = new Variable(restVarString+getID(),i,(float)-1);
+                        //restSumEq.addVariable(Yi);
+                        restSumEq.addVariable(restyi);
+                        }
+                      }
+                   else
+                       {
+                        String restVarString = new String("RestInvY" + j);
+                        //String yiVarString = new String("YInv" +j);
+                        //Variable Yi = new Variable(yiVarString+getID(),i,-per*rate);
+                        Variable restyi = new Variable(restVarString+getID(),i,(float)-1);
+                        //restSumEq.addVariable(Yi);
+                        restSumEq.addVariable(restyi);
+                        }
+
+                   }
+                 }
+
+            control.add(restSumEq);
+            /*
+               Så länge som (e-(q-(wi)) >=0) så görs nedanstående ekvationer (i annat fall sätts RestYnTi = 0) utifrån tre alternativ:
+
+                Alternativ 1: Anges även om varken RestFast eller RestProcent har angetts
+                RestY0T1 = YInv0T1*(1/e) *(e-(q-w1)) * (1+r)-q
+                RestY1T1 = YInv1T1*(1/e) *(e-(q-w1)) * (1+r)-q
+                RestY2T1 = YInv2T1*(1/e) *(e-(q-w1)) * (1+r)-q
+                .
+                .
+                .
+                RestYnT1 = YInvnT1*(1/e) *(e-(q-w1)) * (1+r)-q
+
+                RestY0T2 = YInv0T2*(1/e) *(e-(q-w2)) * (1+r)-q
+                RestY1T2 = YInv1T2*(1/e) *(e-(q-w2)) * (1+r)-q
+                RestY2T2 = YInv2T2*(1/e) *(e-(q-w2)) * (1+r)-q
+                .
+                .
+                .
+                RestYnT2 = YInvnT2*(1/e) *(e-(q-w2)) * (1+r)-q
+
+                .
+                .
+                .
+
+                RestYnTi = YInvnTi*(1/e) *(e-(q-(wi))) * (1+r)-q
+
+                Gråmarkerade ekvationer genereras endast om Iinv0Ti?? 0
+
+
+                e is the economic life span
+             *  q is the analyse period
+             * 
+             * Beräkning av wi’ 
+            T1, T2, T3,T4 och T5 representerar åren
+            år1 = T1, T2 och T3 dvs = 3 tidsteg
+            år2 = T4 och T5 dvs = 2 tidsteg
+            år3 = T6 och T7 dvs = 2 tidsteg
+            år4 = T8  dvs = 1 tidsteg
+            år5 = T9 och T10 dvs = 2 tidsteg 
+            w1 = 1  
+            w2 = 1 
+            w3 = 1 
+            w4 = 2 
+            w5 = 2 
+            w6 = 3 
+            w7 = 3 
+            w8 = 4 
+            w9 = 5 
+            w10 = 5 
+             */
+
+          // annualrate = (1+rate)power(- number of year)
+          //double annrate = Math.pow((1+rate),-analyperiod);
+            // The last annually rate
+          float rate = ((Float)rateVect.get(rateVect.size()-1)).floatValue();
+          //IF (user didn't insert percentage scrap value or fixed scrap value)
+          for(int i = 1; i <= analyperiod;i++ )
+               {
+               int numberOfTimesteps = ((Long)timestepPerYear.get(i-1)).intValue();
+               for(int j =0; j < numberOfTimesteps; j++)
+                  {
+                  wiVector.add(new Long(i));
+                  }
+               }
+         for (int i = 1; i <= maxTimesteps; i++)
+             {
+             //Så länge som (e-(q-(wi)) >=0) så görs nedanstående ekvationer (i annat fall sätts RestYnTi = 0) utifrån tre alternativ:
+             //(1/e) *(e-(q-w1)) * (1+r)-q  -> koff1 = (e-(q-w1))      
+             float koff1 = c_economiclifespan-(analyperiod-((Long)wiVector.get(i-1)).intValue());      
+             float koff2 = (koff1 * rate) /c_economiclifespan;
+                   
+             if(koff1 >= 0)
+               {
+                        for(int j = 0; j<=getNrFunctions(); j++)
+                         {
+                         if(j == 0)
+                            {
+                            if(getCostWhenNoInvest() != 0)
+                                {
+                                Equation restYiTi = new Equation( node, getID(),i,equation++,Equation.EQUAL,(float)0);
+                                String restVarString = new String("RestInvY" + j);
+                                String yiVarString = new String("YInv" +j);
+                                Variable Yi = new Variable(yiVarString+getID(),i,-koff2);
+                                Variable restyi = new Variable(restVarString+getID(),i,(float)1.0);
+                                restYiTi.addVariable(Yi);
+                                restYiTi.addVariable(restyi);
+                                control.add(restYiTi);
+                                }
+                            }
+                         else
+                            {
+                            Equation restYiTi = new Equation( node, getID(),i,equation++,Equation.EQUAL,(float)0);
+                            String restVarString = new String("RestInvY" + j);
+                            String yiVarString = new String("YInv" +j);
+                            Variable Yi = new Variable(yiVarString+getID(),i,-koff2);
+                            Variable restyi = new Variable(restVarString+getID(),i,(float)1.0);
+                            restYiTi.addVariable(Yi);
+                            restYiTi.addVariable(restyi);
+                            control.add(restYiTi);
+                            }
+                        }
+                 } // END IF coff >= 0
+                   // (i annat fall sätts RestYnTi = 0)
+             else
+                {
+                for(int j = 0; j<=getNrFunctions(); j++)
+                   {
+                    if(j == 0)
+                      {
+                      if(getCostWhenNoInvest() != 0)
+                        {
+                        Equation restYiTi = new Equation( node, getID(),i,equation++,Equation.EQUAL,(float)0);
+                        String restVarString = new String("RestInvY" + j);
+                        Variable restyi = new Variable(restVarString+getID(),i,(float)1.0);
+                        restYiTi.addVariable(restyi);
+                        control.add(restYiTi);
+                        }
+                      }
+                    else
+                      {
+                      Equation restYiTi = new Equation( node, getID(),i,equation++,Equation.EQUAL,(float)0);
+                      String restVarString = new String("RestInvY" + j);
+                      Variable restyi = new Variable(restVarString+getID(),i,(float)1.0);
+                      restYiTi.addVariable(restyi);
+                     control.add(restYiTi);
+
+                      }
+                  }
+                }
+              } // END FOR each timesteps IF (user didn't insert percentage scrap value or fixed scrap value)
+                // IF the fixed value of the scap inserted
+
+          if((c_fastscrapvalue > 0) || (c_percentagescrapvalue > 0))
+            {
+            for(int i = 0, x = 0; i < analyperiod;i++ )
+               {
+               x++;
+               int numberOfTimesteps = ((Long)timestepPerYear.get(i)).intValue();
+               for(int j =0; j < numberOfTimesteps; j++)
+                  {
+                  int tDoubelPreemi = x + (int)c_technicallifespan;
+                  if(tDoubelPreemi > analyperiod )
+                    tDoubelPreemi = analyperiod;
+                  tDoubelPreemVect.add(new Long(tDoubelPreemi));
+                  }
+               }
+            } // END ELSE IF
+
+          /*---------------------------------------------------------------------------
+           * * Beräkning av ti’’
+
+                   Antag följande:
+                   Teknisk livslängd: 2 år => t = 2
+                   Analysperiod: 5 år => q = 5 (10 tidssteg => Q = 10)
+                   T1, T2, T3,T4 och T5 representerar åren
+                   år1 = T1, T2 och T3 dvs = 3 tidsteg
+                   år2 = T4 och T5 dvs = 2 tidsteg
+                   år3 = T6 och T7 dvs = 2 tidsteg
+                   år4 = T8  dvs = 1 tidsteg
+                   år5 = T9 och T10 dvs = 2 tidsteg
+                 * investering stäkar sig attid under det år som man har gjort och tekniska livslängden
+                 * börjar alltid det år som kommer efter investering
+                   t1’’ = 3  =  2 + 1 man räknar alltid tillförsta året (to begining)
+                   t2’’ = 3  = 2 + 1
+                   t3’’ = 3 =2+1
+                   t4’’ = 4 = 2+2 man har gjort invistering i år 2 där för börjar T.L.L från år 3 och sträkar sig till år 4
+                 * då räknar man från år 4 tillbaka till år 1 dvs blir 2 + 2
+                   t5’’ = 4 =2+2
+                   t6’’ = 5 = 2+3
+                   t7’’ = 5 =2+3
+                   t8’’ = 5 =2+3  t8 liggar  år 4 men analys året slutar efter ett år då vi kan köra till år 5
+                   t9’’ = 5   t9 liggar  år 5 men analys året slutar i år 5 då vi kan köra till år 5
+                   t10’’ = 5 t10 liggar  år 5 men analys året slutar i år 5 då vi kan köra till år 5
+
+           *
+            Alternativ 2: om RestFast angetts formuleras följande ekvationer så länge som Ti<=Q)
+            RestFastY0T1 = Iinv0T1 * RestFast * (1+r)-t1’’
+            RestFastY1T1 = Iinv1T1 * RestFast * (1+r)- t1’’
+            RestFastY2T1 = Iinv2T1 * RestFast * (1+r)- t1’’
+            .
+            .
+            .
+            RestFastYnT1 = IinvnT1 * RestFast * (1+r)- t1’’
+
+            RestFastY0T2 = Iinv0T2 * RestFast * (1+r)-t2’’
+            RestFastY1T2 = Iinv1T2 * RestFast * (1+r)- t2’’
+            RestFastY2T2 = Iinv2T2 * RestFast * (1+r)- t2’’
+            .
+            .
+            .
+            RestFastYnT2 = IinvnT2 * RestFast * (1+r)- t2’’
+
+            .
+            .
+            .
+
+            RestFastYnTi = IinvnTi * RestFast * (1+r)- ti’’
+
+
+        ((Long)tDoubelPreemVect.get(i-1)).intValue()
+        double annrate = Math.pow((1+rate),-analyperiod);
+          */
+          if(c_fastscrapvalue > 0)
+           {
+           Equation restFastEq = new Equation( node, getID(),1,equation++,Equation.EQUAL,0);
+
+            /*
+            * Y has same name independent of timestep
+            */
+            String restFastString = new String("RestFastTot");
+            Variable restFastTotal ;
+            restFastTotal = new Variable(restFastString+getID(),0,(float)-1.0);
+            obj.addVariable(restFastTotal);
+            //control.add(obj);
+            /*********************************************/
+
+            /* The restTot-variable in the investmentcost function, this must be
+            * added to the global equation OBJ, which is the one
+            * the optimizer tries to minimize
+            */
+            /* Add restTot to the restSumEq */
+            restFastTotal = new Variable(restFastString+getID(),0,(float)1.0);
+            restFastEq.addVariable(restFastTotal);
+
+                for(int i = 1; i <= maxTimesteps; i++)
+                   {
+                   double anrate = Math.pow((1+actualRate),-((Long)tDoubelPreemVect.get(i-1)).intValue());
+                   float koff1 = c_fastscrapvalue*(float)anrate;
+                    
+                   for(int j = 0; j<=getNrFunctions(); j++)
+                      {
+                      if(j == 0)
+                       {
+                       if(getCostWhenNoInvest() != 0)
+                          {
+                          Equation restYiTi = new Equation( node, getID(),i,equation++,Equation.EQUAL,0);
+                          String restVarString = new String("RestFastY" + j);
+                          String yiVarString = new String("Iinv" +j);
+                          Variable Yi = new Variable(yiVarString+getID(),i,-koff1);
+                          Variable restyi = new Variable(restVarString+getID(),i,(float)1.0);
+                          Variable restFastY = new Variable(restVarString+getID(),i,(float)-1.0);
+                          restFastEq.addVariable(restFastY);
+                          restYiTi.addVariable(Yi);
+                          restYiTi.addVariable(restyi);
+                          control.add(restYiTi);
+                          }
+                        }
+                       else
+                        {
+                        Equation restYiTi = new Equation( node, getID(),i,equation++,Equation.EQUAL,0);
+                          String restVarString = new String("RestFastY" + j);
+                          String yiVarString = new String("Iinv" +j);
+                          Variable Yi = new Variable(yiVarString+getID(),i,-koff1);
+                          Variable restyi = new Variable(restVarString+getID(),i,(float)1.0);
+                          Variable restFastY = new Variable(restVarString+getID(),i,(float)-1.0);
+                          restFastEq.addVariable(restFastY);
+                          restYiTi.addVariable(Yi);
+                          restYiTi.addVariable(restyi);
+                          control.add(restYiTi);
+                        }
+                      } // END FOR
+                   } // END FOR EACH TIMESTEP
+                 control.add(restFastEq);
+                }// END IF the fixed value of the scap is inserted
+                /*----------------------------------------------------------------------
+                 
+                Alternativ 3: om RestProcent angetts formuleras följande ekvationer så länge som Ti<=Q)
+                RestProcY0T1 = YInv0T1*RestProcent* (1+r)-t1’’
+                RestProcY1T1 = YInv1T1*RestProcent* (1+r)-t1’’
+                RestProcY2T1 = YInv2T1*RestProcent* (1+r)-t1’’
+                .
+                .
+                .
+                RestProcYnT1 = YInvnT1*RestProcent*(1+r)-t1’’
+
+                RestProcY0T2 = YInv0T2*RestProcent* (1+r)-t2’’
+                RestProcY1T2 = YInv1T2*RestProcent* (1+r)-t2’’
+                RestProcY2T2 = YInv2T2*RestProcent* (1+r)-t2’’
+                .
+                .
+                .
+                RestProcYnT2 = YInvnT2*RestProcent*(1+r)-t2’’
+
+                .
+                .
+                .
+
+                RestProcYnTi = YInvnTi *RestProcent*(1+r)-ti’’
+
+                Gråmarkerade ekvationer genereras endast om Iinv0Ti?? 0
+
+
+                Följande funktioner ska inkluderas i målfunktionen (Om ingen ”restprocent” angetts (och ingen ekonomisk livslängd angetts), ska nedanstående ekvationer inte genereras):
+                RestProcY0T1 + RestProcY1T1 + RestProcY2T1 + ... + RestProcYnT1 + RestProcY0T2 + RestProcY1T2 + RestProcY2T2 + ... + RestProcYnT2 + RestProcY0T3 + RestProcY1T3 + RestProcY2T3 + ... + RestProcYnT3 + RestProcYnTi
+
+                 */
+                // IF the percentage value of the scap is inserted
+          if(c_percentagescrapvalue > 0)
+            {
+                // Calculate the percentage value
+            float psv = c_percentagescrapvalue/100;
+            Equation restPercEq = new Equation( node, getID(),1,equation++,Equation.EQUAL,0);
+
+            /*
+            * Y has same name independent of timestep
+            */
+            String restPercString = new String("RestProcentTot");
+            Variable restPerc ;
+            restPerc = new Variable(restPercString+getID(),0,(float)-1.0);
+            obj.addVariable(restPerc);
+            restPerc = new Variable(restPercString+getID(),0,(float)1.0);
+            restPercEq.addVariable(restPerc);
+            for (int i = 1; i <= maxTimesteps; i++)
+              {
+              double anrate = Math.pow((1+actualRate),-((Long)tDoubelPreemVect.get(i-1)).intValue());
+              float koff1 = psv*(float)anrate;
+
+              for(int j = 0; j<=getNrFunctions(); j++)
+                  {
+                   if(j == 0)
+                            {
+                            if(getCostWhenNoInvest() != 0)
+                               {
+                                Equation restYiTi = new Equation( node, getID(),i,equation++,Equation.EQUAL,0);
+                                String restVarString = new String("RestProcY" + j);
+                                String yiVarString = new String("YInv" +j);
+                                Variable Yi1 = new Variable(yiVarString+getID(),i,-koff1);
+                                Variable restyi = new Variable(restVarString+getID(),i,(float)1.0);
+                                restPerc = new Variable(restVarString+getID(),i,(float)-1.0);
+                                restPercEq.addVariable(restPerc);
+                                restYiTi.addVariable(restyi);
+                                restYiTi.addVariable(Yi1);
+                                control.add(restYiTi);
+                                }
+                            }
+                          else
+                            {
+                            Equation restYiTi = new Equation( node, getID(),i,equation++,Equation.EQUAL,0);
+                            String restVarString = new String("RestProcY" + j);
+                            String yiVarString = new String("YInv" +j);
+                            Variable Yi1 = new Variable(yiVarString+getID(),i,-koff1);
+                            Variable restyi = new Variable(restVarString+getID(),i,(float)1.0);
+                            restPerc = new Variable(restVarString+getID(),i,(float)-1.0);
+                            restPercEq.addVariable(restPerc);
+                            restYiTi.addVariable(restyi);
+                            restYiTi.addVariable(Yi1);
+                            control.add(restYiTi);
+                            }
+                          } // END FOR
+                        } // END FOR EACH TIME STEP
+                    control.add(restPercEq);
+                }// END IF */
+
+       }// END IF (if economic lifespan is inserted)
+
+
+
+     return control;
+     // END ELSE
+   }
+
+
+   
     /**
      * This parses data and initializes this function with values.
      * The linked list of data looks like this:
@@ -919,6 +2264,7 @@ public class InvestmentCost
 			  boolean createMissingResources)
         throws RmdParseException
     {
+        boolean emptyStringflag = false;
 	setTimesteplevel((Timesteplevel) data.removeLast());
 
 	/* first we get the label of the function */
@@ -926,7 +2272,104 @@ public class InvestmentCost
 	    data.removeFirst(); //Throw away the tag
 	    setLabel((String)data.removeFirst());
         }
+        // Added by Nawzad Mardan 2008-06-27
+        if (((String) data.getFirst()).equals("technicallifespan"))
+            {
+                /* remove tag "technicallifespan" */
+                data.removeFirst();
+                try 
+                {
+                    c_technicallifespan = Float.parseFloat((String) data.removeFirst());
+                } 
+                catch (NumberFormatException e) 
+                {
+                    throw new RmdParseException("The 'technicallifespan' field must be a float > 0");
+                }
+                if (c_technicallifespan < 0) 
+                {
+                    throw new RmdParseException("The 'technicallifespan' field must be a float > 0");
+                }
+            }
 
+        if (((String) data.getFirst()).equals("economiclifespan"))
+            {
+                /* remove tag "economiclifespan" */
+                data.removeFirst();
+                try 
+                {
+                    c_economiclifespan = Float.parseFloat((String) data.removeFirst());
+                } 
+                catch (NumberFormatException e) 
+                {
+                    throw new RmdParseException("The 'economiclifespan' field must be a float > 0");
+                }
+                if (c_economiclifespan < 0) 
+                {
+                    throw new RmdParseException("The 'economiclifespan' field must be a float > 0");
+                }
+            }
+
+            if (((String) data.getFirst()).equals("annualRateValue"))
+            {
+
+                data.removeFirst();
+                try
+                {
+                    c_annualratevalue = Float.parseFloat((String) data.removeFirst());
+                    c_annualrateCBState = true;
+                }
+
+                catch (NumberFormatException e)
+                {
+                    throw new RmdParseException("The 'annual rate value' field must be a float > 0");
+                }
+                if (c_annualratevalue < 0)
+                {
+                    throw new RmdParseException("The 'annual rate value' field must be a float > 0");
+                }
+            }
+        if (((String) data.getFirst()).equals("percentagescrapvalue"))
+            {
+                /* remove tag "percentagescrapvalue" */
+                data.removeFirst();
+                try 
+                {
+                    c_percentagescrapvalue = Float.parseFloat((String) data.removeFirst());
+                    if(c_percentagescrapvalue != 0)
+                        c_percentageValueCB = true;
+                } 
+                catch (NumberFormatException e) 
+                {
+                    throw new RmdParseException("The 'percentage scrap value' field must be a float > 0");
+                }
+                /*if (c_percentagescrapvalue< 0)
+                {
+                    throw new RmdParseException("The 'percentage scrap value' field must be a float > 0");
+                }*/
+            }
+        
+        if (((String) data.getFirst()).equals("fastscrapvalue"))
+            {
+                /* remove tag "percentagescrapvalue" */
+                data.removeFirst();
+                try 
+                {
+                    c_fastscrapvalue = Float.parseFloat((String) data.removeFirst());
+                    if(c_fastscrapvalue != 0)
+                        c_fixedValueCB = true;
+                } 
+                catch (NumberFormatException e) 
+                {
+                    throw new RmdParseException("The 'fixed scrap value' field must be a float > 0");
+                }
+                /*if (c_fastscrapvalue < 0)
+                {
+                    throw new RmdParseException("The 'fixed scrap value' field must be a float > 0");
+                }*/
+            }
+        
+      
+    
             /* next should be the cost when no invest
              * variable "c"
              */
@@ -1229,5 +2672,233 @@ public class InvestmentCost
       }
 
       return isRelated;
+    }
+// Inner class    Added by Nawzad Mardan 080626
+  
+    /**
+     * Gets the timesteps value.
+     * @return The timestep values as a Vector.
+     */
+    
+    public Vector getTimestepValues()
+    {
+        return c_timestepValues;
+    }
+    
+    /**
+     * Sets the variable's tims to the Timestep vector
+     * @param  tims The  timestep to be set
+     */
+    public void setTimestepValue( Vector tims)
+    {
+       c_timestepValues = tims; 
+    }
+    
+  /**
+     * Gets the technical lifespan value.
+     * @return The technical lifespan values as a float.
+     */
+    
+    public float getTechnicalLife()
+    {
+        return c_technicallifespan;
+    }
+    
+    /**
+     * Sets the variable's technicallifespan to the technical lifespan
+     * @param  technicallifespan The  technical lifespan to be set
+     */
+    public void setTechnicalLife( float technicallifespan)
+    {
+       c_technicallifespan = technicallifespan; 
+    }
+
+
+    /**
+     * Gets the annual  rate CB State value.
+     * @return The annualrates checkboxs values as a boolean.
+     */
+
+    public boolean getAnnualrateCBState()
+    {
+        return c_annualrateCBState;
+    }
+
+    /**
+     * Sets the variable's technicallifespan to the technical lifespan
+     * @param  technicallifespan The  technical lifespan to be set
+     */
+    public void setAnnualrateCBState( boolean anCBS)
+    {
+       c_annualrateCBState = anCBS;
+    }
+
+
+    /**
+     * Gets the fixed  CheckBox State value.
+     * @return The fixed checkboxs values as a boolean.
+     */
+
+    public boolean getFixedCBState()
+    {
+        return c_fixedValueCB;
+    }
+
+    /**
+     * Sets the variable's technicallifespan to the technical lifespan
+     * @param  fxCBS The c_fixedValueCB to be set
+     */
+    public void setFixedCBState( boolean fxCBS)
+    {
+       c_fixedValueCB = fxCBS;
+    }
+    /**
+     * Gets the percentage  CheckBox State value.
+     * @return The percentage checkboxs values as a boolean.
+     */
+
+    public boolean getPercentageCBState()
+    {
+        return c_percentageValueCB;
+    }
+
+    /**
+     * Sets the variable's pxCBS to the c_percentageValueCB
+     * @param  fxCBS The c_fixedValueCB to be set
+     */
+    public void setPercentageCBState( boolean pxCBS)
+    {
+       c_percentageValueCB = pxCBS;
+    }
+    /**
+     * Gets the discount system cost value.
+     * @return The discount system cost value as a boolean.
+     */
+
+    public boolean getDiscountSystemCost()
+    {
+        return c_discountSystemCost;
+    }
+
+    /**
+     * Sets the variable's dsc to the c_discountSystemCost
+     * @param  dsc The c_discountSystemCost to be set
+     */
+    public void setDiscountSystemCost( boolean dsc)
+    {
+       c_discountSystemCost = dsc;
+    }
+    /**
+     * Gets the economicl lifespan value.
+     * @return The economic lifespan values as a float.
+     */
+    
+    public float getEconomicalLife()
+    {
+        return c_economiclifespan;
+    }
+    
+    /**
+     * Sets the variable's economicllifespan to the technical lifespan
+     * @param  economicllifespan The  economic lifespan to be set
+     */
+    public void setEconomicalLife( float economiclifespan)
+    {
+       c_economiclifespan = economiclifespan; 
+    }
+     
+  
+    /**
+     * Gets the persentage value of the scrap.
+     * @return The persentage value of the scrap as a float.
+     */
+    
+    public float getPercentageValueOfScrap()
+    {
+        return c_percentagescrapvalue ;
+    }
+    
+    /**
+     * Sets the variable's percentagescrapvalue to the pvs
+     * @param  pvs is  the  persentage value of the scrap to be set
+     */
+    public void setPercentageValueOfScrap( float pvs)
+    {
+       c_percentagescrapvalue = pvs; 
+    }
+
+     /**
+     * Gets the persentage value of the annual rate.
+     * @return The c_annualratevalue value  as a float.
+     */
+
+    public float getAnnualRateValue()
+    {
+        return c_annualratevalue ;
+    }
+
+    /**
+     * Sets the variable's c_annualratevalue to the anv
+     * @param  anv is  the  anuual rate value  to be set
+     */
+    public void setAnnualRateValue( float anv)
+    {
+       c_annualratevalue = anv;
+    }
+ /**
+     * Gets the Fixed value of the scrap.
+     * @return The Fixed value of the scrap as a float.
+     */
+    
+    public float getFixedValueOfScrap()
+    {
+        return c_fastscrapvalue ;
+    }
+    
+    /**
+     * Sets the variable's fastscrapvalu to the fvs
+     * @param  fvs is  the  Fixed value of the scrap to be set
+     */
+    public void setFixedValueOfScrap( float fvs)
+    {
+       c_fastscrapvalue = fvs; 
+    }
+    
+   
+    private Vector calculateAnnualRate(int analysPeriod, float rateValue)
+    {
+        double annualRate;
+        Vector annualRateVector = new Vector();
+
+        // Chang rate from integer to foat
+       
+        for(int i = 1; i<= analysPeriod;i++)
+        {
+            // annualrate = (1+rate)power(- number of year)
+            annualRate = Math.pow((1+rateValue),-i);
+            annualRateVector.add(new Float(annualRate));
+
+        }
+        //annualRateVector.add(0, new Float(1.0));
+        return annualRateVector;
+    }
+
+ private Vector CalculateTimestepPerYear(Object [][] data)
+    {
+    Vector tspy = new Vector();
+    for (int i = 0; i < data.length; i++)
+       {
+       int counter = 0;
+       int timePeriodLength = data[i].length;
+           // Each year have his own time steps
+       for(int j= 1; j< timePeriodLength; j++)
+          {
+          if(!data[i][j].equals(""))
+             counter++;
+          }
+      tspy.add(new Long(counter));
+                      // END IF checking
+       }
+    return tspy;
     }
 }

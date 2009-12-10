@@ -1,7 +1,7 @@
 /*
  * reMIND.java
  *
- * Created on den 11 februari 2008, 13:35
+ * Created on den 16 februari 2008, 13:35
  *
  * To change this template, choose Tools | Template Manager
  * and open the template in the editor.
@@ -18,6 +18,7 @@
 
 package remindv2;
 import mind.gui.GUI;
+import java.io.*;
 
 /**
  *
@@ -77,10 +78,38 @@ public class reMIND {
      */
     public static void main(String[] args) 
     {
-//new InnerThread();
+    //new InnerThread();
         // TODO code application logic here
         GUI gui = GUI.getInstance();  // GUI is a singleton
         GUI.setStaticToolbar(gui.c_topToolbar);
+        if(args.length != 0)
+            {
+            File file = new File(args[0]);
+            if(file == null)
+                gui.showMessageDialog("Can't find file " +args[0]);
+            else
+                gui.openArgAction(file);
+            if(args.length > 1)
+                gui.optimizeAction();
+            }
+       /* Process excel = null;
+        Runtime runtime = Runtime.getRuntime();
+        try{
+            String file = "C:\\test.txt";
+            String [] cmdArray = {"C:\\Program Files\\Microsoft office\\OFFICE11\\EXCEL.exe","C:\\test.txt"};
+        excel = runtime.exec(cmdArray);
+        }
+        catch(IOException e) {
+            System.out.println(e);
+        }
+        OutputStream stdin = excel.getOutputStream();
+        PrintStream out = new PrintStream(stdin);
+        String file = "C:\\test.txt";
+        out.println(file);*/
+
+
+     }
+
        
     }
     
@@ -97,4 +126,3 @@ GUI.setStaticToolbar(gui.c_topToolbar);
 }
 }*/
     
-}

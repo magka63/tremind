@@ -52,12 +52,13 @@ public class Ini
     {
 	super();
         // Nawzad Mardan lagt till 2007-07-01
-          try {
-	    creatCommandFile();
-            } 
-        catch(IOException e) 
+          try
+          {
+            creatCommandFile();
+          } 
+          catch(IOException e)
             {
-	    System.out.println(e.getMessage());
+            System.out.println(e.getMessage());
             }
 	load();
     }
@@ -226,48 +227,56 @@ public class Ini
      */ 
    private void creatCommandFile() throws IOException, IllegalArgumentException
     {
-      String newline = System.getProperty("line.separator");
+    String newline = System.getProperty("line.separator");
       //commands = "r MPS\r\no\r\nc p f\r\no\r\nw OPT\r\nq\r\n";*/
-	String commands = "r MPS" + newline
-	    + "o" + newline
-	    + "c p f" + newline
-	    + "o" + newline
-	    + "w OPT" + newline
-	    + "q" + newline;
+	String commands = "read MPS" + newline
+        + "set mip tolerances integrality 0.0"+ newline
+	    + "optimize" + newline
+	    + "change problem fixed_milp" + newline
+	    + "optimize" + newline
+	    + "write OPT" + newline
+	    + "quit" + newline;
 
-        String commandFile = "commands.ocf";
+    String commandFile = "commands.ocf";
 	FileWriter fw = null;
 
-	if(commands == null) {
+	if(commands == null)
+        {
 	    throw new
 		IllegalArgumentException("Command string is empty (null).");
-	}
-        if(!(new File(commandFile)).exists())
+        }
+    if(!(new File(commandFile)).exists())
+     {
+        try
         {
-
-	try {
 	    fw = new FileWriter(new File(commandFile));
-	} catch(IOException e) {
+        }
+        catch(IOException e) {
 	    throw new IOException("Can't create/write to command file. "
 				  + e.getMessage());
-	}
+        }
 
-	/* witre to the file  char by char (very efficient) */
-	for(int i = 0;i < commands.length();i++) {
-	    try {
-		fw.write((int)(commands.charAt(i)));
-	    } catch(IOException e) {
-		throw new IOException("Can't write command to file. "
+        /* witre to the file  char by char (very efficient) */
+        for(int i = 0;i < commands.length();i++)
+        {
+            try
+            {
+            fw.write((int)(commands.charAt(i)));
+            }
+            catch(IOException e) {
+            throw new IOException("Can't write command to file. "
 				      + e.getMessage());
-	    }
-	}
+            }
+        }
 
-	try {
-	    fw.close();
-	} catch(IOException e) {
+        try
+        {
+            fw.close();
+        }
+        catch(IOException e) {
 	    throw new IOException("Couldn't close command file. "
 				  + e.getMessage());
-	}
-    }
+        }
+     }// END IF
    }
 }

@@ -286,14 +286,25 @@ public class ExmlSAXHandler extends DefaultHandler {
 	public void boundary() throws SAXException 
 	{
             //Added by Nawzad Mardan 080910
+            /*
+             *xml += XML.indent(indent+1) + "<inflows>"  + (c_radin ? "true" : "false") + "</inflows>"  + XML.nl();
+        // Added by Nawzad Mardan 080910
+        xml += XML.indent(indent+1) + "<outflows>"  + (c_radout ? "true" : "false") + "</outflows>"  + XML.nl();
+        sheet.addRow(sheet.addLockedCell("Inflows")+sheet.addCell((new Boolean(c_radin))));		
+	sheet.addRow(sheet.addLockedCell("Outflows")+sheet.addCell((new Boolean(c_radout))));
+             */
                if (oldStr.equals("Inflows")) 
-                {
-			addVariable("inflows");
-		} 
+                 {
+                    list.add("inflows");
+                    list.add("true");
+			//addVariable("inflows");
+                 } 
                //Added by Nawzad Mardan 080910
                else if (oldStr.equals("Outflows")) 
-                {
-			addVariable("outflows");
+                 {
+                    list.add("outflows");
+                    list.add("true");
+			//addVariable("outflows");
 		} 
                else if (oldStr.equals("Time Step")) {
 			addTimeStep();
@@ -329,16 +340,22 @@ public class ExmlSAXHandler extends DefaultHandler {
 	 * */
 	public void boundaryTOP() throws SAXException 
 	{
-            //Added by Nawzad Mardan 080910
+            
+               //Added by Nawzad Mardan 080910
                if (oldStr.equals("Inflows")) 
-                {
-			addVariable("inflows");
-		} 
+                 {
+                    list.add("inflow");
+                    list.add("true");
+			//addVariable("inflows");
+                 } 
                //Added by Nawzad Mardan 080910
                else if (oldStr.equals("Outflows")) 
-                {
-			addVariable("outflows");
-		} else if (oldStr.equals("Resource")) {
+                 {
+                    list.add("outflow");
+                    list.add("true");
+			//addVariable("outflows");
+		} 
+               else if (oldStr.equals("Resource")) {
 			addVariable("resource.type");
 		} else if (oldStr.equals("Min")) {
 			checkBoundaryTOP();
@@ -358,10 +375,39 @@ public class ExmlSAXHandler extends DefaultHandler {
 	 * Handles StartStop function elements.
 	 * Added by Nawzad Mardan 2008-06-01
 	 * @exception SAXException. Various causes.
-	 * */
+         * '
+         */
+        
         public void startStopEquation() throws SAXException
         {
-            if (oldStr.equals("Percentage of previous flow")) {
+            if (oldStr.equals("Resource")) {
+			addVariable("resource.type");
+            }
+            else if(oldStr.equals("Start up"))
+            {
+                //System.out.println("The model have a start cost for the first time step"); 
+                list.add("startAltOne");
+                list.add("true");
+            }
+            else if(oldStr.equals("Shut down"))
+            {
+                //System.out.println("The model have a start cost for the first time step"); 
+                list.add("stopAltOne");
+                list.add("true");
+            }
+            else if(oldStr.equals("Start up within the analysis period"))
+            {
+                //System.out.println("The model have a start cost for the first time step"); 
+                list.add("startFirstTimestepAltOne");
+                list.add("true");
+            }
+            else if(oldStr.equals("Shut down within the analysis period"))
+            {
+                //System.out.println("The model have a start cost for the first time step"); 
+                list.add("stopLastTimestepAltOne");
+                list.add("true");
+            } 
+            else if (oldStr.equals("Percentage of previous flow")) {
 			addVariable("percentageOfPreviousFlow");
 		} 
             else if (oldStr.equals("Threshold value")) {
@@ -373,14 +419,14 @@ public class ExmlSAXHandler extends DefaultHandler {
             {
                 //System.out.println("The model have a start cost for the first time step"); 
                 list.add("firstStartCostChoice");
-                 list.add("true");
+                list.add("true");
             }
             else if(oldStr.equals("Start cost value")) {
                 //System.out.println("The model have a startCost cost for the first time step"); 
 			checkstartStopEquation();
 			addVariable("startCost");
 		} 
-             else if(oldStr.equals("Stop cost for the first time step:"))
+             else if(oldStr.equals("Stop cost for the last time step:"))
             {
                 //System.out.println("The model have a stop cost for the first time step"); 
                  list.add("firstStopCostChoice");
@@ -393,10 +439,107 @@ public class ExmlSAXHandler extends DefaultHandler {
             else if(oldStr.equals("Operate value")) {
 			checkstartStopEquation();
 			addVariable("operateCost");
-		} 
-		else
-			throw new SAXException(createErrorMessage("Unknow attribute: \""
-					+ oldStr + "\""));
+		}
+            else if(oldStr.equals("Minimum flow")) {
+			addVariable("miniFlowAltTwo");
+		}
+            
+            else if(oldStr.equals("Start"))
+            {
+                list.add("startAltThree");
+                list.add("true");
+            }
+            else if(oldStr.equals("Stop"))
+            {
+                list.add("stopAltThree");
+                list.add("true");
+            }
+            else if(oldStr.equals("First time step is included"))
+            {
+                list.add("startFirstTimestepAltThree");
+                list.add("true");
+            }
+            else if(oldStr.equals("Last time step is included"))
+            {
+                list.add("stopLastTimestepAltThree");
+                list.add("true");
+            }
+            
+            else if(oldStr.equals("Operate Cost Value")) 
+                {
+			checkstartStopEquation();
+			addVariable("operateCost3");
+		}
+            else if(oldStr.equals("Minimum Flow Value")) {
+			//checkstartStopEquation();
+			addVariable("minimumFlow");
+		}
+            
+            else if(oldStr.equals("Operator")) {
+			//checkstartStopEquation();
+			addVariable("operator3");
+		}
+            
+            else if(oldStr.equals("Min")) {
+			addVariable("lim1");
+		}
+            else if(oldStr.equals("Max")) {
+			addVariable("lim2");
+		}
+            else if(oldStr.equals("R <")) {
+			addVariable("lim2");
+		}
+            else if(oldStr.equals("R >")) {
+			addVariable("lim2");
+		}
+            else if(oldStr.equals("R =")) {
+			addVariable("lim2");}
+                     
+            else if(oldStr.equals("Start west"))
+                { 
+                 list.add("startWasteChoice");
+                 list.add("true");
+                }
+           else if(oldStr.equals("Stop west"))
+                { 
+                 list.add("stopWasteChoice");
+                 list.add("true");
+                }
+           else if(oldStr.equals("Start west for the first time step"))
+                { 
+                 list.add("startWasteOfFirstTimestepChoice");
+                 list.add("true");
+                }
+           else if(oldStr.equals("Stop west for the last time step"))
+                { 
+                 list.add("stopWasteOfLastTimestepChoice");
+                 list.add("true");
+                }
+           else if(oldStr.equals("Percentage value of the waste")) 
+                {
+		checkstartStopEquation();
+		addVariable("percentageWasteValue");
+                }
+           else if(oldStr.equals("Fixed value of the waste")) 
+                {
+		checkstartStopEquation();
+		addVariable("fixedWasteValue");
+                }
+            //operateCostAltFour, miniFlowAltFour, Operate cost, Minimum flow value;
+           else if(oldStr.equals("Operate cost")) 
+                {
+		addVariable("operateCostAltFour");
+                }
+           else if(oldStr.equals("Minimum flow value")) 
+                {
+		addVariable("miniFlowAltFour");
+                }
+           else if(oldStr.equals("Out flow")) 
+                {
+		addVariable("outFlowValue");
+                }
+            else
+                throw new SAXException(createErrorMessage("Unknow attribute: \""+ oldStr + "\""));
             
         }
 	/**
@@ -775,19 +918,24 @@ public class ExmlSAXHandler extends DefaultHandler {
 			list.addLast(charStr);
                 }
                 // Added by Nawzad Mardan 2008-08-14
-                else if (oldStr.equals("Technical lifespan")) {
+        else if (oldStr.equals("Technical lifespan")) {
 			addVariable("technicallifespan");
 		        
 		} 
-                else if (oldStr.equals("Economic lifespan")) {
+        else if (oldStr.equals("Economic lifespan")) {
 			addVariable("economiclifespan");
 		        
-		} 
-                else if (oldStr.equals("Percentage value of the scrap")) {
+		}
+        //annualRateValue
+        else if (oldStr.equals("Annual rate value")) {
+			addVariable("annualRateValue");
+
+		}
+        else if (oldStr.equals("Percentage value of the scrap")) {
 			addVariable("percentagescrapvalue");
 		        
 		} 
-                else if (oldStr.equals("Fixed value of the scrap")) {
+       else if (oldStr.equals("Fixed value of the scrap")) {
 			addVariable("fastscrapvalue");
 		        
 		} 
@@ -1176,7 +1324,10 @@ public class ExmlSAXHandler extends DefaultHandler {
                             oldStr = "stopCostChoice";
                         if(oldStr.equals("Operate value"))
                             oldStr = "choiceTwo";
-                            
+                        if(oldStr.equals("Operate Cost Value"))
+                            oldStr = "choiceThree";    
+                        if(oldStr.equals("Percentage value of the waste") || oldStr.equals("Fixed value of the waste"))
+                            oldStr = "choiceFour";    
 
 			if (f>0){
 				//list.add("choiceOne");    

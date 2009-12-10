@@ -89,8 +89,8 @@ public class OptionsDialog
     private void initComponents () {
         setTitle("Options");
 	c_tabbedPane = new JTabbedPane();
-        mainPanel = new JPanel();
-        optPanel = new JPanel();
+    mainPanel = new JPanel();
+    optPanel = new JPanel();
 	mainPanel.setLayout(new GridBagLayout());
 	optPanel.setLayout(new GridBagLayout());
 
@@ -319,7 +319,7 @@ public class OptionsDialog
 	constraints = new GridBagConstraints ();
 	constraints.gridx = 0;
 	constraints.gridy = 1;
-        constraints.insets = new Insets (10, 10, 0, 0);
+    constraints.insets = new Insets (10, 10, 0, 0);
 	constraints.anchor = GridBagConstraints.NORTHWEST;
 	optPanel.add (optChooser, constraints);
 
@@ -328,14 +328,14 @@ public class OptionsDialog
 	constraints.gridy = 2;
 	constraints.anchor = GridBagConstraints.NORTHWEST;
 	constraints.insets = new Insets (10, 10, 0, 0);
-        optPanel.add (lblOptimizerPath, constraints);
+    optPanel.add (lblOptimizerPath, constraints);
 
 	constraints = new GridBagConstraints ();
 	constraints.gridx = 0;
 	constraints.gridy = 3;
 	constraints.anchor = GridBagConstraints.NORTHWEST;
 	constraints.insets = new Insets (10, 10, 0, 0);
-        optPanel.add (txtOptimizerPath, constraints);
+    optPanel.add (txtOptimizerPath, constraints);
 
 	/*add browse button*/
 	btnBrowse.setText("Browse");
@@ -359,7 +359,7 @@ public class OptionsDialog
 	constraints.gridx = 0;
 	constraints.gridwidth = 3;
 	constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.insets = new Insets (113, 0, 0, 0);
+    constraints.insets = new Insets (113, 0, 0, 0);
 	optPanel.add (sepButtons2, constraints);
 
 

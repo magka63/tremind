@@ -391,7 +391,7 @@ public class Source extends NodeFunction implements Cloneable {
          * the Discountedsystemcost function.
 
          */
-       public EquationControl getEquationControl2(Object [][] data,Vector annualRate,Vector timeStepValues,
+       public EquationControl getEquationControl2(Object [][] data,float rate,Vector timeStepValues,
 					      ID node, Vector toFlows,Vector fromFlows)throws ModelException
        {
 		EquationControl control = new EquationControl();
@@ -399,6 +399,9 @@ public class Source extends NodeFunction implements Cloneable {
 
 		Equation obj = new Equation(node, getID(), 1, 1, Equation.GOALORFREE);
 		Vector foundFlows = new Vector(0);
+        Vector annualRate = null;
+        int analyperiod = data.length;
+        annualRate = calculateAnnualRate(analyperiod, rate);
 
 		if (c_resource == null)
 			throw new ModelException("Resource for Source function in Node "
@@ -485,7 +488,7 @@ public class Source extends NodeFunction implements Cloneable {
            return control;
 	}
 
-        
+
 
 // Validate the function with respect to the object functions
 	private boolean validFunction(int n, int index) {
@@ -645,4 +648,28 @@ public class Source extends NodeFunction implements Cloneable {
   public boolean isRelatedToFlow(ID flow) {
     return false;
   }
+  // Added by Nawzad Mardan 090416
+   /**
+     * Calculating the annually rate
+     *
+     */
+
+    private Vector calculateAnnualRate(int analysPeriod, float annualratevalue)
+    {
+        double annualRate;
+        Vector annualRateVector = new Vector();
+
+        // Chang rate from integer to foat
+         float rate;
+        // Change it to percent
+        rate = annualratevalue/100;
+        for(int i = 1; i<= analysPeriod;i++)
+        {
+            // annualrate = (1+rate)power(- number of year)
+            annualRate = Math.pow((1+rate),-i);
+            annualRateVector.add(new Float(annualRate));
+
+        }
+        return annualRateVector;
+    }
 }

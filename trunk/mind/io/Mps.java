@@ -155,7 +155,7 @@ public class Mps
     {
 	EquationControl equationControl = null;
         initComponents();
-        label.setText("Please wait..generating and controlling the equations");
+        label.setText("Please wait.....generating and controlling the equations");
 	if( myEquationControl == null ){
 	    try {
 		equationControl = model.getEquationControl();
@@ -171,7 +171,7 @@ public class Mps
 	else{
 	    equationControl = myEquationControl;//dev. 2002-03-11
 	}
-        label.setText("Information: Please wait... Creating MPS File ");
+        label.setText("Information: Please wait... Creating MPS File      ");
         //initComponents();
 	// Sort the equations into our three categories
 	Vector equations = equationControl.getAllEquations();
@@ -378,7 +378,7 @@ public class Mps
 	"current model?";
         frame = new JFrame("reMIND: Please wait... Creating MPS File");
         label = new JLabel("Information: Please wait... Creating MPS File");
-        button = new JButton("Cancel");
+        button = new JButton("Quit");
         upperpanel = new JPanel();
         lowerpanel = new JPanel();
         mainpanel = new JPanel();

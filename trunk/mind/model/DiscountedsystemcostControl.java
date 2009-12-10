@@ -40,6 +40,7 @@
 package mind.model;
 import java.util.Vector;
 import java.util.Iterator;
+import mind.io.*;
 
 /**
  *
@@ -59,7 +60,7 @@ public class DiscountedsystemcostControl
     private Object [][] c_data ={ { "Year1", ""},{ "Year2", ""}, {"Year3",""},{"Year4",""},{"Year5",""},{"Year6", ""},}; 
     //A Vector containing the selected timesteps number
     private Vector c_timestepValues;
-    
+    int c_dataLength;
     // An empty constructor (default)
     public DiscountedsystemcostControl() 
     {
@@ -78,7 +79,16 @@ public class DiscountedsystemcostControl
         c_timestepValues = timestepValues;
         calculateAnnualRate();
     }
-    
+    // Sets parameter  ( calls fromModel class when reading rmd file)
+     public DiscountedsystemcostControl(Float rate, Long year, String head [], Object [][] data) 
+    {
+        c_data = data;
+        c_intrate = rate;
+        c_annualRateVector = new Vector();
+        c_analysPeriod = year;
+        c_tableHead = head;
+        calculateAnnualRate();
+    }
      /**
      * Gets the table headar.
      * @return The header as a string.
@@ -188,7 +198,48 @@ public class DiscountedsystemcostControl
             
         }
     }
+    
+    /**
+	 * Save Discountedsystemcost in rmd-format
+     */
    
+      public String toXML(int indent)
+        {
+        String xml = XML.indent(indent) + "<discountSystemCost>" + XML.nl();
+        xml = xml + "<ratein>" + Float.toString(c_intrate) + "</ratein>" + XML.nl();
+        xml = xml + "<analysesPeriod>" + Long.toString(c_analysPeriod) + "</analysesPeriod>" + XML.nl();
+        //c_tableHead
+        Vector  tableHeadVec = new Vector();
+        for (int i = 0; i < c_tableHead.length; i++) 
+           {
+            tableHeadVec.add(c_tableHead[i]);
+           }
+         c_dataLength = c_data[0].length;
+        xml = xml + "<tablesHead>" + tableHeadVec.toString() + "</tablesHead>" + XML.nl();
+        xml = xml + "<dataLengths>" + c_dataLength + "</dataLengths>" + XML.nl();
+        // Add or save all data in the XML FILE
+        String str = "[";
+        for (int i = 0; i < c_data.length; i++) 
+            {
+            for(int j= 0; j< c_dataLength; j++)
+               {
+               str = str+ c_data[i][j]+","; 
+               }
+             }
+        String sTmp = (str.length() < 2) ? "" : str.substring(0, str.length() - 1);// sTmp = str without last ","
+               
+        // Check if the last data is an empty string
+        if(c_data[c_data.length-1][c_dataLength-1].equals(""))
+         sTmp = sTmp+" ]";
+        else
+        sTmp = sTmp+"]";
+        xml = xml + "<dataVectors>"  + sTmp  + "</dataVectors>"  + XML.nl();
+        xml = xml + XML.indent(indent) + "</discountSystemCost>" + XML.nl();
+    
+        return xml;
+
+    }
+
     /**
      * Gets the anuual interests.
      * @return The annual interestes period as a Vector.

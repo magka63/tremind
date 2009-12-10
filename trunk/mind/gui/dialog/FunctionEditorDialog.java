@@ -1,18 +1,18 @@
 /*
  * Copyright 2004:
  * Marcus Bergendorff <amaebe-1@student.luth.se>
- * Jan Skï¿½llermark <jansok-1@student.luth.se>
+ * Jan Sköllermark <jansok-1@student.luth.se>
  * Nils-Oskar Spett <nilspe-1@student.luth.se>
  * Richard Harju <richar-1@student.luth.se>
  * 
  * Copyright 2007:
  * Per Fredriksson <perfr775@student.liu.se>
- * David Karlslï¿½tt <davka417@student.liu.se>
+ * David Karlslätt <davka417@student.liu.se>
  * Tor Knutsson	<torkn754@student.liu.se>
- * Daniel Kï¿½llming <danka053@student.liu.se>
+ * Daniel Källming <danka053@student.liu.se>
  * Ted Palmgren <tedpa175@student.liu.se>
  * Freddie Pintar <frepi150@student.liu.se>
- * Mï¿½rten Thurï¿½n <marth852@student.liu.se>
+ * Mårten Thurén <marth852@student.liu.se>
  *
  * This file is part of reMIND.
  *
@@ -139,7 +139,6 @@ public class FunctionEditorDialog extends mind.gui.dialog.FunctionDialog{
 		//------------------------
 
 		// table settings
-
 		table.getTableHeader().setReorderingAllowed(false);
 		table.setRowSelectionAllowed(false);
 		table.setColumnSelectionAllowed(false);

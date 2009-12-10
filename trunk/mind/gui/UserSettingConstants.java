@@ -47,6 +47,11 @@ public interface UserSettingConstants
     //End PUM5
     final static String SHOW_OPT_OUT = "ShowOptOut";
     final static String OPTIMIZER = "Optimizer";
+    // Added by Nawzad Mardan 090318
+    final static String OPENWITH = "OpenWith";
+    final static String EXCEL_PATH = "ExcelPath";
+    final static String NOTEPAD_PATH = "NotepadPath";
+    // END
     final static String CPLEX_PATH = "CplexPath";
     final static String LPSOLVE_PATH = "LPSolvePath";
     final static String RMD_MODEL_FOLDER  = "RmdModelFolder";
@@ -62,6 +67,7 @@ public interface UserSettingConstants
     final static String GUI_SETTINGS_SHOW_FLOW_IDS = "ShowFlowIDs";
     final static String MPS_SETTINGS_EXPORT_ALL_TIMESTEPS = "MpsExportAllTimeSteps";
     final static String MPS_INFINITY_DEFINITIION = "MpsInfinityDefinition";
+    // Added by Nawzad Mardan 2008-08-25
     final static String MPS_DIMINUTIVE_DEFINITIION = "MpsDiminutiveDefinition";
     final static String HEADER = "reMIND user settings";
     final static String SAVE_FILE = "settings.ini";

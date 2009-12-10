@@ -70,6 +70,7 @@ public class CplexController
     private JPanel mainpanel=null;
     private String exitMessage=null;
     private Process cplex = null;
+    private  int versonNumber;
     /**
    * method is called from the optimize method to
      * initialize the form.
@@ -83,7 +84,7 @@ public class CplexController
 	"current model?";
         frame = new JFrame("reMIND: Please wait... running optimazation");
         label = new JLabel("Information: Please wait... running Optimization");
-        button = new JButton("Cancel");
+        button = new JButton("Quit");
         upperpanel = new JPanel();
         lowerpanel = new JPanel();
         mainpanel = new JPanel();
@@ -190,15 +191,8 @@ public class CplexController
 	    throw new IOException("Couldn't read command file.");
 	}
 
-	/* replace "MPS" and "OPT" with "filename mps" and
-	   "filename.opt txt" */
-	String optFile = fileWithoutExtension+".opt";
-        
-       
-	commands = commands.replaceAll("MPS", filename + " mps");
-	commands = commands.replaceAll("OPT", optFile + " txt");
-       
-        initComponents();
+	
+    initComponents();
         
 	/* run CPLEX with Runtime */
 	Runtime runtime = Runtime.getRuntime();
@@ -243,6 +237,31 @@ public class CplexController
 
 		temp += line;
 	    }
+        // Added by Nawzad Mardan 090320
+        // SEEK CPLEX VERSION
+
+        if(temp.lastIndexOf("CPLEX Interactive Optimizer") != -1)
+        {
+		String	token = null;
+        String  version ;
+        java.util.StringTokenizer  tokenizer = new java.util.StringTokenizer(temp);
+        do{
+            try{
+                token = tokenizer.nextToken();
+                }
+            catch(Exception e) {
+            /* we probably found an empty line, continue */
+            }
+           } while (!token.equals("Optimizer"));
+        version = tokenizer.nextToken();
+        int x = version.indexOf('.');
+        //version.replace(' ','.' );
+        String sVec = version.substring(0, x);//sTmp.split(r)
+        versonNumber = Integer.parseInt(sVec);
+
+        System.out.println("CEPLEX VERSION IS "+ versonNumber + " : "+ version);
+
+	    }
 	    if(temp.lastIndexOf("CPLEX>") != -1) {
 		cplexOutput += temp;
 		break;
@@ -271,6 +290,18 @@ public class CplexController
 		return p;
 	    }
 	}
+
+    /* replace "MPS" and "OPT" with "filename mps" and
+	   "filename.opt txt" */
+	String optFile = fileWithoutExtension+".opt";
+
+
+	commands = commands.replaceAll("MPS", filename + " mps");
+	// Decide kind or type of output file (versonNumber) Added by Nawzad Mardan 090325
+    if(versonNumber <= 10)
+        commands = commands.replaceAll("OPT", optFile + " txt");
+    else
+        commands = commands.replaceAll("OPT", optFile + " sol");
 
 	/* delete OPT file if it exists */
 	if((new File(optFile)).exists()) {
@@ -372,8 +403,14 @@ public class CplexController
 
 	if(optimizationSuccessful) {
 	    /* load result with CplexOut */
-	    try {
-		result = CplexOut.load(optFile);
+	    try 
+        {
+            // Added by Nawzad Mardan 090325
+        if(versonNumber <= 10)
+            result = CplexOut.load(optFile);
+        else
+            result = CplexOut.newVersionload(optFile);//System.out.println("New convertings rutin must be created");
+
 	    }
 	    catch(FileNotFoundException e) {
                 //Destroy the resources for the farme, and return the memory to the OS, and marked as undisplayable
