@@ -70,6 +70,9 @@ public class RmdSAXHandler extends DefaultHandler {
 
 	private Locator locator;
 
+    // Added by Nawzad Mardan 090316
+    private Vector c_timestepsVector;
+
 	public RmdSAXHandler() {
 		Exception e = new Exception();
 		System.out.println("Cannot use this RmdSAXHandler constructor "
@@ -82,6 +85,7 @@ public class RmdSAXHandler extends DefaultHandler {
 		m_AppIfc = new RmdXmlAppIfc();
 		m_AppIfc.m_Model = m;
 		m_AppIfc.m_GraphModel = gm;
+        c_timestepsVector = new Vector();
 	}
 
 	/**
@@ -98,7 +102,8 @@ public class RmdSAXHandler extends DefaultHandler {
 		m_AppIfc.m_Node = node;
 		m_AppIfc.m_ResCntl = rcntl;
 		m_AppIfc.m_TopTSL = topTSL;
-                //Added by Nawzad Mardan
+                //Added by Nawzad
+        c_timestepsVector = new Vector();
                // m_AppIfc.c_discountedsystemcostControl = dcsc;
 	}
 
@@ -340,6 +345,7 @@ public class RmdSAXHandler extends DefaultHandler {
 				if ((appIfc != null) && (appIfc.m_Model != null)) {
 					appIfc.m_Model.addResource(label, unit, prefix,
 							new ExtendedColor(colorname, colorvalue));
+                                        
 				}
 			} else if (m_Tag.equals("node")) {
 				String id = "";
@@ -404,7 +410,11 @@ public class RmdSAXHandler extends DefaultHandler {
 					if (tag.equals("labelVector"))
 						splitToStringVector(labelVec, value, ",");
 					if (tag.equals("lengthVector"))
+                    {
 						splitToFloatVector(lengthVec, value, ",");
+                        // Added by Nawzad Mardan 090316
+                        c_timestepsVector = lengthVec;
+                    }
 				}
 
 				if (divide < 1) {
@@ -425,6 +435,7 @@ public class RmdSAXHandler extends DefaultHandler {
 								makeError("The 'divide' field of "
 										+ "the toplevel must be 1"));
 					}
+
 					appIfc.m_TopTSL = appIfc.m_Model.getTopTimesteplevel();
 					appIfc.m_Model.changeTimesteplevel(appIfc.m_TopTSL.toInt(),
 							name, divide, labelVec, lengthVec);
@@ -435,7 +446,130 @@ public class RmdSAXHandler extends DefaultHandler {
 								+ name + "' is already defined"));
 					}
 				}
-			} else if (m_Tag.equals("flow")) {
+			}
+                        // Added by Nawzad Mardan 20081211
+                        else if (m_Tag.equals("discountSystemCost")) 
+                            {
+                            // Annually rate
+                            Float intrate =new Float(0.0);
+                            // Number of years
+                            Long analysPeriod= new Long(0) ;
+                            // A Vector containing calculated  rate for each year
+                            Vector annualRateVector;
+                            // The header of the table 
+                            String tableHead []={"",""};
+                            // An empety table data
+                            Object [][] data = { { "", ""},{ "",""}, {"", ""},}; 
+                            int dataLength = -1;
+                            for (int t = 0; t < numAttr(); t++) 
+                            {
+                                String tag = getAttrTag(t);
+                                String value = getAttr(t);
+                                
+                                if (tag.equals("ratein"))
+                                    intrate = Float.parseFloat(value);
+                                
+                                if (tag.equals("analysesPeriod"))
+                                    analysPeriod = Long.parseLong(value);
+                                
+                                if (tag.equals("tablesHead"))
+                                    {
+                                    String vecStr = new String();
+                                    String[] sVec;
+                
+                                     try 
+                                        {
+                                        vecStr = value;
+                                        String sTmp = (vecStr.length() < 2) ? "" : vecStr.substring(1, vecStr.length() - 1); // sTmp = s without "[]"
+                                        sVec = sTmp.split(",");
+                                        tableHead =sVec;
+                                        } 
+                                      catch (NumberFormatException e) 
+                                         {
+                                         throw new RmdParseException("The 'table Head' field must be a string ");
+                                         }
+                                    }
+                                
+                                if (tag.equals("dataLengths"))
+                                    dataLength  = Integer.parseInt(value);
+                                    
+                                if (tag.equals("dataVectors"))
+                                    {
+                                    String[] sVec;
+                                    boolean emptyStringflag = false;
+                                    try 
+                                        {
+                                        int sTmplength = value.length();
+                                        // Check if the last string is empty string
+                                        // When using split method if the last strings in the array string contain empty string the method
+                                        // cann't splited thats why you must chek it and see if you have an empty string'
+                                        char c = value.charAt(sTmplength-2);
+                                        if (c ==' ')
+                                            emptyStringflag = true;
+               
+                                        String sTmp = (value.length() < 2) ? "" : value.substring(1, value.length() - 1); // sTmp = s without "[]"
+             
+                                        sVec = sTmp.split(",");
+               
+                                        int x = sVec.length;               
+                                        int k = 0;
+                                        int datalen ;
+                                        datalen = analysPeriod.intValue();
+                                        data = new Object[datalen][dataLength];
+                                        for (int i = 0; i < analysPeriod; i++)
+                                            {
+                                            for(int j = 0; j< dataLength; j++)
+                                               {
+                                                data[i][j]= sVec[k];
+                                                k++;
+                                                if(k == x)
+                                                break;
+                                                }
+                                             }
+                    
+                                        if(emptyStringflag)
+                                          {
+                                            data[datalen-1][dataLength-1]="";
+                                          }
+                                        
+                                        // Chek it again and see if the data array have not initiated all cells
+                                        for (int i = 0; i < analysPeriod; i++)
+                                            {
+                                            for(int j = 0; j< dataLength; j++)
+                                                {
+                                                if (data[i][j]==null)
+                                                data[i][j]="";
+                                                }
+                                             }
+                                        }// END TRY 
+                                
+                                    catch (NumberFormatException e) 
+                                        {
+                                        throw new RmdParseException("The 'Data' field must be a float > 0");
+                                        }
+                
+                                    }// END IF TAG VECTOR
+                            }// END FOR LOOP
+                            
+                            if (intrate < 0) 
+                                {
+                                throw new RmdParseException("The 'rate' field must be a float > 0");
+                                }
+                            if (analysPeriod < 0) 
+                                {
+                                throw new RmdParseException("The 'analysPeriod' field must be a intiger > 0");
+                                }
+       
+                            if (dataLength < 0) 
+                                {
+                                throw new RmdParseException("The 'Data length'  must be a float > 0");
+                                }
+                            appIfc.m_Model.setDiscountedsystemcostParameter(intrate, analysPeriod, tableHead, data, c_timestepsVector);
+                            
+                        }// END IF TAG DISCOUNTSYSTEMCOST
+
+                        
+                        else if (m_Tag.equals("flow")) {
 				String id = null;
 				String from = null;
 				String to = null;

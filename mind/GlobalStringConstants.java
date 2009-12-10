@@ -33,7 +33,7 @@ package mind;
 
 public interface GlobalStringConstants {
 
-  final public String reMIND_version = "2.3";
+  final public String reMIND_version = "2.4";
 
   // Strings used in optimization automation
   final public static String OPT_NONE  = "None";
@@ -41,4 +41,9 @@ public interface GlobalStringConstants {
   final public static String OPT_LPSOLVE = "LP_Solve";
   final public static String CPLEX_COMMAND_FILE = "commands.ocf";
   final public static String LPSOLVE_COMMAND_FILE = "lpsolvecommands.ocf";
+  // Added by Nawzad Mrdan 20090319
+  final public static String OPT_EXCEL  = "Excel";
+  final public static String OPT_NOTEPAD  = "Notepad";
+
+
 }

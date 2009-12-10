@@ -4,9 +4,9 @@
  * Martin Hagman <marha189@student.liu.se>
  * Henrik Norin <henno776@student.liu.se>
  * Anna Stjerneby <annst566@student.liu.se>
- * Tim Terlegï¿½rd <timte878@student.liu.se>
+ * Tim Terlegård <timte878@student.liu.se>
  * Johan Trygg <johtr599@student.liu.se>
- * Peter ï¿½strand <petas096@student.liu.se>
+ * Peter Åstrand <petas096@student.liu.se>
  *
  * This file is part of reMIND.
  *
@@ -239,18 +239,8 @@ public class Equation
       }
       else  {
         // this is what makes this equation unique
-
-    	// NOTE: If-statement added by Johan Sandberg to avoid exception
-    	// when updating a function editor dialog. 
-	// What happens is that the c_function is null when this method 
-	// is called from a function editor dialog.  
-    	if (c_function != null) {
-          c_ID_as_string =  c_function.toString() +
-                            E_string + 
-                            c_equation + 
-                            T_string + 
-                            c_timestep;
-        }
+        c_ID_as_string =  c_function.toString() +
+            E_string + c_equation + T_string + c_timestep;
         return c_ID_as_string;
       }
     }

@@ -113,7 +113,7 @@ public class CplexOut
 		// Read a new line.
 		rad = reader.readLine();
 		tokenizer = new StringTokenizer(rad);
-	    } while (tokenizer.nextToken() != "OBJECTIVE");
+	    } while (!(tokenizer.nextToken().equals("OBJECTIVE")));
 	}
 	else
 	    throw new FileInteractionException("File not ready to be read");
@@ -330,7 +330,8 @@ public class CplexOut
 	}
 
 	/* here comes the data! */
-	while(m_row != null) {
+	while(m_row != null)
+    {
 	    m_row = m_reader.readLine();
 	    lineNumber++;
 
@@ -356,7 +357,7 @@ public class CplexOut
 	    String m_tempId;
 	    try {
 		m_tempId = m_tokenizer.nextToken();
-		m_tokenizer.nextToken(); /* skip column */
+		m_tokenizer.nextToken(); /* skip column BS*/
 	    }
 	    catch(NoSuchElementException e) {
 		System.out.println("Row: " + lineNumber);
@@ -395,7 +396,9 @@ public class CplexOut
 
 	    /* check if this tempId is a flow */
 	    try {
-		if(m_tempId.charAt(0) != 'F') {
+		if(m_tempId.charAt(0) != 'F') 
+        {
+            //System.out.println("We don't have a flow");
 		    continue;
 		}
 		else if(!(m_tempId.charAt(1) >= '0' 
@@ -410,16 +413,19 @@ public class CplexOut
 	    /* parse ID in tempId */
 	    m_id = "";
 	    int j = 1;
-	    for(int i = 1;i < m_tempId.length();i++) {		
+	    for(int i = 1;i < m_tempId.length();i++)
+        {
 		char m_ch = m_tempId.charAt(i);
 		if(m_ch >= '0' && m_ch <= '9')
 		    m_id += m_ch;
-		else {
+		else
+            {
 		    j = i + 1;
 		    break; /* found end of ID */
-		}
+            }
 	    }
-	    try {
+	    try
+        {
 		m_intId = Integer.parseInt(m_id);
 	    }
 	    catch(NumberFormatException e) {
@@ -448,16 +454,18 @@ public class CplexOut
 		}
 	    }
 
-	    for(;j < m_tempId.length();j++) {
+	    for(;j < m_tempId.length();j++)
+        {
 		char m_ch = m_tempId.charAt(j);
 		if(m_ch >= '0' && m_ch <= '9')
 		    m_timestep += m_ch;
 		else if(m_ch == ' ')
 		    break; /* found end of timestep*/
-		else {
+		else
+            {
 		    m_store = false; /* found something else, this means
 				    * we found a temp variable */
-		}
+            }
 	    }
 
 	    if(m_store == false)
@@ -483,18 +491,18 @@ public class CplexOut
 	    if(m_store) {
 
 		/* get the hashtable for this flow */
-		Hashtable m_flow = 
-		    (Hashtable)m_flows.get(new Integer(m_intId));
-		if(m_flow == null) {
+		Hashtable m_flow = (Hashtable)m_flows.get(new Integer(m_intId));
+		if(m_flow == null)
+            {
 
 		    /* this is a new flow, create a new hashtable and
 		     * insert it into the flow hashtable */
 		    m_flow = new Hashtable();
 		    m_flows.put(new Integer(m_intId), m_flow);
-		}
+            }
 		m_flow.put(new Integer(m_intTimestep), new Double(m_value));
 	    }
-	}
+	}// END OF FILE
 
 	/* Now everything is stored in a hashtable of hashtables.
 	 * Convert this to an OptimizationResult. */
@@ -506,12 +514,14 @@ public class CplexOut
 	LinkedList keys = new LinkedList();
 
 	/* reverse list of keys */
-	while(enu.hasMoreElements()) {
+	while(enu.hasMoreElements())
+        {
 	    keys.addLast(enu.nextElement());
-	}
+        }
 
 	/* iterate over all the flows */
-	while(keys.size() > 0) {
+	while(keys.size() > 0) 
+        {
 	    Integer m_flowId = (Integer)keys.removeLast();
 
 	    Hashtable m_flow = (Hashtable)m_flows.get(m_flowId);
@@ -519,12 +529,341 @@ public class CplexOut
 	    m_values[0] = 0.0;
 
 	    /* iterate through all the timesteps */
-	    for(int j = 1;j <= m_values.length;j++) {
-		m_values[j - 1] = 
-		    ((Double)m_flow.get(new Integer(j))).doubleValue();
-	    }
+	    for(int j = 1;j <= m_values.length;j++)
+            {
+            m_values[j - 1] = ((Double)m_flow.get(new Integer(j))).doubleValue();
+            }
 	    m_result.addFlow(new ID(new Long(m_flowId.intValue()), "F"), m_values);
+        }
+
+	m_fileReader.close();
+
+	return m_result;
+    }
+
+    /**
+     * reMIND 2009<br> Added by Nawzad Mardan 090421, handel new version of CPLEX,
+     * The new version of CPLEX(From 11 and up) have an xml out put(result) file, that is totaly different from the old version
+     * Read in a CPLEX new version( from 11 and above)outfile and put it in an OptimizationResult.
+     * The above function that was supposed to read in a CPLEX outfile
+     * is borked.
+     *
+     * @param  filename Name of the OPT-file to load.
+     * @return An OptimizationResult containing an internal
+     *         representation of the optimal result.
+     * @throws IOException Thrown whenever the file is unreadable or if it's
+     *         the wrong format.
+     * @throws FileNotFoundException Thrown if the file can't be found.
+     * @see    OptimizationResult
+     * @author Nawzad Mardan
+     */
+    public static OptimizationResult newVersionload(String filename)
+	throws IOException, FileNotFoundException
+    {
+	OptimizationResult m_result = new OptimizationResult();
+	FileReader m_fileReader = null;
+	BufferedReader m_reader = null;
+	String m_row, objValue;
+	StringTokenizer m_tokenizer;
+	String m_token = null;
+	boolean m_store = true;
+	Hashtable m_flows = new Hashtable();
+	int lineNumber = 0;
+
+	if(filename == null) {
+	    throw new IllegalArgumentException("Filename is empty (null).");
 	}
+
+	/* open the file */
+	try {
+	    m_fileReader = new FileReader(filename);
+	} catch(FileNotFoundException e) {
+	    throw new FileNotFoundException("Can't find file " + filename);
+	}
+	m_reader = new BufferedReader(m_fileReader);
+
+	/* find the objective value */
+	do {
+	    try {
+		m_row = m_reader.readLine();
+		lineNumber++;
+	    } catch(IOException e) {
+		m_fileReader.close();
+		throw new IOException(e.getMessage());
+	    }
+
+	    if(m_row == null) {
+		/* EOF found */
+		m_fileReader.close();
+		throw new IOException("Unexpected end of file found.");
+	    }
+	} while (!(m_row.contains("objectiveValue=")));
+
+
+	/* get the string "VALUE" */
+	try {
+	    //m_tokenizer.nextToken();
+        int x = m_row.indexOf('"');
+        objValue = m_row.substring(x+1,m_row.length() - 1); // objValue  without "
+	}
+	catch(NoSuchElementException e) {
+	    m_fileReader.close();
+	    throw new IOException("Couldn't find the string 'objectiveValue'.");
+	}
+
+	/* get the objective value */
+	try {
+	    m_result.globalOptimum = Double.parseDouble(objValue);
+	}
+	catch(NumberFormatException e){
+	    m_fileReader.close();
+	    throw new IOException("Unable to read objective value.");
+	}
+
+	/* locate the string "<variables>"  */
+	
+	    m_token = "";
+	    do {
+		try {
+		    m_row = m_reader.readLine();
+		    lineNumber++;
+		}
+		catch(IOException e) {
+		    m_fileReader.close();
+		    throw new IOException(e.getMessage());
+		}
+
+		if(m_row == null) {
+		    /* EOF found */
+		    m_fileReader.close();
+		    throw new IOException("Unexpected end of file found.");
+		}
+	    } while(!(m_row.contains("<variables>")));
+
+	/* "<variables>" tag has been found twice, extract the IDs and activities */
+	
+	/* here comes the data! */
+	//while(m_row != null)
+    do
+    {
+	    m_row = m_reader.readLine();
+	    lineNumber++;
+
+	    /* check if we're at EOF */
+	    if(m_row == null)
+		break;
+
+	    m_tokenizer = new StringTokenizer(m_row);
+	    try {
+            // skip String <variable
+        m_tokenizer.nextToken();
+        m_token = m_tokenizer.nextToken();
+	    }
+	    catch(NoSuchElementException e) {
+
+		/* probably an empty row, continue */
+		continue;
+	    }
+        String m_tempId, value;
+	    /* make sure we skip both 'A' and the NUMBER */
+	    if(m_token.contains("name=\"F"))
+        {
+        int x = m_token.indexOf('"');
+        m_tempId = m_token.substring(x+1,m_token.length() - 1);
+        //Skip index and status
+		m_tokenizer.nextToken(); m_tokenizer.nextToken();
+        String valueStr;
+
+	   
+	    try
+        {
+		valueStr = m_tokenizer.nextToken();
+        if(valueStr.contains("value="))
+            {
+             int y = valueStr.indexOf('"');
+             value = valueStr.substring(y+1,valueStr.length() - 1);
+            }
+        else
+           continue;
+	    }
+	    catch(NoSuchElementException e) {
+		System.out.println("Row: " + lineNumber);
+		System.out.println(m_row);
+		System.out.println("Token: " + m_token);
+		m_fileReader.close();
+		throw new IOException("Unexpected end of tokens found.");
+	    }// END IF
+        }
+        else
+            continue;
+	    double m_value;
+	    try {
+		m_value = Double.parseDouble(value);
+	    }
+	    catch(NumberFormatException e){
+		System.out.println("Row: " + lineNumber);
+		System.out.println(m_row);
+		System.out.println("Token: " + m_token);
+		m_fileReader.close();
+		throw new IOException("Unable to read value.");
+	    }
+	    catch(NoSuchElementException e) {
+		System.out.println("Row: " + lineNumber);
+		System.out.println(m_row);
+		System.out.println("Token: " + m_token);
+		m_fileReader.close();
+		throw new IOException("Unexpected end of tokens found.");
+	    }
+
+	    /* parse tempId to extract ID and timestep */
+	    String m_id = null;
+	    String m_timestep = null;
+	    int m_intId;
+	    int m_intTimestep;
+
+	    m_store = true;
+
+	    /* check if this tempId is a flow */
+	    try {
+		if(m_tempId.charAt(0) != 'F')
+        {
+            //System.out.println("We don't have a flow");
+		    continue;
+		}
+		else if(!(m_tempId.charAt(1) >= '0'
+			  && m_tempId.charAt(1) <= '9')) {
+		    continue;
+		}
+	    } catch(Exception e) {
+		/* some kind of OOB exception, ignore this id */
+		continue;
+	    }
+
+	    /* parse ID in tempId */
+	    m_id = "";
+	    int j = 1;
+	    for(int i = 1;i < m_tempId.length();i++)
+        {
+		char m_ch = m_tempId.charAt(i);
+		if(m_ch >= '0' && m_ch <= '9')
+		    m_id += m_ch;
+		else
+            {
+		    j = i + 1;
+		    break; /* found end of ID */
+            }
+	    }
+	    try
+        {
+		m_intId = Integer.parseInt(m_id);
+	    }
+	    catch(NumberFormatException e) {
+		System.out.println("m_tempId = " + m_tempId);
+		System.out.println("Row: " + lineNumber);
+		System.out.println(m_row);
+		System.out.println("Token: " + m_token);
+		m_fileReader.close();
+		throw new IOException("Bad parsing of id number. ("
+				      + m_tempId + ")");
+	    }
+
+	    /* parse timestep */
+	    m_timestep = "";
+
+	    /* find 'T' by parsing backwards */
+	    for(int k = m_tempId.length()-1;k >= 0;k--) {
+		if(m_tempId.charAt(k) == 'T') {
+		    /* found it! */
+		    j = k + 1;
+		    break;
+		}
+		if(k == 0) {
+		    /* bad Id, don't save */
+		    m_store = false;
+		}
+	    }
+
+	    for(;j < m_tempId.length();j++)
+        {
+		char m_ch = m_tempId.charAt(j);
+		if(m_ch >= '0' && m_ch <= '9')
+		    m_timestep += m_ch;
+		else if(m_ch == ' ')
+		    break; /* found end of timestep*/
+		else
+            {
+		    m_store = false; /* found something else, this means
+				    * we found a temp variable */
+            }
+	    }
+
+	    if(m_store == false)
+		continue;
+
+	    try {
+		m_intTimestep = Integer.parseInt(m_timestep);
+	    }
+	    catch(NumberFormatException e) {
+		System.out.println("m_timestep = " + m_timestep);
+		System.out.println("Row: " + lineNumber);
+		System.out.println(m_row);
+		System.out.println("Token: " + m_token);
+		m_fileReader.close();
+		throw new IOException("Bad parsing of timestep. ("
+				      + m_timestep + ")");
+	    }
+
+	    /* ignore 0 timesteps */
+	    if(m_intTimestep == 0)
+		continue;
+
+	    if(m_store) {
+
+		/* get the hashtable for this flow */
+		Hashtable m_flow = (Hashtable)m_flows.get(new Integer(m_intId));
+		if(m_flow == null)
+            {
+
+		    /* this is a new flow, create a new hashtable and
+		     * insert it into the flow hashtable */
+		    m_flow = new Hashtable();
+		    m_flows.put(new Integer(m_intId), m_flow);
+            }
+		m_flow.put(new Integer(m_intTimestep), new Double(m_value));
+	    }
+	}while(!(m_row.contains("</CPLEXSolution>")));// END OF FILE while 
+
+	/* Now everything is stored in a hashtable of hashtables.
+	 * Convert this to an OptimizationResult. */
+
+	/* the number of flows */
+	double m_values[];
+
+	Enumeration enu = m_flows.keys();
+	LinkedList keys = new LinkedList();
+
+	/* reverse list of keys */
+	while(enu.hasMoreElements())
+        {
+	    keys.addLast(enu.nextElement());
+        }
+
+	/* iterate over all the flows */
+	while(keys.size() > 0)
+        {
+	    Integer m_flowId = (Integer)keys.removeLast();
+
+	    Hashtable m_flow = (Hashtable)m_flows.get(m_flowId);
+	    m_values = new double[m_flow.size()];
+	    m_values[0] = 0.0;
+
+	    /* iterate through all the timesteps */
+	    for(int j = 1;j <= m_values.length;j++)
+            {
+            m_values[j - 1] = ((Double)m_flow.get(new Integer(j))).doubleValue();
+            }
+	    m_result.addFlow(new ID(new Long(m_flowId.intValue()), "F"), m_values);
+        }
 
 	m_fileReader.close();
 

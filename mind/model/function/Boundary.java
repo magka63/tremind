@@ -509,10 +509,12 @@ public class Boundary
 	    xml = xml + XML.indent(indent+1) + "<label>" +
 		XML.toXML(getLabel()) + "</label>" + XML.nl();
         // Added by Nawzad Mardan 080910
+        if(c_radin)
         xml += XML.indent(indent+1) + "<inflows>"  + (c_radin ? "true" : "false") + "</inflows>"  + XML.nl();
         // Added by Nawzad Mardan 080910
+        if(c_radout)
         xml += XML.indent(indent+1) + "<outflows>"  + (c_radout ? "true" : "false") + "</outflows>"  + XML.nl();
-
+        
 	if (c_resource != null)
 	    xml = xml + XML.indent(indent+1) + "<resource.type>" +
 		XML.toXML(resources.getLabel(c_resource)) +
@@ -523,11 +525,9 @@ public class Boundary
 	    xml = xml + XML.indent(indent+1) + "<timestep.boundary nr=\"" +
 		(i+1) + "\">" + XML.nl();
 	    if (((Boolean) c_isMin.get(i)).booleanValue())
-		xml = xml + XML.indent(indent+2) + "<min>" +
-		    c_minimum.get(i).toString() + "</min>" + XML.nl();
+		xml = xml + XML.indent(indent+2) + "<min>" + c_minimum.get(i).toString() + "</min>" + XML.nl();
 	    if (((Boolean) c_isMax.get(i)).booleanValue())
-		xml = xml + XML.indent(indent+2) + "<max>" +
-		    c_maximum.get(i).toString() + "</max>" + XML.nl();
+		xml = xml + XML.indent(indent+2) + "<max>" + c_maximum.get(i).toString() + "</max>" + XML.nl();
 
 	    xml = xml + XML.indent(indent+1) + "</timestep.boundary>" + XML.nl();
 	}
@@ -549,7 +549,9 @@ public class Boundary
 		//Add function header
 		sheet.addFunctionHeader("Boundary", label);
                 // Added by Nawzad Mardan 080910
-                sheet.addRow(sheet.addLockedCell("Inflows")+sheet.addCell((new Boolean(c_radin))));		
+                if(c_radin)
+                sheet.addRow(sheet.addLockedCell("Inflows")+sheet.addCell((new Boolean(c_radin))));	
+                if(c_radout)
 		sheet.addRow(sheet.addLockedCell("Outflows")+sheet.addCell((new Boolean(c_radout))));
 		//Add Resource description
 		String resource = ((c_resource==null)?"":resources.getLabel(c_resource));

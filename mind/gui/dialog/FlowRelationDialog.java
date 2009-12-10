@@ -827,7 +827,7 @@ public class FlowRelationDialog extends mind.gui.dialog.FunctionDialog
 	gbc = new java.awt.GridBagConstraints();
 	gbc.gridx = 0;
 	gbc.gridy = 2;
-	gbc.insets = new java.awt.Insets (10, 140, 0, 5);
+	gbc.insets = new java.awt.Insets (10, 144, 0, 5);
 	gbc.anchor = java.awt.GridBagConstraints.NORTHWEST;
         pnlFlowSettings.add(spinLimit2,gbc);
 	/*spinLimit2.addListener(new SpinButtonListener() {
@@ -1150,22 +1150,22 @@ public class FlowRelationDialog extends mind.gui.dialog.FunctionDialog
 	case GREATER:
 	    spinLimit1.setVisible(true);
 	    spinLimit2.setVisible(false);
-	    lblSpin.setText("< X");
+	    lblSpin.setText("          < X");
 	    break;
 	case LESS:
 	    spinLimit1.setVisible(false);
 	    spinLimit2.setVisible(true);
-	    lblSpin.setText("   X <");
+	    lblSpin.setText("        X <");
 	    break;
 	case EQUAL:
 	    spinLimit1.setVisible(false);
 	    spinLimit2.setVisible(true);
-	    lblSpin.setText("   X =");
+	    lblSpin.setText("        X =");
 	    break;
 	case LESS_GREATER:
 	    spinLimit1.setVisible(true);
 	    spinLimit2.setVisible(true);
-	    lblSpin.setText("< X <");
+	    lblSpin.setText("        <X<");
 	    break;
 	}
     }

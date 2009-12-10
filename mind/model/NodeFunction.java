@@ -220,7 +220,25 @@ public abstract class NodeFunction
      * @throws ModelException If error occurs
       *Added by Nawzad Mardan 070801 used by Discountedsystemcost function
      */
-    public EquationControl getEquationControl2(Object [][] data,Vector annualRate,Vector timeStepValues,
+    public EquationControl getEquationControl2(Object [][] data,float annualRate,Vector timeStepValues,
+					      ID node, Vector toFlows,
+					      Vector fromFlows)
+	throws ModelException
+    {
+	return new EquationControl();
+    }
+
+     /**
+     * Returns optimizationinformation from the function
+     * @param data The timestep numbers for each year
+     * @param annualRate The annualy rate
+     * @param timeStepValues The length of timesteps
+     * @param node The node that owns the function, ID used to set equationID
+     * @return Some equations that model the functions behaviour
+     * @throws ModelException If error occurs
+      *Added by Nawzad Mardan 070801 used by Discountedsystemcost function
+     */
+    public EquationControl getEquationControl2(Object [][] data,Vector annualRate,int timeStepValues,
 					      ID node, Vector toFlows,
 					      Vector fromFlows)
 	throws ModelException

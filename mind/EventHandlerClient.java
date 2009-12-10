@@ -4,9 +4,9 @@
  * Martin Hagman <marha189@student.liu.se>
  * Henrik Norin <henno776@student.liu.se>
  * Anna Stjerneby <annst566@student.liu.se>
- * Tim Terlegï¿½rd <timte878@student.liu.se>
+ * Tim Terlegård <timte878@student.liu.se>
  * Johan Trygg <johtr599@student.liu.se>
- * Peter ï¿½strand <petas096@student.liu.se>
+ * Peter Åstrand <petas096@student.liu.se>
  *
  * This file is part of reMIND.
  *
@@ -49,7 +49,7 @@ import mind.automate.OptimizationException;
  * @author Andreas Remar
  * @version $Revision: 1.13 $ $Date: 2005/05/14 07:53:24 $
  */
-public class EventHandlerClient 
+public class EventHandlerClient
 {
     private EventHandlerServer c_eventHandler;
     private boolean c_isChanged;
@@ -311,7 +311,7 @@ public class EventHandlerClient
     /**
      * Gets a node from the model.
      * @param nodeID ID of the node to get.
-     * @return The node with the ID nodeï¿½D.
+     * @return The node with the ID nodeÍD.
      */
     public Object getNode(ID nodeID)
     {
