@@ -239,8 +239,17 @@ public class Equation
       }
       else  {
         // this is what makes this equation unique
-        c_ID_as_string =  c_function.toString() +
-            E_string + c_equation + T_string + c_timestep;
+      	// NOTE: If-statement added by josa (Johan Sandberg) to avoid 
+    	// an exception when updating a function editor dialog. 
+    	// What happens is that the c_function is null when this method 
+    	// is called from a function editor dialog.  
+      	if (c_function != null) {
+          c_ID_as_string =  c_function.toString() +
+            				E_string + 
+            				c_equation + 
+            				T_string + 
+            				c_timestep;
+      	}
         return c_ID_as_string;
       }
     }
