@@ -3,6 +3,21 @@
 
 = Introduction =
 
+_The publication list is not yet all up to date_
+
+The publication list of reMIND has different purposes and one is to help the user of the software to easy find information on how to use the software. The list is divided into two main parts: (1) tables consisting of information for each publication regarding e.g. the name of the modeler and the branch of business that has been studied and (2) lists of the publications. Before the code for the reMIND software was written a Fortran based code was used. Therefore, the first publications in the list are based on the use of the fortran based software, while the rest of the publications are based on the reMIND software, which is JAVA-based. The list was originally compiled by Magnus Karlsson (Linköping University, Sweden) but is now updated by the group responsible for release and development handling for reMIND, based on information from the users of the software.
+
+=Publications in tables=
+
+==MIND (fortran code)==
+|| *Branch of business* || *Company* || *Model operator* || *Publications/Reports* ||
+||_N/A_||_N/A_||_N/A_||Söderström and Nilsson, 1988||
+||Mechanical engineering industry||Brukens Härdtjänster, Anderstorp||Katarina Nilsson||Nilsson, Söderström and Karlsson, 1989||
+||Pulp and paper industry||_N/A_||Katarina Nilsson||Nilsson and Söderström, 1992||
+
+
+=Publications in lists=
+
 ==Publications/reports based totally or partly on models built in the analysis tool MIND/reMIND (also found in the tables above)==
 
  # Bengtsson, C. and Karlsson, M., Co-operation of the MIND-method and the Pinch Technology: Energy Efficient Pre-evaporation of Bleach Plant Filtrate Using Waste Heat, Arbetsnotat 4, Program Energisystem, IKP, Linköping University, 1999.
@@ -12,13 +27,3 @@
 
  # Gong, M., Karlsson, M. and Söderström, M., Industry and the energy market – optimal choice of measures using the MIND method, In Proceedings of the CRIS (International Institute for Critical Infrastructures) conference on ‘Power Systems and Communications Infrastructures for the future’, Bejing, China, 23-27 September 2002.
  # Gong, M., Using Exergy and Otimization Models to Improve Industrial Energy Systems Towards Sustainability, Linköping Studies in Science and Technology, Dissertation No. 868, ISBN 91-7373-933-2, Linköping University, Linköping, Sweden, 2004.
-
-
-
-
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
