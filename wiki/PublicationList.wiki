@@ -3,7 +3,19 @@
 
 = Introduction =
 
-Blabla bla bla
+==Publications/reports based totally or partly on models built in the analysis tool MIND/reMIND (also found in the tables above)==
+
+#Bengtsson, C. and Karlsson, M., Co-operation of the MIND-method and the Pinch Technology: Energy Efficient Pre-evaporation of Bleach Plant Filtrate Using Waste Heat, Arbetsnotat 4, Program Energisystem, IKP, Linköping University, 1999.
+
+#Bengtsson, C., Karlsson, M., Berntsson, T. and Söderström, M., Co-ordination of Pinch Technology and the MIND method – applied to a Swedish board mill, Applied Thermal Engineering 22 (2): 133-144, Pergamon Press, 2002a. 
+
+==Other publications, related to the MIND method==
+
+*Gong, M., Karlsson, M. and Söderström, M., Industry and the energy market – optimal choice of measures using the MIND method, In Proceedings of the CRIS (International Institute for Critical Infrastructures) conference on ‘Power Systems and Communications Infrastructures for the future’, Bejing, China, 23-27 September 2002.
+
+*Gong, M., Using Exergy and Otimization Models to Improve Industrial Energy Systems Towards Sustainability, Linköping Studies in Science and Technology, Dissertation No. 868, ISBN 91-7373-933-2, Linköping University, Linköping, Sweden, 2004.
+
+
 
 
 = Details =
