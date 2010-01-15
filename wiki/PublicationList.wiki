@@ -14,7 +14,11 @@ The publication list of reMIND has different purposes and one is to help the use
 ||_N/A_||_N/A_||_N/A_||Söderström and Nilsson, 1988||
 ||Mechanical engineering industry||Brukens Härdtjänster, Anderstorp||Katarina Nilsson||Nilsson, Söderström and Karlsson, 1989||
 ||Pulp and paper industry||_N/A_||Katarina Nilsson||Nilsson and Söderström, 1992||
-
+||Dairy||_N/A_||Katarina Nilsson||Nilsson and Söderström, 1993||
+||Mechanical engineering industry||_N/A_||Katarina Nilsson||Nilsson and Söderström, 1993||
+||_N/A_||_N/A_||Katarina Nilsson||Nilsson, 1993||
+||Refinery||_N/A_||Katarina Nilsson||Nilsson and Sundén, 1993||
+||Refinery||_N/A_||Katarina Nilsson||Nilsson, Söderström and Karlsson, 1994||
 
 =Publications in lists=
 
