@@ -26,8 +26,32 @@ If you are a user of reMIND and have used the software as basis in a scientific 
 ==MIND (JAVA code)==
 || *Branch of business* || *Company* || *Model operator* || *Publications/Reports* ||
 ||Steel industry||SSAB, Luleå||Mikael Larsson||Larsson and Dahl, 2003||
-||Steel industry||SSAB, Luleå||Peter Sandberg, Mikael Larsson||Larsson and Sandberg, 2003;<br> Larsson Sandberg, Dahl, Söderström and Vourinen, 2004; <br>Sandberg and Larsson, 2004; <br>Sandberg, Larsson, Dahl, Söderström and Vourinen, 2004||
+||Steel industry||SSAB, Luleå||Peter Sandberg, <br>Mikael Larsson||Larsson and Sandberg, 2003;<br> Larsson Sandberg, Dahl, Söderström and Vourinen, 2004; <br>Sandberg and Larsson, 2004; <br>Sandberg, Larsson, Dahl, Söderström and Vourinen, 2004||
 ||Steel industry||SSAB, Luleå||Mikael Larsson||Ryman, Larsson, Niemi, and Grip, 2004; <br>Larsson, Dahl and Grip, 2004; <br>Larsson and Dahl, 2004||
+||Steel industry||SSAB, Luleå||Mikael Larsson, <br>Chuan Wang||Larsson, Wang, Dahl, Wedholm, Samuelsson, Magnusson, Lampinen, Su and Grip, 2004||
+||Dairy||Arla Foods AB, Linköping and Göteborg||Mikael Söderström, <br>Johan Kronman||Söderström, 2004; <br>Kronman, 2004||
+||Pulp and paper industry||Stora Enso Skoghall||Magnus Karlsson||Gong and Karlsson, 2004||
+||Dairy||Arla Foods AB, Linköping||Magnus Karlsson||Karlsson, Rohdin, Karlsson and Moshfegh, 2005||
+||Mechanical engineering industry||Fredriksons Verkstads AB||Daniel Brissman Ivarsson, <br>Fredrik Gersér||Brissman Ivarsson and Gersér, 2004||
+||Steel industry||SSAB, Luleå||Christer Ryman||Ryman and Larsson, 2006; <br>Ryman, Grip and Larsson, 2007; <br>Ryman and Larsson, 2007; <br>Ryman, Viktröm, Larsson and Rutqvist, 2008||
+||Steel industry||Sandvik AB||Magnus Karlsson||Karlsson, 2007||
+||Pulp mill, <br>sawmill, <br>biofuel upgrade plant||Stora Enso Skutskär, etc||Magnus Karlsson||Karlsson and Wolf, 2008||
+||Pulp mill||Stora Enso Skutskär||Sofia Klugman, <br>Magnus Karlsson||Klugman, Karlsson and Moshfegh, 2008||
+||Pulp mill, <br>sawmill, <br>biofuel upgrade plant||Stora Enso Skutskär, etc||Magnus Karlsson, <br>Anna Wolf||Wolf and Karlsson, 2008||
+||Pulp and paper mill||Korsnäs||Sofia Klugman, <br>Magnus Karlsson||Klugman, Karlsson and Moshfegh, 2009||
+||Foundry industry||SKF||Patrik Thollander, <br>Nawzad Mardan, <br>Magnus Karlsson||Thollander, Mardan and Karlsson, 2009||
+||Pulp mill||FRAM-mill||Inger-Lise Svensson, <br>Johanna Jönsson||Svensson, Jönsson, Berntsson and Moshfegh, 2008; <br>Jönsson, Svensson, Berntsson and Moshfegh, 2008||
+||Pulp mill||FRAM-mill||Inger-Lise Svensson||Svensson and Moshfegh, 2008||
+||Pulp mill||FRAM-mill||Johanna Jönsson||Jönsson and Algehed, 2008||
+||District heating system||Tekniska Verken i Linköping||Elisabeth Wetterlund, <br>(Kristina Difs)||Difs, Wetterlund, Trygg, Söderström, 2008; <br>Wetterlund, Difs, Söderström, 2009||
+||Steel industry||SSAB, Luleå||Chuan Wang||Wang, Ryman and Dahl, 2008; <br>Wang, Ryman, Larsson, Wikström and Grip, 2007; <br>Wang, Larsson, Ryman, Grip Wikström, Johnsson and Engdahl, 2008||
+||Steel industry||SSAB, Luleå||Kimmo Kinnunen||Kinnunen, Wang, Larsson and Perander, 2008||
+||Steel industry||SSAB, Luleå||Linda Bergman||Bergman, Larsson, Wikström, Ökvist, Zuo, and Jansson, 2008||
+
+
+
+
+
 
 
 
