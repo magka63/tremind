@@ -26,7 +26,7 @@ If you are a user of reMIND and have used the software as basis in a scientific 
 ==MIND (JAVA code)==
 || *Branch of business* || *Company* || *Model operator* || *Publications/Reports* ||
 ||Steel industry||SSAB, Luleå||Mikael Larsson||Larsson and Dahl, 2003||
-||Steel industry||SSAB, Luleå||Peter Sandberg, Mikael Larsson||Larsson and Sandberg, 2003; Larsson, Sandberg, Dahl, Söderström and Vourinen, 2004; Sandberg and Larsson, 2004; Sandberg, Larsson, Dahl, Söderström and Vourinen, 2004||
+||Steel industry||SSAB, Luleå||Peter Sandberg, Mikael Larsson||Larsson and Sandberg, 2003;<br> Larsson Sandberg, Dahl, Söderström and Vourinen, 2004; <br>Sandberg and Larsson, 2004; <br>Sandberg, Larsson, Dahl, Söderström and Vourinen, 2004||
 ||Steel industry||SSAB, Luleå||Mikael Larsson||Ryman, Larsson, Niemi, and Grip, 2004; Larsson, Dahl and Grip, 2004; Larsson and Dahl, 2004||
 
 
