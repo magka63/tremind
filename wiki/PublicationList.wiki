@@ -1,10 +1,7 @@
-#summary A list of known scientific publications where reMIND has been used for modelling.
+#summary A list of known publications where reMIND has been used for modelling.
 #labels Featured
 
 = Introduction =
-
-_The publication list is not yet all up to date_
-
 The publication list of reMIND has different purposes and one is to help the user of the software to easy find information on how to use the software. The list is divided into two main parts: (1) tables consisting of information for each publication regarding e.g. the name of the modeler and the branch of business that has been studied and (2) lists of the publications. Before the code for the reMIND software was written a Fortran based code was used. Therefore, the first publications in the list are based on the use of the fortran based software, while the rest of the publications are based on the reMIND software, which is JAVA-based. The list was originally compiled by Magnus Karlsson (Linköping University, Sweden) but is now updated by the group responsible for release and development handling for reMIND, based on information from the users of the software.
 
 =How to include new publications=
@@ -30,10 +27,6 @@ If you are a user of reMIND and have used the software as basis in a scientific 
 ||Pulp and paper industry||Stora Enso Langerbrügge||Mehrdad Heidari Tari||Heidari Tari and Söderström, 2002a||
 ||Steel industry||SSAB, Luleå||Mehrdad Heidari Tari||Heidari Tari, Larsson, Söderström and Dahl, 2002||
 ||Pulp and paper industry||Stora Enso Skoghall||Mei Gong||Gong, 2003||
-
-
-
-
 
 
 
