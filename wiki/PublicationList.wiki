@@ -7,8 +7,8 @@ _The publication list is not yet all up to date_
 
 The publication list of reMIND has different purposes and one is to help the user of the software to easy find information on how to use the software. The list is divided into two main parts: (1) tables consisting of information for each publication regarding e.g. the name of the modeler and the branch of business that has been studied and (2) lists of the publications. Before the code for the reMIND software was written a Fortran based code was used. Therefore, the first publications in the list are based on the use of the fortran based software, while the rest of the publications are based on the reMIND software, which is JAVA-based. The list was originally compiled by Magnus Karlsson (Linköping University, Sweden) but is now updated by the group responsible for release and development handling for reMIND, based on information from the users of the software.
 
-=Including new publications"
-If you are a user of reMIND and have used the to software as basis in a scientific publication, report or other relevant publication, please use the 
+=Including new publications=
+If you are a user of reMIND and have used the software as basis in a scientific publication, report or other relevant publication, please use the space "Enter a comment" to notify the group responsible for release an development handling for reMIND. Look at the tables and the reference list the information needed to be included in the comments.
 
 =Publications in tables=
 
@@ -22,6 +22,19 @@ If you are a user of reMIND and have used the to software as basis in a scientif
 ||_N/A_||_N/A_||Katarina Nilsson||Nilsson, 1993||
 ||Refinery||_N/A_||Katarina Nilsson||Nilsson and Sundén, 1993||
 ||Refinery||_N/A_||Katarina Nilsson||Nilsson, Söderström and Karlsson, 1994||
+
+==MIND (JAVA code)==
+|| *Branch of business* || *Company* || *Model operator* || *Publications/Reports* ||
+||Steel industry||SSAB, Luleå||Mikael Larsson||Larsson and Dahl, 2003||
+||Steel industry||SSAB, Luleå||Peter Sandberg, Mikael Larsson||Larsson and Sandberg, 2003
+Larsson, Sandberg, Dahl, Söderström and Vourinen, 2004
+Sandberg and Larsson, 2004
+Sandberg, Larsson, Dahl, Söderström and Vourinen, 2004||
+||Steel industry||SSAB, Luleå||Mikael Larsson||Ryman, Larsson, Niemi, and Grip, 2004
+Larsson, Dahl and Grip, 2004
+Larsson and Dahl, 2004||
+
+
 
 =Publications in lists=
 
