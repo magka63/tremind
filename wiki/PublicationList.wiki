@@ -22,6 +22,20 @@ If you are a user of reMIND and have used the software as basis in a scientific 
 ||_N/A_||_N/A_||Katarina Nilsson||Nilsson, 1993||
 ||Refinery||_N/A_||Katarina Nilsson||Nilsson and Sundén, 1993||
 ||Refinery||_N/A_||Katarina Nilsson||Nilsson, Söderström and Karlsson, 1994||
+||Mechanical engineering industry||Volvo PV, Torslanda and Gent||Süleyman Dag||Dag, Björk and Karlsson, 1996; <br>Dag, 2000||
+||Pulp and paper industry||Stora Enso Langerbrügge||Magnus Karlsson||Karlsson, 1999; <br>Karlsson, 2001||
+||Steel industry||SSAB, Luleå||Mikael Larsson||Grip, Larsson, and Dahl, 2001||
+||Pulp and paper industry||Stora Enso Skoghall||Magnus Karlsson||Bengtsson and Karlsson, 1999; <br>Bengtsson, Karlsson, Berntsson and Söderström, 2002a; <br>Karlsson and Söderström, 2002; <br>Karlsson, 2004; <br>Bengtsson, Karlsson, Berntsson and Söderström, 2002b; <br>Karlsson and Carlson, 2002; <br>Karlsson, 2002||
+||Pulp and paper industry||Fiskeby Board, Norrköping||Mehrdad Heidari Tari||Heidari Tari and Söderström, 2002b; <br>Heidari Tari, 2002a; <br>Heidari Tari, 2002b||
+||Pulp and paper industry||Stora Enso Langerbrügge||Mehrdad Heidari Tari||Heidari Tari and Söderström, 2002a||
+||Steel industry||SSAB, Luleå||Mehrdad Heidari Tari||Heidari Tari, Larsson, Söderström and Dahl, 2002||
+||Pulp and paper industry||Stora Enso Skoghall||Mei Gong||Gong, 2003||
+
+
+
+
+
+
 
 ==MIND (JAVA code)==
 || *Branch of business* || *Company* || *Model operator* || *Publications/Reports* ||
