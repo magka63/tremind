@@ -98,7 +98,7 @@ If you are a user of reMIND and have used the software as basis in a scientific 
 
  # Gong, M., Karlsson, M. and Söderström, M., Industry and the energy market – optimal choice of measures using the MIND method, In Proceedings of the CRIS (International Institute for Critical Infrastructures) conference on ‘Power Systems and Communications Infrastructures for the future’, Bejing, China, 23-27 September 2002.
  # Gong, M., Using Exergy and Otimization Models to Improve Industrial Energy Systems Towards Sustainability, Linköping Studies in Science and Technology, Dissertation No. 868, ISBN 91-7373-933-2, Linköping University, Linköping, Sweden, 2004.
-Heidari Tari, M., MIND – A decision making tool, presented in Energiting, http://www.stem.se/energiting2001, Föredrag No. 19, 2001.
+ # Heidari Tari, M., MIND – A decision making tool, presented in Energiting, http://www.stem.se/energiting2001, Föredrag No. 19, 2001.
  # Heidari Tari, M., On Optimization Modeling of Industrial Energy Systems at plant level - Development of the decision-making tool "MIND", Linköping Studies in Science and Technology, Dissertation No. 777, Linköping University, Linköping, Sweden, 2002.
  # Karlsson, M., Analysing Strategic Energy-Related Investments in Process Industries – Applied Studies at a Pulp and Board Mill, Linköping Studies in Science and Technology, Dissertation No. 791, ISBN 91-7373-476-4, Linköping University, Linköping, Sweden, 2002.
  # Karlsson, M., Sandberg, P., The MIND method: a decision support system based on MILP, submitted for publication in Decision support systems, 2004.
