@@ -25,9 +25,8 @@ If you are a user of reMIND and have used the software as basis in a scientific 
 
 ==MIND (JAVA code)==
 || *Branch of business* || *Company* || *Model operator* || *Publications/Reports* ||
-||Steel industry||SSAB, Luleå||Mikael Larsson||Larsson and Dahl, 2003||
+||Steel industry||SSAB, Luleå||Mikael Larsson||Larsson and Dahl, 2003; <br>Ryman, Larsson, Niemi, and Grip, 2004; <br>Larsson, Dahl and Grip, 2004; <br>Larsson and Dahl, 2004||
 ||Steel industry||SSAB, Luleå||Peter Sandberg, <br>Mikael Larsson||Larsson and Sandberg, 2003;<br> Larsson Sandberg, Dahl, Söderström and Vourinen, 2004; <br>Sandberg and Larsson, 2004; <br>Sandberg, Larsson, Dahl, Söderström and Vourinen, 2004||
-||Steel industry||SSAB, Luleå||Mikael Larsson||Ryman, Larsson, Niemi, and Grip, 2004; <br>Larsson, Dahl and Grip, 2004; <br>Larsson and Dahl, 2004||
 ||Steel industry||SSAB, Luleå||Mikael Larsson, <br>Chuan Wang||Larsson, Wang, Dahl, Wedholm, Samuelsson, Magnusson, Lampinen, Su and Grip, 2004||
 ||Dairy||Arla Foods AB, Linköping and Göteborg||Mikael Söderström, <br>Johan Kronman||Söderström, 2004; <br>Kronman, 2004||
 ||Pulp and paper industry||Stora Enso Skoghall||Magnus Karlsson||Gong and Karlsson, 2004||
@@ -49,12 +48,7 @@ If you are a user of reMIND and have used the software as basis in a scientific 
 ||Steel industry||SSAB, Luleå||Linda Bergman||Bergman, Larsson, Wikström, Ökvist, Zuo, and Jansson, 2008||
 
 
-
-
-
-
-
-
+<br>
 =Publications in lists=
 
 ==Publications/reports based totally or partly on models built in the analysis tool MIND/reMIND (also found in the tables above)==
