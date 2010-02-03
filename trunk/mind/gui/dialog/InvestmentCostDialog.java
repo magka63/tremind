@@ -38,7 +38,6 @@
  * InvestmentCostDialog.java
  *
  * Created on November 17, 2003, 6:42 PM
- * Nawzad Mardan 2009-05-20
  */
 
 package mind.gui.dialog;
@@ -317,14 +316,6 @@ public class InvestmentCostDialog extends mind.gui.dialog.FunctionDialog {
 
         /* Init dialog */
         c_pnlLimits.setLayout(new GridBagLayout());
-        int analysperiod =((c_gui.getDiscountedsystemcostControl()).getAnalysPeriod()).intValue();
-        float rate =((c_gui.getDiscountedsystemcostControl()).getRate()).floatValue();
-        // Added by Nawzad Mardan 090512
-       if((rate == 0) && (analysperiod == 1))
-           c_function.setDiscountSystemCost(false);
-        if((rate != 0) && (analysperiod != 1))
-            c_function.setDiscountSystemCost(true);
-
         initComponent();
         initDynamicComponents();
 
@@ -432,78 +423,34 @@ public class InvestmentCostDialog extends mind.gui.dialog.FunctionDialog {
 	float end;
 	float offset;
 	float slope;
-    float c;
-    boolean flag = true;
+        float c;
+        boolean flag = true;
 
 	boolean valid = true;
 
 	/* former "end"*/
 	float formerEnd = 0;
         
-    if(technicallifespanField.getFloatValue() < 0)
+        if(technicallifespanField.getFloatValue() < 0)
                 {
                  JOptionPane.showMessageDialog(null, "Please enter correct value of the technical lifespan.\n "+"The 'Lifespan' field must be  > 0",
 					"Lifespan <= 0", JOptionPane.WARNING_MESSAGE);
                 valid = false;
                 return false;
                 }
-   if(economiclifespanField.getFloatValue() < 0)
+        if(economiclifespanField.getFloatValue() < 0)
                 {
                  JOptionPane.showMessageDialog(null, "Please enter correct value of the economic lifespan.\n "+"The 'Lifespan' field must be  > 0",
 					"Lifespan <= 0", JOptionPane.WARNING_MESSAGE);
                  valid = false;
                  return false;
                 }
-   if((technicallifespanField.getFloatValue()!= 0) && (!c_function.getDiscountSystemCost()) )
-                {
-                 JOptionPane.showMessageDialog(null, "Insert length of analyses period and annual rate from the Menu\nModel-> Discounted stystem cost..," +
-                         " or set Technical lifespan to zero",
-                         "The length of analyses period and annual rate is missing", JOptionPane.WARNING_MESSAGE);
-                valid = false;
-                return false;
-                }
-    if((economiclifespanField.getFloatValue()!= 0) && (!c_function.getDiscountSystemCost()) )
-                {
-                 JOptionPane.showMessageDialog(null, "Insert length of analyses period and annual rate from the Menu\nModel-> Discounted stystem cost.." +
-                         ",or set Economical lifespan to zero.\n",
-                         "The length of analyses period and annual rate is missing", JOptionPane.WARNING_MESSAGE);
-                valid = false;
-                return false;
-                }
-    if((annualrateField.getFloatValue()!= 0) && (!c_function.getDiscountSystemCost()) )
-                {
-                 JOptionPane.showMessageDialog(null, "Insert length of analyses period and annual rate from the Menu\nModel-> Discounted stystem cost.." +
-                         ", or set Annual rate to zero.\n",
-                         "The length of analyses period and annual rate is missing", JOptionPane.WARNING_MESSAGE);
-                valid = false;
-                return false;
-                }
-    if((percentagescrapvalueField.getFloatValue()!= 0) && (!c_function.getDiscountSystemCost()) )
-                {
-                 JOptionPane.showMessageDialog(null, "Insert length of analyses period and annual rate from the Menu\nModel-> Discounted stystem cost.." +
-                         ", or set Percentage residual value to zero.\n",
-                         "The length of analyses period and annual rate is missing", JOptionPane.WARNING_MESSAGE);
-                valid = false;
-                return false;
-                }
-    if((fixedscrapvalueField.getFloatValue()!= 0) && (!c_function.getDiscountSystemCost()) )
-                {
-                 JOptionPane.showMessageDialog(null, "Insert length of analyses period and annual rate from the Menu\nModel-> Discounted stystem cost.." +
-                         ", or set Fixed residual value to zero.\n.\n",
-                         "The length of analyses period and annual rate is missing", JOptionPane.WARNING_MESSAGE);
-                valid = false;
-                return false;
-                }
-   /* float x = fixedscrapvalueField.getFloatValue();
          if(fixedscrapvalueField.getFloatValue() < 0)
                 {
                  JOptionPane.showMessageDialog(null, "Please enter correct value for the fixed value of the scrap .\n "+"The 'Fixed value of scrap' field must be  > 0",
 					"Fixed valu <= 0", JOptionPane.WARNING_MESSAGE);
                 valid = false;
                 return false;
-              //float x = fixedscrapvalueField.getFloatValue();
-
-                System.out.println("Fixed scrap value is a negativ value" + x);
                 }
         
         if(percentagescrapvalueField.getFloatValue() < 0)
@@ -512,8 +459,7 @@ public class InvestmentCostDialog extends mind.gui.dialog.FunctionDialog {
 					"Precentage valu <= 0", JOptionPane.WARNING_MESSAGE);
                 valid = false;
                 return false;
-                System.out.println("Percentage scrap value is a negativ value");
-                }*/
+                }
         /*if(!c_function.getDiscounsystemStaus())
         {
         if((economiclifespanField.getFloatValue() > 0)|| (technicallifespanField.getFloatValue() > 0))
@@ -615,8 +561,6 @@ public class InvestmentCostDialog extends mind.gui.dialog.FunctionDialog {
             c_function.setPercentageValueOfScrap(percentagescrapvalueField.getFloatValue());
             c_function.setFixedValueOfScrap(fixedscrapvalueField.getFloatValue());
             c_function.setTimestepValue(c_timeStepValues);
-            if(annualrateCheckBox.isSelected())
-                c_function.setAnnualRateValue(annualrateField.getFloatValue());
             }
         }
         c_function.setTimestep(old_timestep);
@@ -847,8 +791,7 @@ public class InvestmentCostDialog extends mind.gui.dialog.FunctionDialog {
         getContentPane().add(pnlTimestep, gridBagConstraints1);
         
         // Added by Nawzad Mardn 080624
-        lblTechnicallifespan = new JLabel("Technical lifespan    ");
-        lblTechnicallifespan.setToolTipText("Set value to zero if no Technical lifespan is considered");
+        lblTechnicallifespan = new JLabel("Technical lifespan   ");
         pnltechnicallife = new JPanel();
         pnltechnicallife.setLayout(new java.awt.GridBagLayout());
         java.awt.GridBagConstraints gridBagConstraints22,gridBagConstraints23,gridBagConstraints24;
@@ -863,22 +806,14 @@ public class InvestmentCostDialog extends mind.gui.dialog.FunctionDialog {
         pnltechnicallife.add(lblTechnicallifespan, gridBagConstraints22);
         
         technicallifespanField =new PositiveNumberField();
-        technicallifespanField.setToolTipText("Set value to zero if no Technical lifespan is considered");
+        technicallifespanField.setToolTipText("Technical lifespan");
         technicallifespanField.setText(new Float(c_function.getTechnicalLife()).toString());  
         gridBagConstraints23 = new java.awt.GridBagConstraints();
         gridBagConstraints23.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints23.insets = new java.awt.Insets(5, 5, 0, 0);
+        gridBagConstraints23.insets = new java.awt.Insets(5, 5, 0, 10);
         gridBagConstraints23.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints23.weightx = 1.0;
         pnltechnicallife.add(technicallifespanField, gridBagConstraints23);
-
-        javax.swing.JLabel years = new javax.swing.JLabel(" Years");
-        gridBagConstraints23 = new java.awt.GridBagConstraints();
-        gridBagConstraints23.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints23.insets = new java.awt.Insets(0, 0, 0, 10);
-        gridBagConstraints23.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints23.weightx = 1.0;
-        pnltechnicallife.add(years, gridBagConstraints23);
 
         gridBagConstraints24 = new java.awt.GridBagConstraints();
         gridBagConstraints24.gridx = 0;
@@ -889,9 +824,8 @@ public class InvestmentCostDialog extends mind.gui.dialog.FunctionDialog {
         getContentPane().add(pnltechnicallife, gridBagConstraints24);
         
         lblEconomiclifespan = new JLabel("Economical lifespan");
-        lblEconomiclifespan.setToolTipText("Set value to zero if no Economical lifespan is considered ");
         economiclifespanField =new PositiveNumberField();
-        economiclifespanField.setToolTipText("Set value to zero if no Economical lifespan is considered ");
+        economiclifespanField.setToolTipText("Economical lifespan");
         economiclifespanField.setText(new Float(c_function.getEconomicalLife()).toString());   
         pnleconomiclife = new JPanel();
         pnleconomiclife.setLayout(new java.awt.GridBagLayout());
@@ -906,18 +840,10 @@ public class InvestmentCostDialog extends mind.gui.dialog.FunctionDialog {
         
         gridBagConstraints23 = new java.awt.GridBagConstraints();
         gridBagConstraints23.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints23.insets = new java.awt.Insets(5, 5, 0, 0);
+        gridBagConstraints23.insets = new java.awt.Insets(5, 5, 0, 10);
         gridBagConstraints23.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints23.weightx = 1.0;
         pnleconomiclife.add(economiclifespanField, gridBagConstraints23);
-
-        javax.swing.JLabel year = new javax.swing.JLabel(" Years");
-        gridBagConstraints23 = new java.awt.GridBagConstraints();
-        gridBagConstraints23.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints23.insets = new java.awt.Insets(0, 0, 0, 10);
-        gridBagConstraints23.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints23.weightx = 1.0;
-        pnleconomiclife.add(year, gridBagConstraints23);
 
         gridBagConstraints24 = new java.awt.GridBagConstraints();
         gridBagConstraints24.gridx = 0;
@@ -932,68 +858,11 @@ public class InvestmentCostDialog extends mind.gui.dialog.FunctionDialog {
          *private javax.swing.JPanel pnlpercentagescrapvalue, pnlfixedscrapvalue;
          *
          */
-
-        annualrateCheckBox = new JCheckBox("Use investment specific rate");
-        annualrateCheckBox.setSelected(c_function.getAnnualrateCBState());
-        //Register a listener for the check boxes.
-        annualrateCheckBox.addItemListener(new QItemListener());
-        annualrateField =  new PositiveNumberField();
-        annualrateField.setToolTipText("Use investment specific rate  ");
-        lblannualrate = new JLabel(" %");
-        if(c_function.getAnnualrateCBState())
-         {
-         annualrateField.setText(new Float(c_function.getAnnualRateValue()).toString());
-         lblannualrate.setEnabled(true);
-         }
-        else
-         {
-         annualrateField.setEnabled(false);
-         annualrateField.setText("0.0");
-         lblannualrate.setEnabled(false);
-         }
-        lblannualrate = new JLabel(" %");
-
-        JPanel pnlannulrate = new JPanel();
-        pnlannulrate.setLayout(new java.awt.GridBagLayout());
-        gridBagConstraints2 = new java.awt.GridBagConstraints();
-        gridBagConstraints2.gridx = 0;
-        gridBagConstraints2.gridy = 0;
-        gridBagConstraints2.gridwidth = 2;
-        gridBagConstraints2.insets = new java.awt.Insets(5, 5, 0, 6);
-        gridBagConstraints2.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints2.weightx = 1.0;
-        pnlannulrate.add(annualrateCheckBox, gridBagConstraints2);
-
-        gridBagConstraints2 = new java.awt.GridBagConstraints();
-        gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints2.insets = new java.awt.Insets(0, 0, 0, 0);
-        gridBagConstraints2.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints2.weightx = 1.0;
-        pnlannulrate.add(annualrateField, gridBagConstraints2);
-
-        gridBagConstraints2 = new java.awt.GridBagConstraints();
-        gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints2.insets = new java.awt.Insets(0, 0, 0, 10);
-        gridBagConstraints2.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints2.weightx = 1.0;
-        pnlannulrate.add(lblannualrate, gridBagConstraints2);
-
-        gridBagConstraints2 = new java.awt.GridBagConstraints();
-        gridBagConstraints2.gridx = 0;
-        //gridBagConstraints24.gridy = 6;
-        gridBagConstraints2.fill = java.awt.GridBagConstraints.SOUTHWEST;
-        gridBagConstraints2.insets = new java.awt.Insets(5, 5, 0, 10);
-        gridBagConstraints2.anchor = java.awt.GridBagConstraints.SOUTHWEST;
-        getContentPane().add(pnlannulrate, gridBagConstraints2);
-
-
         //Create the check boxes.
         //percentagevalueCheckBox, fixedvalueCheckBox
-        percentagevalueCheckBox = new JCheckBox("Percentage Residual Value     ");
-        percentagevalueCheckBox.setToolTipText("Insert a value larger than zero when residual revenues are associated with the investment. " +
-                "\nInsert a value lower than zero when residual charges are associated with the investment. ");
-        //percentagevalueCheckBox.setMnemonic(KeyEvent.VK_C);
-        percentagevalueCheckBox.setSelected(c_function.getPercentageCBState());
+        percentagevalueCheckBox = new JCheckBox("Percentage value of the scrap");
+        percentagevalueCheckBox.setMnemonic(KeyEvent.VK_C);
+        percentagevalueCheckBox.setSelected(c_function.getPercentagevalueChoice());
         percentagevalueCheckBox.addItemListener(new QItemListener());
        // lblpercentagescrapvalue = new JLabel("Percentage value of the scrap");
         pnlpercentagescrapvalue = new JPanel();
@@ -1009,26 +878,16 @@ public class InvestmentCostDialog extends mind.gui.dialog.FunctionDialog {
         gridBagConstraints32.weightx = 1.0;
         pnlpercentagescrapvalue.add(percentagevalueCheckBox, gridBagConstraints32);
         
-        percentagescrapvalueField =new PositiveAndNegativeNumberField();
-        percentagescrapvalueField.setToolTipText("Insert a value larger than zero when residual revenues are associated with the investment. " +
-                "\nInsert a value lower than zero when residual charges are associated with the investment. ");
-
+        percentagescrapvalueField =new PositiveNumberField();
+        percentagescrapvalueField.setToolTipText("Percentage value of the scrap");
         percentagescrapvalueField.setText(new Float(c_function.getPercentageValueOfScrap()).toString());
-        percentagescrapvalueField.setEnabled(c_function.getPercentageCBState());
+        percentagescrapvalueField.setEnabled(c_function.getPercentagevalueChoice());
         gridBagConstraints33 = new java.awt.GridBagConstraints();
         gridBagConstraints33.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints33.insets = new java.awt.Insets(0, 0, 0, 0);
+        gridBagConstraints33.insets = new java.awt.Insets(5, 5, 0, 10);
         gridBagConstraints33.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints33.weightx = 1.0;
         pnlpercentagescrapvalue.add(percentagescrapvalueField, gridBagConstraints33);
-
-        javax.swing.JLabel per = new javax.swing.JLabel(" %");
-        gridBagConstraints33 = new java.awt.GridBagConstraints();
-        gridBagConstraints33.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints33.insets = new java.awt.Insets(0, 0, 0, 10);
-        gridBagConstraints33.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints33.weightx = 1.0;
-        pnlpercentagescrapvalue.add(per, gridBagConstraints33);
 
         gridBagConstraints34 = new java.awt.GridBagConstraints();
         gridBagConstraints34.gridx = 0;
@@ -1045,11 +904,9 @@ public class InvestmentCostDialog extends mind.gui.dialog.FunctionDialog {
           private javax.swing.JLabel lblpercentagescrapvalue, lblfixedscrapvalue;
          *private javax.swing.JPanel pnlpercentagescrapvalue, pnlfixedscrapvalue;
          */
-        fixedvalueCheckBox = new JCheckBox("Fixed Residual Value       ");
-        fixedvalueCheckBox.setToolTipText("Insert a value larger than zero when residual revenues are associated with the investment." +
-                "\n Insert a value lower than zero when residual charges are associated with the investment. ");
+        fixedvalueCheckBox = new JCheckBox("Fixed value of the scrap   ");
         fixedvalueCheckBox.setMnemonic(KeyEvent.VK_C);
-        fixedvalueCheckBox.setSelected(c_function.getFixedCBState());
+        fixedvalueCheckBox.setSelected(c_function.getFixedagevalueChoice());
         fixedvalueCheckBox.addItemListener(new QItemListener());
         //lblfixedscrapvalue = new JLabel("Fixed value of the scrap   ");
         pnlfixedscrapvalue = new JPanel();
@@ -1065,11 +922,10 @@ public class InvestmentCostDialog extends mind.gui.dialog.FunctionDialog {
         gridBagConstraints42.weightx = 1.0;
         pnlfixedscrapvalue.add(fixedvalueCheckBox, gridBagConstraints42);
         
-        fixedscrapvalueField =new PositiveAndNegativeNumberField();
-        fixedscrapvalueField.setToolTipText("Insert a value larger than zero when residual revenues are associated with the investment." +
-                "\n Insert a value lower than zero when residual charges are associated with the investment.");
+        fixedscrapvalueField =new PositiveNumberField();
+        fixedscrapvalueField.setToolTipText("Fixed value of the scrap   ");
         fixedscrapvalueField.setText(new Float(c_function.getFixedValueOfScrap()).toString()); 
-        fixedscrapvalueField.setEnabled(c_function.getFixedCBState());
+        fixedscrapvalueField.setEnabled(c_function.getFixedagevalueChoice());
         gridBagConstraints43 = new java.awt.GridBagConstraints();
         gridBagConstraints43.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints43.insets = new java.awt.Insets(5, 5, 0, 10);
@@ -1084,8 +940,7 @@ public class InvestmentCostDialog extends mind.gui.dialog.FunctionDialog {
         gridBagConstraints44.insets = new java.awt.Insets(5, 5, 0, 10);
         gridBagConstraints44.anchor = java.awt.GridBagConstraints.SOUTHWEST;
         getContentPane().add(pnlfixedscrapvalue, gridBagConstraints44);
-
-
+         
         
         
         /*********************************
@@ -1376,8 +1231,6 @@ public class InvestmentCostDialog extends mind.gui.dialog.FunctionDialog {
     /**
      * Action when the "remove outflow" button is pressed.
      */
-
-
     private void btnRemoveOutflowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveOutflowActionPerformed
         Object selectedValue = c_lstSelectedOutflow.getSelectedValue();
         /* Do nothing if nothing is selected*/
@@ -1561,15 +1414,15 @@ private javax.swing.JButton btnCancel;
 private JDialog c_parent;
 boolean c_modal;
 //private JButton btnRate;
-private PositiveNumberField  technicallifespanField,economiclifespanField, annualrateField;
+private PositiveNumberField  technicallifespanField,economiclifespanField;
+//private javax.swing.JLabel lblRatAnalys, lblTechnicallifespan, lblEconomiclifespan;
 private javax.swing.JLabel lblTechnicallifespan, lblEconomiclifespan;
 //private javax.swing.JPanel pnlRate, pnltechnicallife, pnleconomiclife, pnlMain;
 private javax.swing.JPanel pnltechnicallife, pnleconomiclife, pnlMain;
-private PositiveAndNegativeNumberField  percentagescrapvalueField,fixedscrapvalueField;
-private javax.swing.JLabel lblpercentagescrapvalue, lblfixedscrapvalue, lblannualrate;
+private PositiveNumberField  percentagescrapvalueField,fixedscrapvalueField;
+private javax.swing.JLabel lblpercentagescrapvalue, lblfixedscrapvalue;
 private javax.swing.JPanel pnlpercentagescrapvalue, pnlfixedscrapvalue;
-private JCheckBox percentagevalueCheckBox, fixedvalueCheckBox,annualrateCheckBox ;
-
+private JCheckBox percentagevalueCheckBox, fixedvalueCheckBox;
 // End of variables declaration     
 
 /**
@@ -1888,22 +1741,15 @@ private JCheckBox percentagevalueCheckBox, fixedvalueCheckBox,annualrateCheckBox
                     {
                     fixedscrapvalueField.setEnabled(true);
                     percentagescrapvalueField.setEnabled(false);
-                    c_function.setFixedCBState(true);
                     percentagevalueCheckBox.setSelected(false);
                     percentagescrapvalueField.setText("0.0");      
                     }
-                    else 
+                    /*else 
                     {
-                    fixedscrapvalueField.setEnabled(false);
-                    c_function.setFixedValueOfScrap(0);
-                    //c_function.set
-                    percentagescrapvalueField.setEnabled(true);
-                    //c_function.setPercentageCBState(true);
-                    fixedscrapvalueField.setText("0.0");
-                    c_function.setFixedCBState(false);
-                    //percentagevalueCheckBox.setSelected(false);
-                    percentagescrapvalueField.setText("0.0");
-                    }
+                        c_choiceOneSelected = false;
+                        setAltOneEnabeld(false);
+                        setAltOneDefaultValue();
+                    }*/
                 }
             else if(source == percentagevalueCheckBox)
                 {
@@ -1912,40 +1758,7 @@ private JCheckBox percentagevalueCheckBox, fixedvalueCheckBox,annualrateCheckBox
                     fixedscrapvalueField.setEnabled(false);
                     fixedvalueCheckBox.setSelected(false);
                     percentagescrapvalueField.setEnabled(true);
-                    c_function.setPercentageCBState(true);
                     fixedscrapvalueField.setText("0.0");      
-                    }
-                else
-                    {
-                    fixedscrapvalueField.setEnabled(true);
-                    //fixedvalueCheckBox.setSelected(false);
-                    percentagescrapvalueField.setEnabled(false);
-                    c_function.setPercentageCBState(false);
-                    percentagescrapvalueField.setText("0.0");
-                    c_function.setPercentageValueOfScrap(0);
-                    fixedscrapvalueField.setText("0.0");
-                    }
-                }
-
-            else if(source == annualrateCheckBox)
-                {
-                if(annualrateCheckBox.getSelectedObjects()!=null)
-                    {
-                    //c_stopCostSelected = true
-                    //lblannualrate;annualrateField ;
-                    annualrateField.setEnabled(true);
-                    lblannualrate.setEnabled(true);
-                    c_function.setAnnualrateCBState(true);
-                    }
-                else
-                    {
-                    //c_stopCostSelected = false;
-                    annualrateField.setEnabled(false);
-                    lblannualrate.setEnabled(false);
-                    annualrateField.setText("0.0");
-                    c_function.setAnnualrateCBState(false);
-                    c_function.setAnnualRateValue(0); //operateCostField
-
                     }
                 }
             }
