@@ -1,21 +1,21 @@
 /*
  * Copyright 2003:
- * Almsted Åsa <asaal288@student.liu.se>
+ * Almsted Ã…sa <asaal288@student.liu.se>
  * Anliot Manne <manan699@student.liu.se>
  * Fredriksson Linus <linfr529@student.liu.se>
  * Gylin Mattias <matgy024@student.liu.se>
- * Sjölinder Mattias <matsj509@student.liu.se>
- * Sjöstrand Johan <johsj438@student.liu.se>
- * Åkerlund Anders <andak893@student.liu.se>
+ * SjÃ¶linder Mattias <matsj509@student.liu.se>
+ * SjÃ¶strand Johan <johsj438@student.liu.se>
+ * Ã…kerlund Anders <andak893@student.liu.se>
  * 
  * Copyright 2007:
  * Per Fredriksson <perfr775@student.liu.se>
- * David Karlslätt <davka417@student.liu.se>
+ * David KarlslÃ¤tt <davka417@student.liu.se>
  * Tor Knutsson	<torkn754@student.liu.se>
- * Daniel Källming <danka053@student.liu.se>
+ * Daniel KÃ¤llming <danka053@student.liu.se>
  * Ted Palmgren <tedpa175@student.liu.se>
  * Freddie Pintar <frepi150@student.liu.se>
- * Mårten Thurén <marth852@student.liu.se>
+ * MÃ¥rten ThurÃ©n <marth852@student.liu.se>
  *
  * This file is part of reMIND.
  *
@@ -445,6 +445,76 @@ public class InvestmentCostDialog extends mind.gui.dialog.FunctionDialog {
                  valid = false;
                  return false;
                 }
+<<<<<<< .mine
+   if((technicallifespanField.getFloatValue()!= 0) && (!c_function.getDiscountSystemCost()) )
+                {
+                 JOptionPane.showMessageDialog(null, "Insert length of analyses period and annual rate from the Menu\nModel-> Discounted stystem cost..," +
+                         " or set Technical lifespan to zero",
+                         "The length of analyses period and annual rate is missing", JOptionPane.WARNING_MESSAGE);
+                valid = false;
+                return false;
+                }
+    if((economiclifespanField.getFloatValue()!= 0) && (!c_function.getDiscountSystemCost()) )
+                {
+                 JOptionPane.showMessageDialog(null, "Insert length of analyses period and annual rate from the Menu\nModel-> Discounted stystem cost.." +
+                         ",or set Economical lifespan to zero.\n",
+                         "The length of analyses period and annual rate is missing", JOptionPane.WARNING_MESSAGE);
+                valid = false;
+                return false;
+                }
+    if((economiclifespanField.getFloatValue() != 0) && (technicallifespanField.getFloatValue() != 0))
+               {
+               if(economiclifespanField.getFloatValue() > technicallifespanField.getFloatValue())
+                   {
+                   JOptionPane.showMessageDialog(null, "The length of economical lifespan should be less or equal to the technical lifespan. ",
+					"Input error", JOptionPane.WARNING_MESSAGE);
+                   valid = false;
+                   return false;
+                   }
+               }
+    if((annualrateField.getFloatValue()!= 0) && (!c_function.getDiscountSystemCost()) )
+                {
+                 JOptionPane.showMessageDialog(null, "Insert length of analyses period and annual rate from the Menu\nModel-> Discounted stystem cost.." +
+                         ", or set Annual rate to zero.\n",
+                         "The length of analyses period and annual rate is missing", JOptionPane.WARNING_MESSAGE);
+                valid = false;
+                return false;
+                }
+    if((percentagescrapvalueField.getFloatValue()!= 0) && (!c_function.getDiscountSystemCost()) )
+                {
+                 JOptionPane.showMessageDialog(null, "Insert length of analyses period and annual rate from the Menu\nModel-> Discounted stystem cost.." +
+                         ", or set Percentage residual value to zero.\n",
+                         "The length of analyses period and annual rate is missing", JOptionPane.WARNING_MESSAGE);
+                valid = false;
+                return false;
+                }
+    if((fixedscrapvalueField.getFloatValue()!= 0) && (!c_function.getDiscountSystemCost()) )
+                {
+                 JOptionPane.showMessageDialog(null, "Insert length of analyses period and annual rate from the Menu\nModel-> Discounted stystem cost.." +
+                         ", or set Fixed residual value to zero.\n.\n",
+                         "The length of analyses period and annual rate is missing", JOptionPane.WARNING_MESSAGE);
+                valid = false;
+                return false;
+                }
+
+
+    if((percentagescrapvalueField.getText()).equals(""))
+              {
+              percentagescrapvalueField.setText("0.0");
+              c_function.setPercentageValueOfScrap(0.f);
+              c_function.setPercentageCBState(false);
+             }
+    if((fixedscrapvalueField.getText()).equals(""))
+              {
+              fixedscrapvalueField.setText("0.0");
+              c_function.setFixedValueOfScrap(0.f);
+              c_function.setFixedCBState(false);
+             }
+
+
+   /* float x = fixedscrapvalueField.getFloatValue();
+=======
+>>>>>>> .r45
          if(fixedscrapvalueField.getFloatValue() < 0)
                 {
                  JOptionPane.showMessageDialog(null, "Please enter correct value for the fixed value of the scrap .\n "+"The 'Fixed value of scrap' field must be  > 0",
@@ -807,6 +877,20 @@ public class InvestmentCostDialog extends mind.gui.dialog.FunctionDialog {
         
         technicallifespanField =new PositiveNumberField();
         technicallifespanField.setToolTipText("Technical lifespan");
+
+        technicallifespanField.addKeyListener(new KeyAdapter()
+            {
+            public void keyReleased(KeyEvent e)
+                 {
+                 if((technicallifespanField.getText()).equals(""))
+                    {
+                    JOptionPane.showMessageDialog(null, "Set value to zero if no Technical lifespan is considered. ",
+					"Input error", JOptionPane.WARNING_MESSAGE);
+                    technicallifespanField.setText("0.0");
+                    return;
+                    }
+                 }
+            });
         technicallifespanField.setText(new Float(c_function.getTechnicalLife()).toString());  
         gridBagConstraints23 = new java.awt.GridBagConstraints();
         gridBagConstraints23.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -826,7 +910,22 @@ public class InvestmentCostDialog extends mind.gui.dialog.FunctionDialog {
         lblEconomiclifespan = new JLabel("Economical lifespan");
         economiclifespanField =new PositiveNumberField();
         economiclifespanField.setToolTipText("Economical lifespan");
-        economiclifespanField.setText(new Float(c_function.getEconomicalLife()).toString());   
+        economiclifespanField.setText(new Float(c_function.getEconomicalLife()).toString());
+        economiclifespanField.addKeyListener(new KeyAdapter()
+            {
+            public void keyReleased(KeyEvent e)
+                 {
+                
+                 if((economiclifespanField.getText()).equals(""))
+                    {
+                    JOptionPane.showMessageDialog(null, "Set value to zero if no Economical lifespan is considered. ",
+					"Input error", JOptionPane.WARNING_MESSAGE);
+                    economiclifespanField.setText("0.0");
+                    return;
+                    }
+                 
+                 }
+            });
         pnleconomiclife = new JPanel();
         pnleconomiclife.setLayout(new java.awt.GridBagLayout());
         gridBagConstraints22 = new java.awt.GridBagConstraints();
@@ -860,9 +959,17 @@ public class InvestmentCostDialog extends mind.gui.dialog.FunctionDialog {
          */
         //Create the check boxes.
         //percentagevalueCheckBox, fixedvalueCheckBox
+<<<<<<< .mine
+        percentagevalueCheckBox = new JCheckBox("Percentage Disposal Residual Value     ");
+        percentagevalueCheckBox.setToolTipText("Insert a value larger than zero when residual revenues are associated with the investment. " +
+                "\nInsert a value lower than zero when residual charges are associated with the investment. ");
+        //percentagevalueCheckBox.setMnemonic(KeyEvent.VK_C);
+        percentagevalueCheckBox.setSelected(c_function.getPercentageCBState());
+=======
         percentagevalueCheckBox = new JCheckBox("Percentage value of the scrap");
         percentagevalueCheckBox.setMnemonic(KeyEvent.VK_C);
         percentagevalueCheckBox.setSelected(c_function.getPercentagevalueChoice());
+>>>>>>> .r45
         percentagevalueCheckBox.addItemListener(new QItemListener());
        // lblpercentagescrapvalue = new JLabel("Percentage value of the scrap");
         pnlpercentagescrapvalue = new JPanel();
@@ -878,8 +985,15 @@ public class InvestmentCostDialog extends mind.gui.dialog.FunctionDialog {
         gridBagConstraints32.weightx = 1.0;
         pnlpercentagescrapvalue.add(percentagevalueCheckBox, gridBagConstraints32);
         
+<<<<<<< .mine
+        percentagescrapvalueField =new PositiveAndNegativeNumberField();
+        percentagescrapvalueField.setToolTipText("Insert a value larger than zero when residual revenues are associated with the investment. " +
+                "\nInsert a value lower than zero when residual charges are associated with the investment. ");
+        
+=======
         percentagescrapvalueField =new PositiveNumberField();
         percentagescrapvalueField.setToolTipText("Percentage value of the scrap");
+>>>>>>> .r45
         percentagescrapvalueField.setText(new Float(c_function.getPercentageValueOfScrap()).toString());
         percentagescrapvalueField.setEnabled(c_function.getPercentagevalueChoice());
         gridBagConstraints33 = new java.awt.GridBagConstraints();
@@ -904,7 +1018,13 @@ public class InvestmentCostDialog extends mind.gui.dialog.FunctionDialog {
           private javax.swing.JLabel lblpercentagescrapvalue, lblfixedscrapvalue;
          *private javax.swing.JPanel pnlpercentagescrapvalue, pnlfixedscrapvalue;
          */
+<<<<<<< .mine
+        fixedvalueCheckBox = new JCheckBox("Fixed Disposal Residual Value       ");
+        fixedvalueCheckBox.setToolTipText("Insert a value larger than zero when residual revenues are associated with the investment." +
+                "\n Insert a value lower than zero when residual charges are associated with the investment. ");
+=======
         fixedvalueCheckBox = new JCheckBox("Fixed value of the scrap   ");
+>>>>>>> .r45
         fixedvalueCheckBox.setMnemonic(KeyEvent.VK_C);
         fixedvalueCheckBox.setSelected(c_function.getFixedagevalueChoice());
         fixedvalueCheckBox.addItemListener(new QItemListener());
