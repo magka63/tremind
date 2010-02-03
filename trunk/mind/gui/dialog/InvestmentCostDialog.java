@@ -1033,7 +1033,7 @@ public class InvestmentCostDialog extends mind.gui.dialog.FunctionDialog {
 
         //Create the check boxes.
         //percentagevalueCheckBox, fixedvalueCheckBox
-        percentagevalueCheckBox = new JCheckBox("Percentage Residual Value     ");
+        percentagevalueCheckBox = new JCheckBox("Percentage Disposal Residual Value     ");
         percentagevalueCheckBox.setToolTipText("Insert a value larger than zero when residual revenues are associated with the investment. " +
                 "\nInsert a value lower than zero when residual charges are associated with the investment. ");
         //percentagevalueCheckBox.setMnemonic(KeyEvent.VK_C);
@@ -1089,7 +1089,7 @@ public class InvestmentCostDialog extends mind.gui.dialog.FunctionDialog {
           private javax.swing.JLabel lblpercentagescrapvalue, lblfixedscrapvalue;
          *private javax.swing.JPanel pnlpercentagescrapvalue, pnlfixedscrapvalue;
          */
-        fixedvalueCheckBox = new JCheckBox("Fixed Residual Value       ");
+        fixedvalueCheckBox = new JCheckBox("Fixed Disposal Residual Value       ");
         fixedvalueCheckBox.setToolTipText("Insert a value larger than zero when residual revenues are associated with the investment." +
                 "\n Insert a value lower than zero when residual charges are associated with the investment. ");
         fixedvalueCheckBox.setMnemonic(KeyEvent.VK_C);
