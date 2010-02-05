@@ -470,6 +470,16 @@ public class InvestmentCostDialog extends mind.gui.dialog.FunctionDialog {
                 valid = false;
                 return false;
                 }
+    if((economiclifespanField.getFloatValue()> 0) && (technicallifespanField.getFloatValue() > 0) )
+                {
+                if((economiclifespanField.getFloatValue()) > (technicallifespanField.getFloatValue()))
+                  {
+                  JOptionPane.showMessageDialog(null, "The length of economical lifespan should be less or equal to the length of technical lifespan",
+                         "INPUT ERORR", JOptionPane.WARNING_MESSAGE);
+                 valid = false;
+                 return false;
+                 }
+                }
     if((annualrateField.getFloatValue()!= 0) && (!c_function.getDiscountSystemCost()) )
                 {
                  JOptionPane.showMessageDialog(null, "Insert length of analyses period and annual rate from the Menu\nModel-> Discounted stystem cost.." +
