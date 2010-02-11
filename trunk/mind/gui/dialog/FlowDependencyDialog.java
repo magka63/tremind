@@ -4,18 +4,21 @@
  * Martin Hagman <marha189@student.liu.se>
  * Henrik Norin <henno776@student.liu.se>
  * Anna Stjerneby <annst566@student.liu.se>
- * Tim TerlegÂrd <timte878@student.liu.se>
+ * Tim Terleg√•rd <timte878@student.liu.se>
  * Johan Trygg <johtr599@student.liu.se>
- * Peter ≈strand <petas096@student.liu.se>
+ * Peter √Östrand <petas096@student.liu.se>
   * 
  * Copyright 2007:
  * Per Fredriksson <perfr775@student.liu.se>
- * David Karlsl‰tt <davka417@student.liu.se>
+ * David Karlsl√§tt <davka417@student.liu.se>
  * Tor Knutsson	<torkn754@student.liu.se>
- * Daniel K‰llming <danka053@student.liu.se>
+ * Daniel K√§llming <danka053@student.liu.se>
  * Ted Palmgren <tedpa175@student.liu.se>
  * Freddie Pintar <frepi150@student.liu.se>
- * MÂrten ThurÈn <marth852@student.liu.se>
+ * M√•rten Thur√©n <marth852@student.liu.se>
+ *
+ * Copyright 2010
+ * Nawzad Mardan <nawzad.mardan@liu.se>
  *
  * This file is part of reMIND.
  *
@@ -59,7 +62,7 @@ import mind.io.Ini;
 
 /**
  *
- * @author Tim TerlegÂrd
+ * @author Tim Terleg√•rd
  * @author  Per Fredriksson
  * @author 	Tor Knutsson
  * @version 2007-12-10

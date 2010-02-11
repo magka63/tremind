@@ -4,18 +4,21 @@
  * Martin Hagman <marha189@student.liu.se>
  * Henrik Norin <henno776@student.liu.se>
  * Anna Stjerneby <annst566@student.liu.se>
- * Tim Terlegård <timte878@student.liu.se>
+ * Tim Terlegï¿½rd <timte878@student.liu.se>
  * Johan Trygg <johtr599@student.liu.se>
- * Peter Åstrand <petas096@student.liu.se>
+ * Peter ï¿½strand <petas096@student.liu.se>
  *
  * Copyright 2007:
  * Per Fredriksson <perfr775@student.liu.se>
- * David Karlslätt <davka417@student.liu.se>
+ * David Karlslï¿½tt <davka417@student.liu.se>
  * Tor Knutsson	<torkn754@student.liu.se>
- * Daniel Källming <danka053@student.liu.se>
+ * Daniel Kï¿½llming <danka053@student.liu.se>
  * Ted Palmgren <tedpa175@student.liu.se>
  * Freddie Pintar <frepi150@student.liu.se>
- * Mårten Thurén <marth852@student.liu.se> 
+ * MÃ¥rten Thuren <marth852@student.liu.se>
+ *
+ * Copyright 2010:
+ * Nawzad Mardan <nawzad.mardan@liu.se>
  *
  * This file is part of reMIND.
  *
@@ -45,7 +48,7 @@ import mind.io.*;
 /**
  * The function Flow Dependency
  *
- * @author Tim Terlegård
+ * @author Tim Terlegï¿½rd
  * @author Freddie Pintar
  * @author Tor Knutsson
  * @version 2007-12-12
@@ -239,27 +242,63 @@ public class FlowDependency
             variables.addElement(var);
           }
           // add -a1*y1
-          var = new Variable(timestep, getID(), i + 1,
-                             info.getOffset(i + 1) * ( -1), true);
-          variables.addElement(var);
+          if(size != 1)
+            {
+            var = new Variable(timestep, getID(), i + 1, info.getOffset(i + 1) * ( -1), true);
+            variables.addElement(var);
+            }
 
           // create an equation and all the variables to it
           Equation part =
-              new Equation(node, getID(), timestep, equation++,
+              new Equation(node, getID(),node.toString()+"FlowDependencyFun", timestep, equation++,
                            Equation.EQUAL, (float) 0);
           for (int j = 0; j < variables.size(); j++)
             part.addVariable( (Variable) variables.get(j));
 
           control.add(part);
+          // Added by Nawzad Mardan 20100210
+          //  When we have only one slop then we do not need to create any binary variables
+          if(size == 1)
+            {
+            // create variables for x1Lower <= x1
+            Equation lowerLimit = new Equation(node, getID(),node.toString()+"FlowDependencyFun", timestep, equation++,
+                           Equation.GREATEROREQUAL, info.getLowerLimit(i + 1));
+            for (int j = 0; j < xFlows.size(); j++)
+                {
+                var = new Variable( ( (Flow) xFlows.get(j)).getID(),timestep, getID(), i + 1, (float)  1);
+                lowerLimit.addVariable(var);
+                }
+            control.add(lowerLimit);
+            /* Make a binary variable just to operate with fixed integer value commando
+            Equation integer = new Equation(node, getID(),node.toString()+"FlowDependencyFun", timestep, equation++,
+                           Equation.EQUAL, 1);
+            var = new Variable(timestep, getID(), i + 1, 1, true);
+            integer.addVariable(var);
+            control.add(integer);*/
 
-          // create variables for x1Lower*y1 <= x1 <= x1Upper*y1
+            // create variables and equation for x1 <= x1Upper
+            Equation upperLimit = new Equation(node, getID(),node.toString()+"FlowDependencyFun", timestep, equation++,
+                             Equation.LOWEROREQUAL, info.getUpperLimit(i + 1));
+            for (int j = 0; j < xFlows.size(); j++)
+                {
+                var = new Variable( ( (Flow) xFlows.get(j)).getID(),timestep, getID(), i + 1, (float) 1);
+                upperLimit.addVariable(var);
+                }
+            control.add(upperLimit);
+
+            } // END IF there is only one slop
+          // IF there is more than one slop
+          else
+          {  // create variables for x1Lower*y1 <= x1 <= x1Upper*y1
           // first create variables and equation for x1Lower*y1 - x1 <= 0
           Equation lowerLimit =
-              new Equation(node, getID(), timestep, equation++,
+              new Equation(node, getID(),node.toString()+"FlowDependencyFun", timestep, equation++,
                            Equation.LOWEROREQUAL, (float) 0);
-          var = new Variable(timestep, getID(), i + 1,
-                             info.getLowerLimit(i + 1), true);
+          //  When we have only one slop then we do not need to create a binary variable
+          var = new Variable(timestep, getID(), i + 1,info.getLowerLimit(i + 1), true);
           lowerLimit.addVariable(var);
+
+
           for (int j = 0; j < xFlows.size(); j++) {
             var = new Variable( ( (Flow) xFlows.get(j)).getID(),
                                timestep, getID(), i + 1, (float) - 1);
@@ -268,44 +307,48 @@ public class FlowDependency
           control.add(lowerLimit);
 
           /* create variables and equation for x1 - x1Upper*Y1 <= 0
-               Jonas Sääv - 2005-05-12: but don't create this equation for the last segment
+               Jonas Sï¿½ï¿½v - 2005-05-12: but don't create this equation for the last segment
                     E.g.
                    Between 0.0 and 5000  <res-Y> = 1.0*<res-X> + 0.0
                    Between 5000 and 1E10 <res-Y> = 1.2*<res-X> + 0.0   don't create upper limit equations
                for this last segment.
            */
-          if (i < size-1) { // according to the comment above
-            Equation upperLimit =
-                new Equation(node, getID(), timestep, equation++,
+          if (i <= size-1) { // according to the comment above
+            Equation upperLimit = new Equation(node, getID(),node.toString()+"FlowDependencyFun", timestep, equation++,
                              Equation.LOWEROREQUAL, (float) 0);
             for (int j = 0; j < xFlows.size(); j++) {
-              var = new Variable( ( (Flow) xFlows.get(j)).getID(),
-                                 timestep, getID(), i + 1, (float) 1);
+              var = new Variable( ( (Flow) xFlows.get(j)).getID(),timestep, getID(), i + 1, (float) 1);
               upperLimit.addVariable(var);
             }
-            var = new Variable(timestep, getID(), i + 1,
-                               info.getUpperLimit(i + 1) * ( -1), true);
+           
+            var = new Variable(timestep, getID(), i + 1, info.getUpperLimit(i + 1) * ( -1), true);
             upperLimit.addVariable(var);
 
             control.add(upperLimit);
           }// end if (i < size)
+
+        } // END ELSE  When the equation have more than one slop
         } // END FOR
 
 	// create equation and variables for  y1 + y2 + ... + yn = 1
-	Equation integer = new Equation(node, getID(), timestep, equation++,
+    // Added by Nawzad Mardan 20100210
+     //  When we have only one slop then we do not need to create a binary variable
+    if(size != 1)
+     {
+     Equation integer = new Equation(node, getID(),node.toString()+"FlowDependencyFun", timestep, equation++,
 					Equation.EQUAL, (float) 1);
 	for (int i = 0; i < size; i++) {
 	    var = new Variable(timestep, getID(), i+1, (float) 1, true);
 	    integer.addVariable(var);
 	}
 	control.add(integer);
-
+    }
 	// finally add that the total flow is the sum of every
 	// interval
 	// for resource X
 	for (int i = 0; i < xFlows.size(); i++) {
 	    Equation flowTotal =
-		new Equation(node, getID(), timestep, equation++,
+		new Equation(node, getID(),node.toString()+"FlowDependencyFun", timestep, equation++,
 			     Equation.EQUAL, (float) 0);
 	    for (int j = 0; j < size; j++) {
 		var = new Variable(((Flow) xFlows.get(i)).getID(),
@@ -321,7 +364,7 @@ public class FlowDependency
 	// for resource Y
 	for (int i = 0; i < yFlows.size(); i++) {
 	    Equation flowTotal =
-		new Equation(node, getID(), timestep, equation++,
+		new Equation(node, getID(),node.toString()+"FlowDependencyFun", timestep, equation++,
 			     Equation.EQUAL, (float) 0);
 	    for (int j = 0; j < size; j++) {
 		var = new Variable(((Flow) yFlows.get(i)).getID(),
@@ -401,6 +444,19 @@ public class FlowDependency
 	    addEquationOfTimestep(control, i+1, index, node, xFlows, yFlows);
 	}
 	//	System.out.println("flowdep eq = " + control.get(0));
+
+    // Added by Nawzad Mardan 20100210
+    // Make a binary variable just to operate with fixed integer value commando
+    TimestepInfo info = (TimestepInfo) c_timesteps.get(0);
+	int size = info.getSize();
+    if(size == 1)
+      {
+      Equation integer = new Equation(node, getID(),node.toString()+"FlowDependencyFun", maxTimesteps, 1965,
+                           Equation.EQUAL, 1);
+      Variable var = new Variable(maxTimesteps, getID(), maxTimesteps + 1, 1, true);
+      integer.addVariable(var);
+      control.add(integer);
+     }
 
 	return control;
     }
