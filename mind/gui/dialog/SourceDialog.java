@@ -4,18 +4,21 @@
  * Martin Hagman <marha189@student.liu.se>
  * Henrik Norin <henno776@student.liu.se>
  * Anna Stjerneby <annst566@student.liu.se>
- * Tim TerlegÂrd <timte878@student.liu.se>
+ * Tim Terleg√•rd <timte878@student.liu.se>
  * Johan Trygg <johtr599@student.liu.se>
- * Peter ≈strand <petas096@student.liu.se>
+ * Peter √Östrand <petas096@student.liu.se>
  * 
  * Copyright 2007:
  * Per Fredriksson <perfr775@student.liu.se>
- * David Karlsl‰tt <davka417@student.liu.se>
+ * David Karlsl√§tt <davka417@student.liu.se>
  * Tor Knutsson	<torkn754@student.liu.se>
- * Daniel K‰llming <danka053@student.liu.se>
+ * Daniel K√§llming <danka053@student.liu.se>
  * Ted Palmgren <tedpa175@student.liu.se>
  * Freddie Pintar <frepi150@student.liu.se>
- * MÂrten ThurÈn <marth852@student.liu.se>
+ * M√•rten Thur√©n <marth852@student.liu.se>
+ *
+ * Copyright 2010
+ * Nawzad Mardan <nawzad.mardan@liu.se>
  *
  * This file is part of reMIND.
  *
@@ -57,7 +60,7 @@ import mind.EventHandlerClient;
 
 /**
  *
- * @author Tim TerlegÂrd
+ * @author Tim Terleg√•rd
  * @author Johan Trygg
  * @author Urban Liljedahl
  * @author  Per Fredriksson
@@ -145,6 +148,9 @@ public class SourceDialog extends mind.gui.dialog.FunctionDialog {
 
 	//2003-12-10
 	private javax.swing.JTable tblCostPerUnit;
+    // Added by Nawzad Mardan 20100209
+    private int c_maxTimeSteps = 1;
+    private String c_currentTimestep;
 
 	/** Creates new form SourceDialog */
 	public SourceDialog(javax.swing.JDialog parent, boolean modal, ID nodeID,
@@ -159,6 +165,19 @@ public class SourceDialog extends mind.gui.dialog.FunctionDialog {
 		c_timesteplevels = 1;
 		Timesteplevel level = c_eventhandler.getTopTimesteplevel();
 		Timesteplevel thisLevel = c_function.getTimesteplevel();
+
+        // Added by Nawzad Mardan 20100210
+        NodeControl nodeControl = c_gui.getAllNodes();
+        Timesteplevel tsl2 = nodeControl.getTimesteplevel(c_nodeID);
+        c_currentTimestep  = tsl2.getLabel();
+        Timesteplevel tstl = level;
+        if(tstl.getNextLevel() == null)
+            c_maxTimeSteps = 0;
+
+        while ((tstl = tstl.getNextLevel()) != null)
+            {
+            c_maxTimeSteps *= tstl.getTimesteps();
+            }
 		while (level != thisLevel) {
 			c_timesteplevels++;
 			level = level.getNextLevel();
@@ -599,6 +618,14 @@ public class SourceDialog extends mind.gui.dialog.FunctionDialog {
 
 			//Save the values for the selected timestep
 			updateTimestep();
+            /* Added by Nawzad Mardan 20100209 at 23.30 
+            To solve the bug for the source function. If you add a new source function in a node
+            which has several levels of time steps must be taken to add value for
+            each time step, otherwise you can not open model without error
+             */
+            if(!(c_currentTimestep.equals("TOP")))
+                if(!c_function.getCostSize())
+                    c_function.updateCost(c_maxTimeSteps);
 
 			// close the dialog
 			closeDialog(null);

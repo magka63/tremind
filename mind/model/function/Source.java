@@ -4,18 +4,21 @@
  * Martin Hagman <marha189@student.liu.se>
  * Henrik Norin <henno776@student.liu.se>
  * Anna Stjerneby <annst566@student.liu.se>
- * Tim TerlegÂrd <timte878@student.liu.se>
+ * Tim Terleg√•rd <timte878@student.liu.se>
  * Johan Trygg <johtr599@student.liu.se>
- * Peter ≈strand <petas096@student.liu.se>
- *
+ * Peter √Östrand <petas096@student.liu.se>
+ * 
  * Copyright 2007:
  * Per Fredriksson <perfr775@student.liu.se>
- * David Karlsl‰tt <davka417@student.liu.se>
+ * David Karlsl√§tt <davka417@student.liu.se>
  * Tor Knutsson	<torkn754@student.liu.se>
- * Daniel K‰llming <danka053@student.liu.se>
+ * Daniel K√§llming <danka053@student.liu.se>
  * Ted Palmgren <tedpa175@student.liu.se>
  * Freddie Pintar <frepi150@student.liu.se>
- * MÂrten ThurÈn <marth852@student.liu.se> 
+ * M√•rten Thur√©n <marth852@student.liu.se>
+ *
+ * Copyright 2010
+ * Nawzad Mardan <nawzad.mardan@liu.se>
  *
  * This file is part of reMIND.
  *
@@ -62,6 +65,8 @@ public class Source extends NodeFunction implements Cloneable {
 	private Vector c_cost;
 
 	private ID c_resource;
+    // Added by Nawzad Mardan 20100209 at 23.50
+    private boolean c_largeCostSize;
 
 	/**
 	 * Creates an empty function
@@ -115,6 +120,18 @@ public class Source extends NodeFunction implements Cloneable {
 
 		return null;
 	}
+// Added by Nawzad Mardan 20100209
+    /**
+	 * Gets the size of cost vector as a boolean
+	 * @return The size of cost vector as a boolean
+	 */
+	public boolean getCostSize() {
+         if(c_cost.size() > 1)
+                c_largeCostSize = true;
+
+         return c_largeCostSize;
+
+    }
 
 	/**
 	 * Gets the cost for a specific timestep
@@ -628,6 +645,22 @@ public class Source extends NodeFunction implements Cloneable {
 		c_cost = newCost;
 	}
 
+    // Added by Nawzad Mardan 20100209
+	public void updateCost(int factor) {
+		int oldsize = c_cost.size();
+		int newsize = oldsize * factor;
+
+		//Copy old cost values to new cost array
+		Vector newCost = new Vector(newsize, 1);
+		TimestepInfo info;
+		for (int i = 0; i < oldsize; i++) {
+			info = (TimestepInfo) c_cost.get(i);
+			for (int k = 0; k < factor; k++) {
+				newCost.add(info.clone());
+			}
+		}
+		c_cost = newCost;
+	}
 	protected void timestepSetLessDetailed(int newSize, int factor) {
 		Vector newCost = new Vector(newSize);
 		int i, oldindex;
