@@ -4,9 +4,12 @@
  * Martin Hagman <marha189@student.liu.se>
  * Henrik Norin <henno776@student.liu.se>
  * Anna Stjerneby <annst566@student.liu.se>
- * Tim Terlegård <timte878@student.liu.se>
+ * Tim Terlegï¿½rd <timte878@student.liu.se>
  * Johan Trygg <johtr599@student.liu.se>
- * Peter Åstrand <petas096@student.liu.se>
+ * Peter ï¿½strand <petas096@student.liu.se>
+ *
+ * Copyright 2010:
+ * Nawzad Mardan <nawzad.mardan@liu.se>
  *
  * This file is part of reMIND.
  *
@@ -66,6 +69,8 @@ public class Equation
     private boolean c_usingName = false;
     private String c_ID_as_string;
     private boolean c_ID_created = false;
+    // Added by Nawzad Mardan 20100117
+    private String c_nodeName;
 
     /**
      * A nullconstructor
@@ -149,7 +154,42 @@ public class Equation
 
         create_getID_string();
     }
+// Added by Nawzad Mardan 20100115
 
+    /**
+     * Constructor for a flowequation
+     * @param node The node the function was generated for
+     * @param function The function that generated this equation
+     * @param nodName node number
+     * @param timestep Which timestep
+     * @param equation Which equation
+     * @param operator Type of operator
+     * @param rhs The right hand side
+     * @throws IllegalArgumentException when arguments mismatch
+     */
+    public Equation(ID node, ID function,String nodName, int timestep, int equation,
+		    String operator, float rhs)
+	throws IllegalArgumentException
+    {
+	if (!node.isNode())
+	    throw new IllegalArgumentException("Argument node is not a node ID");
+	if (!function.isFunction())
+	    throw new IllegalArgumentException("Argument flow is not a flow ID");
+	else if (timestep < 0)
+	    throw new IllegalArgumentException("Argument timestep is negative");
+
+	c_node = node;
+	c_function = function;
+    c_nodeName = nodName;
+	c_timestep = timestep;
+	c_equation = equation;
+
+	c_variables = new Vector(2,1);
+	c_operator = operator;
+	c_RHS = rhs;
+
+        create_getID_string();
+    }
     /**
      * Constructor for a flowequation with a specific name
      * RHS default to 0
@@ -239,15 +279,15 @@ public class Equation
       }
       else  {
         // this is what makes this equation unique
-      	// NOTE: If-statement added by josa (Johan Sandberg) to avoid 
-    	// an exception when updating a function editor dialog. 
-    	// What happens is that the c_function is null when this method 
-    	// is called from a function editor dialog.  
+      	// NOTE: If-statement added by josa (Johan Sandberg) to avoid
+    	// an exception when updating a function editor dialog.
+    	// What happens is that the c_function is null when this method
+    	// is called from a function editor dialog.
       	if (c_function != null) {
           c_ID_as_string =  c_function.toString() +
-            				E_string + 
-            				c_equation + 
-            				T_string + 
+            				E_string +
+            				c_equation +
+            				T_string +
             				c_timestep;
       	}
         return c_ID_as_string;
