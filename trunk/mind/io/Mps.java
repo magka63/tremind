@@ -4,9 +4,9 @@
  * Martin Hagman <marha189@student.liu.se>
  * Henrik Norin <henno776@student.liu.se>
  * Anna Stjerneby <annst566@student.liu.se>
- * Tim Terlegård <timte878@student.liu.se>
+ * Tim Terlegï¿½rd <timte878@student.liu.se>
  * Johan Trygg <johtr599@student.liu.se>
- * Peter Åstrand <petas096@student.liu.se>
+ * Peter ï¿½strand <petas096@student.liu.se>
  * Copyright 2002:
  * Urban Liljedahl <lilje@sm.luth.se>
  *
@@ -247,7 +247,9 @@ public class Mps
 	BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
 
 	// Write top info
-	writer.write("NAME          reMIND version 2.2");
+    // Addef by Nawzad Mardan 20100222
+    String versionName =  mind.GlobalStringConstants.reMIND_version;
+	writer.write("NAME          reMIND version "+versionName );
 	writer.newLine();
 
 	// Write all our rows (or equations)
