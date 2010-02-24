@@ -123,7 +123,7 @@ If you are a user of reMIND and have used the software as basis in a scientific 
  # Söderström, M., Energikartläggning och modellering av Arla Foods mejeri i Linköping, LiTH-IKP-Ex-2119 (Examensarbete), 2004.
 
 
-==Other publications, related to the MIND method==
+==Other publications, related to the MIND method (not found in the tables above)==
 
  # Gong, M., Karlsson, M. and Söderström, M., Industry and the energy market – optimal choice of measures using the MIND method, In Proceedings of the CRIS (International Institute for Critical Infrastructures) conference on ‘Power Systems and Communications Infrastructures for the future’, Bejing, China, 23-27 September 2002.
  # Gong, M., Using Exergy and Otimization Models to Improve Industrial Energy Systems Towards Sustainability, Linköping Studies in Science and Technology, Dissertation No. 868, ISBN 91-7373-933-2, Linköping University, Linköping, Sweden, 2004.
