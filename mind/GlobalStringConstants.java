@@ -1,6 +1,6 @@
 /*
  * Copyright 2005:
- *  Jonas Sääv <js@acesimulation.com>
+ *  Jonas Sï¿½ï¿½v <js@acesimulation.com>
  *
  * This file is part of reMIND.
  *
@@ -33,7 +33,7 @@ package mind;
 
 public interface GlobalStringConstants {
 
-  final public String reMIND_version = "2.4";
+  final public String reMIND_version = "2.5";
 
   // Strings used in optimization automation
   final public static String OPT_NONE  = "None";

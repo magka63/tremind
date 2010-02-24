@@ -4,9 +4,9 @@
  * Martin Hagman <marha189@student.liu.se>
  * Henrik Norin <henno776@student.liu.se>
  * Anna Stjerneby <annst566@student.liu.se>
- * Tim Terlegård <timte878@student.liu.se>
+ * Tim Terlegï¿½rd <timte878@student.liu.se>
  * Johan Trygg <johtr599@student.liu.se>
- * Peter Åstrand <petas096@student.liu.se>
+ * Peter ï¿½strand <petas096@student.liu.se>
  *
  * This file is part of reMIND.
  *
@@ -27,7 +27,7 @@
 
 /**
  *
- * @author Tim Terlegård
+ * @author Tim Terlegï¿½rd
  * @author Johan Trygg
  */
 package mind.io;
@@ -49,8 +49,10 @@ public class XML
     public static String getHeader(String root)
     {
         XML xml = new XML();
+        // Added MIND version to the rmd file by Nawzad Mardan 20100223
         String str = "<?xml version='1.0' encoding='ISO-8859-1'?>" + nl() +
-            "<!DOCTYPE " + root + " PUBLIC \""  + root + ".dtd\" \"/" + root + ".dtd\">" + nl();
+            "<!DOCTYPE " + root + " PUBLIC \""  + root + ".dtd\" \"/" + root + ".dtd\">" + nl()+
+            "<!-- reMIND version "+ mind.GlobalStringConstants.reMIND_version +" -->"+ nl();
 
         return str;
     }
