@@ -1,15 +1,15 @@
 /*
  * Copyright 2003:
- * Jonas Sääv <js@acesimulation.com>
+ * Jonas Sï¿½ï¿½v <js@acesimulation.com>
  *
  * Copyright 2007:
  * Per Fredriksson <perfr775@student.liu.se>
- * David Karlslätt <davka417@student.liu.se>
+ * David Karlslï¿½tt <davka417@student.liu.se>
  * Tor Knutsson	<torkn754@student.liu.se>
- * Daniel Källming <danka053@student.liu.se>
+ * Daniel Kï¿½llming <danka053@student.liu.se>
  * Ted Palmgren <tedpa175@student.liu.se>
  * Freddie Pintar <frepi150@student.liu.se>
- * Mårten Thurén <marth852@student.liu.se> 
+ * Mï¿½rten Thurï¿½n <marth852@student.liu.se> 
  *
  * This file is part of reMIND.
  *
@@ -41,7 +41,7 @@ import java.util.*;
 /**
  * The function class BinaryFunction
  * (is now called Logical Equation instead)
- * @author Jonas Sääv
+ * @author Jonas Sï¿½ï¿½v
  * @author Freddie Pintar
  * @author Tor Knutsson
  * @version 2007-12-12
@@ -393,11 +393,11 @@ public void toEXML(ResourceControl resources,ExmlSheet sheet) {
     int size = flowId.size();
 
     /* Main binary equation
-     BiF1T1 + BiF2T1+… +BiFmT1 = 1	(1)
-     BiF1T2 + BiF2T2+… +BiFmT2 = 1
+     BiF1T1 + BiF2T1+ï¿½ +BiFmT1 = 1	(1)
+     BiF1T2 + BiF2T2+ï¿½ +BiFmT2 = 1
      .
      .
-     BiF1Ti + BiF2Ti+… +BiFmTi) = 1
+     BiF1Ti + BiF2Ti+ï¿½ +BiFmTi) = 1
      */
 
     binEq = new Equation(node, getID() /* This function ID */,
@@ -417,41 +417,47 @@ public void toEXML(ResourceControl resources,ExmlSheet sheet) {
     upperBoundaryEq = new Equation(node, getID(), timestep, eqId++ /* Equation number */,
                                    Equation.LOWEROREQUAL);
 
-    // för varje flöde
-       // lägg till en BiFiT1 i binEq
-       // lägg till en lowerBoundaryEq
-       // lägg till en upperBoundaryEq
+    // fï¿½r varje flï¿½de
+       // lï¿½gg till en BiFiT1 i binEq
+       // lï¿½gg till en lowerBoundaryEq
+       // lï¿½gg till en upperBoundaryEq
 
        for (int i = 0; i < size; i++) {
-         // lägg till en BiFiT1 i binEq
+         // lï¿½gg till en BiFiT1 i binEq
          coeff = ( (Integer) (info.getCoeff().elementAt(i))).intValue();
-         BiFnTi = new Variable("Bi" + getID().toString() + flowId.elementAt(i).toString(),
-                               timestep, coeff);
+        // BiFnTi = new Variable("Bi" + getID().toString() + flowId.elementAt(i).toString(),
+          //                     timestep, coeff);
+          BiFnTi = new Variable("Bi"  + flowId.elementAt(i).toString(),timestep, coeff);
+
          BiFnTi.setIsInteger(true);
          binEq.addVariable(BiFnTi);
 
-         // lägg till en upperBoundaryEq
+         // lï¿½gg till en upperBoundaryEq
          max = ((Double)info.getMax().elementAt(i)).doubleValue();
          if (max < 0)
            max = c_infinity; // maximum value that can be represented with a float
          upperBoundaryEq = new Equation(node, getID(), timestep, eqId++ /* Equation number */,
                                         Equation.LOWEROREQUAL);
-         BiFnTi = new Variable("Bi" + getID().toString() + flowId.elementAt(i).toString(),
-                               timestep, (float) -max);
+         //BiFnTi = new Variable("Bi" + getID().toString() + flowId.elementAt(i).toString(),
+           //                    timestep, (float) -max);
+         BiFnTi = new Variable("Bi" + flowId.elementAt(i).toString(),timestep, (float) -max);
+
          BiFnTi.setIsInteger(true);
          FnTi = new Variable( flowId.elementAt(i).toString(), timestep,1);
          upperBoundaryEq.addVariable(BiFnTi);
          upperBoundaryEq.addVariable(FnTi);
          control.add(upperBoundaryEq);
 
-         // lägg till en lowerBoundaryEq
+         // lï¿½gg till en lowerBoundaryEq
          min = ((Double)info.getMin().elementAt(i)).doubleValue();
          if (min > 0) {
            lowerBoundaryEq = new Equation(node, getID(), timestep,
                                           eqId++ /* Equation number */,
                                           Equation.GREATEROREQUAL);
-           BiFnTi = new Variable("Bi" + getID().toString() + flowId.elementAt(i).toString(),
-                                 timestep, (float) - min);
+           //BiFnTi = new Variable("Bi" + getID().toString() + flowId.elementAt(i).toString(),
+             //                    timestep, (float) - min);
+           BiFnTi = new Variable("Bi" + flowId.elementAt(i).toString(),timestep, (float) - min);
+         
            BiFnTi.setIsInteger(true);
            // FnTi = new Variable( (ID) flowId.elementAt(i), timestep,-1); already created
            lowerBoundaryEq.addVariable(BiFnTi);
