@@ -119,8 +119,8 @@ If you are a user of reMIND and have used the software as basis in a scientific 
  # Karlsson, M., internal reports, 1999 and 2001.
  # Karlsson, M., Rohdin, P., Karlsson, F. and Moshfegh, B., Energikonsekvenser av strukturerat energieffektivitetstänkande för Arla Foods (EKSET) – slutrapport, LiTH-IKP-R-1364, Linköpings Universitet, 2005.
  # Karlsson, M., Modellering av Sandvik AB värmesystem tillsammans med SEAB, LIU-IEI-R-07/0014--SE, Linköpings Universitet, 2007 
-# Kronman, J., Energikartläggning och modellering av Arla Foods anläggning i Göteborg, LiTH-IKP-R-1333 (Projektarbete), 2004.
-# Söderström, M., Energikartläggning och modellering av Arla Foods mejeri i Linköping, LiTH-IKP-Ex-2119 (Examensarbete), 2004.
+ # Kronman, J., Energikartläggning och modellering av Arla Foods anläggning i Göteborg, LiTH-IKP-R-1333 (Projektarbete), 2004.
+ # Söderström, M., Energikartläggning och modellering av Arla Foods mejeri i Linköping, LiTH-IKP-Ex-2119 (Examensarbete), 2004.
 
 
 ==Other publications, related to the MIND method==
