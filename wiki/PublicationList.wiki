@@ -58,15 +58,12 @@ If you are a user of reMIND and have used the software as basis in a scientific 
 <br>
 =Publications in lists=
 
-==Publications/reports based totally or partly on models built in the analysis tool MIND/reMIND (also found in the tables above)==
+==Scientific publications (scientific journals or conferences) based totally or partly on models built in the analysis tool MIND/reMIND (also found in the tables above)==
 
  # Bengtsson, C. and Karlsson, M., Co-operation of the MIND-method and the Pinch Technology: Energy Efficient Pre-evaporation of Bleach Plant Filtrate Using Waste Heat, Arbetsnotat 4, Program Energisystem, IKP, Linköping University, 1999.
  # Bengtsson, C., Karlsson, M., Berntsson, T. and Söderström, M., Co-ordination of Pinch Technology and the MIND method – applied to a Swedish board mill, Applied Thermal Engineering 22 (2): 133-144, Pergamon Press, 2002a. 
  # Bengtsson, C., Karlsson, M., Berntsson, T. and Söderström, M., Cost-efficient CO2-reduction in the pulp and paper industry - a case study, In Proceedings of the 1st International Conference on Sustainable Energy Technologies, Porto, Portugal, 12-14 June 2002b.
  # Bergman, L., Larsson, M., Wikström, J-O., Ökvist, L., Zuo, G. and Jansson, B., Oxygen blast furnace process for Swedish conditions, Scanmet - 3rd International Conference on Process Development in Iron and Steelmaking, June 8-11, 2008, Luleå, Sweden, 2008.
- # Brissman Ivarsson, D., Gersér, F., Energisystemanalys av Fredriksons Verkstads AB i Vadstena, LiTH-IKP-Ing-Ex--04/14--SE (Examensarbete), 2004.
- # Dag, S., Björk, C. and Karlsson, P., Modell för kostnadseffektiv samverkan mellan Göteborg energi och Volvo PV, rapport, 1996.
- # Dag, S., Volvo Faces a Deregulated European Electricity Market, Linköping Studies in Science and Technology, Dissertation No. 663, Linköping University, Linköping, Sweden, 2000.
  # Difs, K., Wetterlund, E., Trygg, L., Söderström, M., Biomass gasification opportunities in a district heating system, submitted for publication in Biomass & Bioenergy, 2008.
  # Gong, M., Optimization of Industrial Process by Introducing Feedback Loops into MIND Method, Energy - The International Journal, Vol 28, No 15, pp.1655-1669, 2003. 
  # Gong M., Karlsson M., Coordination of exergy analysis and the MIND method - applied to a pulp and board mill, International Journal of Exergy, Vol. 1, No. 3, pp. 289-302, Wiley, 2004.
@@ -77,19 +74,15 @@ If you are a user of reMIND and have used the software as basis in a scientific 
  # Heidari Tari, M., Energy Efficiency in Industrial Systems – On Benefits of Using Optimisation Models, Submitted to International Journal of General Systems, 2002b.
  # Jönsson, J., Svensson, I., Berntsson, T., Moshfegh, B., Excess Heat from Chemical Pulp Mills: Trade-offs between Internal and External Use in the Case of Sweden – Part 2: Results, Energy Policy, Vol. 36, No. 11, pp 4186-4197, 2008.
  # Jönsson, J., Algehed, J., Economic trade-offs between internal and external use of excess heat from kraft pulp mills in Sweden, ECOS, Krakow, 2008.
- # Karlsson, M., internal reports, 1999 and 2001.
  # Karlsson, M. and Söderström M., Sensitivity analysis of investments in the pulp and paper industry - on investments in the chemical recovery cycle at a board mill, International Journal of Energy Research 26 (14): 1253-1267, Wiley, 2002.
  # Karlsson, M. and Carlson, A., Increasing the use of wood fuel in a pulp and paper mill – investment opportunity and external costs, In Proceedings of the 10th Biennal Bioenergy Conference, Boise, Idaho, USA, 22-26 September 2002.
  # Karlsson, M., A pulp and paper mill in the deregulated electricity market – strategies for electricity production, Submitted to Energy Conversion and Management, Elsevier, 2002.
  # Karlsson, M., A systems approach to the reduction of oil demand in a Swedish board mill, Energy – The International Journal 29 (1): 103-124, Elsevier, 2004.
- # Karlsson, M., Rohdin, P., Karlsson, F. and Moshfegh, B., Energikonsekvenser av strukturerat energieffektivitetstänkande för Arla Foods (EKSET) – slutrapport, LiTH-IKP-R-1364, Linköpings Universitet, 2005.
- # Karlsson, M., Modellering av Sandvik AB värmesystem tillsammans med SEAB, LIU-IEI-R-07/0014--SE, Linköpings Universitet, 2007 
  # Karlsson, M., Wolf, A., Using an optimization model to evaluate the economic benefits of industrial symbiosis in the forest industry. Journal of Cleaner Production, Vol. 16, Nr. 14, pp 1536-1544, Elsevier, 2008.
  # Kinnunen, K., Wang, C., Larsson, M. and Perander J., Factory scale energy optimisation of coke oven gas production at Raahe Steelworks, Scanmet - 3rd International Conference on Process Development in Iron and Steelmaking, June 8-11, 2008, Luleå, Sweden, 2008.
  # Klugman, S., Karlsson, M., Moshfegh, B., Modeling an industrial energy system: perspectives on regional heat cooperation, The International Journal of Energy Research, Vol. 32, Nr. 9, pp 793-807, Wiley, 2008.
  # Klugman, S., Karlsson, M., Moshfegh, B., A Swedish integrated pulp and paper mill - Energy optimisation and local heat cooperation, Energy Policy, Vol. 37, Nr. 7, pp 2514-2524, 2009.
- # Kronman, J., Energikartläggning och modellering av Arla Foods anläggning i Göteborg, LiTH-IKP-R-1333 (Projektarbete), 2004.
- # Larsson, M. and Dahl, Reduction of the specific energy use in an integrated steel plant – The effect of an optimisation model, ISIJ International, Vol. 43, No. 10, pp. 1664-1673, 2003.
+  # Larsson, M. and Dahl, Reduction of the specific energy use in an integrated steel plant – The effect of an optimisation model, ISIJ International, Vol. 43, No. 10, pp. 1664-1673, 2003.
  # Larsson, M. and Sandberg, P., Analysing the Influence of Variations when Optimising the Energy and Material System for an Integrated Steel Plant, Proceedings of the 4th International Conference on Fluid and Thermal Energy Conversion, FTEC 2003, December 7-11 2003, Bali, Indonesia, 2003.
  # Larsson, M., Sandberg, P., Dahl, J., Söderström, M., Vourinen, H., System gains of widening the system boundaries - renovation of the coke oven battery at an integrated steel plant, International Journal of Energy Research, Vol. 28, No. 12, pp. 1051-1064, 2004.
  # Larsson, M., Dahl, J. and Grip, C-E, Process integration in the steel industry, Proceedings of the 2nd International Conference on New Developments in Metallurgical Process Technology, 19-21 September 2004 - Riva del Garda, Italy, 2004.
@@ -111,13 +104,24 @@ If you are a user of reMIND and have used the software as basis in a scientific 
  # Svensson, I., Moshfegh, B., Absorption cooling – An analysis of the competition between industrial excess heat, waste incineration, bio-fuelled CHP and NGCC, ECOS, Krakow, 2008. 
  # Svensson, I., Jönsson, J., Berntsson, T., Moshfegh, B., Excess Heat from Chemical Pulp Mills: Trade-offs between Internal and External Use in the Case of Sweden – Part 1: Methodology. Energy Policy, Vol. 36, No. 11, pp 4178-4185, 2008.
  # Söderström, M. and Nilsson, K., Simulation and life cycle cost optimization of industrial energy supply and energy use, User 1 Conference, Ostende, Belgium, September 6-8, pp. 77-82, 1988.
- # Söderström, M., Energikartläggning och modellering av Arla Foods mejeri i Linköping, LiTH-IKP-Ex-2119 (Examensarbete), 2004.
  # Thollander, P., Mardan, N., Karlsson, M., Optimization as investment decision support in a Swedish medium-sized iron foundry – a move beyond traditional energy auditing, Vol. 86, Nr. 4, pp 433-440, Elsevier, 2009.
  # Wang, C., Ryman, C. and Dahl, Potential CO2 emission reduction for BF-BOF steelmaking based on optimised use of ferrous burden materials,	International Journal of Greenhouse Gas Control, Doi:10.1016/j.ijggc.2008.06.005, 2008.
  # Wang, C., Ryman, C., Larsson, M., Wikström, J-O. and Grip, C-E, A model on CO2 emission reduction in integrated steelmaking by optimization methods, 3rd International Green Energy Conference, June 18-20, 2007, Västerås, Sweden, 2007.
  # Wang, C., Larsson, M., Ryman, C., Grip, C-E., Wikström, J-O., Johnsson, A. and Engdahl, J., A model on CO2 emission reduction in integrated steelmaking by optimization methods, International Journal of Energy Research. In Press, 2008.
  # Wetterlund, E., Difs, K. and Söderström, M. Energy polocoes affecting biomass gasification applications in district heating systems,  The First International Conference on Applied Energy (ICAE09), 5-7 January 2009, Hong Kong, 2009.
  # Wolf, A., Karlsson, M., Evaluating the environmental benefits of Industrial Symbiosis - Discussion and demonstration of an approach. Progress in Industrial Ecology - An International Journal, Vol. 5, Nr. 5-6, pp 502-517, Inderscience Enterprises Ltd, 2008.
+
+
+==Reports based totally or partly on models built in the analysis tool MIND/reMIND (also found in the tables above)==
+ # Brissman Ivarsson, D., Gersér, F., Energisystemanalys av Fredriksons Verkstads AB i Vadstena, LiTH-IKP-Ing-Ex--04/14--SE (Examensarbete), 2004.
+ # Dag, S., Björk, C. and Karlsson, P., Modell för kostnadseffektiv samverkan mellan Göteborg energi och Volvo PV, rapport, 1996.
+ # Dag, S., Volvo Faces a Deregulated European Electricity Market, Linköping Studies in Science and Technology, Dissertation No. 663, Linköping University, Linköping, Sweden, 2000.
+ # Karlsson, M., internal reports, 1999 and 2001.
+ # Karlsson, M., Rohdin, P., Karlsson, F. and Moshfegh, B., Energikonsekvenser av strukturerat energieffektivitetstänkande för Arla Foods (EKSET) – slutrapport, LiTH-IKP-R-1364, Linköpings Universitet, 2005.
+ # Karlsson, M., Modellering av Sandvik AB värmesystem tillsammans med SEAB, LIU-IEI-R-07/0014--SE, Linköpings Universitet, 2007 
+# Kronman, J., Energikartläggning och modellering av Arla Foods anläggning i Göteborg, LiTH-IKP-R-1333 (Projektarbete), 2004.
+# Söderström, M., Energikartläggning och modellering av Arla Foods mejeri i Linköping, LiTH-IKP-Ex-2119 (Examensarbete), 2004.
+
 
 ==Other publications, related to the MIND method==
 
