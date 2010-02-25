@@ -249,9 +249,17 @@ public class FlowDependency
             }
 
           // create an equation and all the variables to it
-          Equation part =
-              new Equation(node, getID(),node.toString()+"FlowDependencyFun", timestep, equation++,
+          Equation part;
+          if(size == 1)
+            {
+            part = new Equation(node, getID(),node.toString()+"FlowDependencyFun", timestep, equation++,
+                           Equation.EQUAL, (float) info.getOffset(i + 1));
+            }
+          else
+            {
+            part = new Equation(node, getID(),node.toString()+"FlowDependencyFun", timestep, equation++,
                            Equation.EQUAL, (float) 0);
+            }
           for (int j = 0; j < variables.size(); j++)
             part.addVariable( (Variable) variables.get(j));
 
