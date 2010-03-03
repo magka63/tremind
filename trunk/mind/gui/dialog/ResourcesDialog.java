@@ -4,9 +4,9 @@
  * Martin Hagman <marha189@student.liu.se>
  * Henrik Norin <henno776@student.liu.se>
  * Anna Stjerneby <annst566@student.liu.se>
- * Tim Terlegård <timte878@student.liu.se>
+ * Tim Terlegï¿½rd <timte878@student.liu.se>
  * Johan Trygg <johtr599@student.liu.se>
- * Peter Åstrand <petas096@student.liu.se>
+ * Peter ï¿½strand <petas096@student.liu.se>
  *
  * This file is part of reMIND.
  *
@@ -42,7 +42,7 @@ import mind.model.*;
 /*
  * ResourcesDialog.java
  *
- * @author Peter Åstrand
+ * @author Peter ï¿½strand
  * @author Johan Trygg
  * @author Peter Andersson
  * @version 2001-07-27
@@ -53,6 +53,8 @@ public class ResourcesDialog extends javax.swing.JDialog
     private GUI c_gui;
     private Vector c_resources;
     private java.awt.Frame c_parent;
+    private String c_newResourceName ="";
+    private  JDialog dialog;
 
     /**
      * Creates the new form ResourcesDialog
@@ -170,7 +172,7 @@ public class ResourcesDialog extends javax.swing.JDialog
         gridBagConstraints1.gridy = 3;
         gridBagConstraints1.insets = new java.awt.Insets(10, 10, 2, 2);
         gridBagConstraints1.anchor = java.awt.GridBagConstraints.WEST;
-        getContentPane().add(prefixLabel, gridBagConstraints1);
+      //  getContentPane().add(prefixLabel, gridBagConstraints1);
 
 	// Adds textfield for prefix
         prefixTextField.getDocument().addDocumentListener(new MyDocumentListener());
@@ -183,14 +185,14 @@ public class ResourcesDialog extends javax.swing.JDialog
         gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints1.insets = new java.awt.Insets(2, 2, 10, 10);
         gridBagConstraints1.anchor = java.awt.GridBagConstraints.WEST;
-        getContentPane().add(prefixTextField, gridBagConstraints1);
+        //getContentPane().add(prefixTextField, gridBagConstraints1);
 
 	// Add colorLabel
 	colorLabel.setText("Color:");
 
 	gridBagConstraints1 = new java.awt.GridBagConstraints();
         gridBagConstraints1.gridx = 1;
-        gridBagConstraints1.gridy = 5;
+        gridBagConstraints1.gridy = 4;
         gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints1.insets = new java.awt.Insets(10, 10, 2, 2);
         gridBagConstraints1.anchor = java.awt.GridBagConstraints.WEST;
@@ -206,12 +208,29 @@ public class ResourcesDialog extends javax.swing.JDialog
 				   );
 
 	gridBagConstraints1 = new java.awt.GridBagConstraints();
-        gridBagConstraints1.gridx = 1;
-        gridBagConstraints1.gridy = 6;
-        gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints1.insets = new java.awt.Insets(2, 2, 10, 10);
-        gridBagConstraints1.anchor = java.awt.GridBagConstraints.WEST;
-        getContentPane().add(colorBox, gridBagConstraints1);
+    gridBagConstraints1.gridx = 1;
+    gridBagConstraints1.gridy = 5;
+    gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints1.insets = new java.awt.Insets(2, 2, 10, 10);
+    gridBagConstraints1.anchor = java.awt.GridBagConstraints.WEST;
+    getContentPane().add(colorBox, gridBagConstraints1);
+
+
+    // Added by Nawzad Mardan 20100302 to change resource name
+    editResourceButton = new javax.swing.JButton();
+    editResourceButton.setText("Edit Resource Name");
+    editResourceButton.addActionListener (new java.awt.event.ActionListener () {
+		public void actionPerformed (java.awt.event.ActionEvent evt) {
+		    editResourceButtonActionPerformed (evt);
+		}
+	    });
+    gridBagConstraints1 = new java.awt.GridBagConstraints();
+    gridBagConstraints1.gridx = 1;
+    gridBagConstraints1.gridy = 6;
+    gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints1.insets = new java.awt.Insets(2, 2, 10, 10);
+    gridBagConstraints1.anchor = java.awt.GridBagConstraints.WEST;
+    getContentPane().add(editResourceButton, gridBagConstraints1);
 
         // Add changebutton
 	/*
@@ -291,6 +310,7 @@ public class ResourcesDialog extends javax.swing.JDialog
 
     private void okButtonActionPerformed (java.awt.event.ActionEvent evt)
     {
+    c_gui.setChanged(true);
 	closeDialog(null);
     }
 
@@ -390,6 +410,13 @@ public class ResourcesDialog extends javax.swing.JDialog
 
 	// Sets the color of the resource.
 	((Resource)resourceList.getSelectedValue()).setColor((ExtendedColor)colorBox.getSelectedItem());
+    //((Resource)resourceList.getSelectedValue()).setLabel("Ahdaf");
+    //resourceNameChanged();
+    }
+
+    public void resourceNameChanged()
+    {
+    ((Resource)resourceList.getSelectedValue()).setLabel("Anya");
     }
 
     class MyDocumentListener implements DocumentListener {
@@ -417,6 +444,10 @@ public class ResourcesDialog extends javax.swing.JDialog
 	    else if (name.equals("prefixTextField")) {
 		resource.setPrefix(prefixTextField.getText());
 	    }
+        else if(name.equals("name"))
+        {
+            System.out.println("name");
+        }
 	}
     }
 
@@ -437,5 +468,44 @@ public class ResourcesDialog extends javax.swing.JDialog
     //added 2002-12-18 to embedd resourceList in a JScrollPane
     private javax.swing.JScrollPane scrollpane;
     // End of variables declaration
+    // Added by Nawzad Mardan 20100302 to change resource name
+    private javax.swing.JButton editResourceButton;
+   
+    /**
+     * Action when the "Edit..." button is pressed.
+     */
+    private void editResourceButtonActionPerformed(java.awt.event.ActionEvent evt)
+    {
+    ResourceName rn;
+    String resourceName = "";
+    if (resourceList.getSelectedIndex() == -1)
+        {
+         JOptionPane.showMessageDialog(null, "The resource must be specified", "Resouce is not selected ",JOptionPane.WARNING_MESSAGE);
+                    return;
+        }
+    else
+       {
+        // show dialog for editing a resource name
+        Resource resource = (Resource) resourceList.getSelectedValue();
+        resourceName = resource.getLabel();
+        rn = new ResourceName();
+        rn.setNewResourceName(resourceName);
+    
+        dialog = new EditResourceDialog  (this, true, rn);
+        
+        int height = getLocation().y + getSize().height/2;
+        int width = getLocation().x + getSize().width/2;
+        int x = (int) (width - dialog.getSize().width/2);
+        int y = (int) (height - dialog.getSize().height/2);
+        dialog.setLocation(x, y);
+        dialog.setVisible(true);
+        }
+    if(!rn.getResourceName().equals("") && !rn.getResourceName().equals(resourceName))
+        {
+        ((Resource)resourceList.getSelectedValue()).setLabel(rn.getResourceName());
+         updateResources();
+        }
+    }
+
 
 }
