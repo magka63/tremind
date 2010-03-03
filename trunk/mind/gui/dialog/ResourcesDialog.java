@@ -410,13 +410,6 @@ public class ResourcesDialog extends javax.swing.JDialog
 
 	// Sets the color of the resource.
 	((Resource)resourceList.getSelectedValue()).setColor((ExtendedColor)colorBox.getSelectedItem());
-    //((Resource)resourceList.getSelectedValue()).setLabel("Ahdaf");
-    //resourceNameChanged();
-    }
-
-    public void resourceNameChanged()
-    {
-    ((Resource)resourceList.getSelectedValue()).setLabel("Anya");
     }
 
     class MyDocumentListener implements DocumentListener {
@@ -444,10 +437,6 @@ public class ResourcesDialog extends javax.swing.JDialog
 	    else if (name.equals("prefixTextField")) {
 		resource.setPrefix(prefixTextField.getText());
 	    }
-        else if(name.equals("name"))
-        {
-            System.out.println("name");
-        }
 	}
     }
 
