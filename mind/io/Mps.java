@@ -65,7 +65,7 @@ public class Mps
     // A frame that show information about what is going on
     private  JFrame frame = null;
     private JLabel label = null;
-    private JButton button = null;
+    private JButton btnQuit = null;
     private JPanel upperpanel=null;
     private JPanel lowerpanel=null;
     private JPanel mainpanel=null;
@@ -102,47 +102,6 @@ public class Mps
 	return "MPS - optimizable file";
     }
     
- /* public void save(Model model, File filename)
-	throws IOException, FileInteractionException
-    {
-      new SaveThread(model, filename);
-    }
-
-    private class SaveThread extends Thread // inner class
-      {
-      Model model;
-      File filename;
-      public SaveThread(Model m, File f)
-        {
-        model=m; 
-        filename=f;
-        start();
-        }
-      public void run() // det kan man inte ha throws IOException, FileInteractionExcption
-        {
-        try
-        {
-            save_(model, filename);
-            if(stop == true)
-                {
-                System.exit(0);
-                }
-        }
-        catch (IOException e) 
-        {
-		e.printStackTrace(System.out);
-                // throw new FileInteractionException("This file type can't " +
-		//			       "be saved.");
-		System.out.println("Couldn't save file!");
-        }
-        catch(FileInteractionException e)
-        {
-            e.printStackTrace(System.out); 
-            System.out.println("This file type can't be saved.");
-        }
-       }//END RUN
-    }// END SaveThread class*/
-
     /**
      * Saves the model in the mps format.
      * @param model The model to be saved.
@@ -374,23 +333,24 @@ public class Mps
      */
     private void initComponents () 
     {
-         exitMessage ="You requested to exit this application.\n" +
-	"The current model is not saved and will be destroyed\n " +
-	"if you exit. Do you want to exit without saving the\n" +
-	"current model?";
-        frame = new JFrame("reMIND: Please wait... Creating MPS File");
-        label = new JLabel("Information: Please wait... Creating MPS File");
-        button = new JButton("Quit");
-        upperpanel = new JPanel();
-        lowerpanel = new JPanel();
-        mainpanel = new JPanel();
-        upperpanel.add(label);
-        lowerpanel.add(button);
-        mainpanel.add(upperpanel);
-        mainpanel.add(lowerpanel);
-        frame.getContentPane().add(mainpanel);
-        frame.addWindowListener(new WindowAdapter() {
-     public void windowClosing(WindowEvent evt) 
+      exitMessage ="You requested to exit this application.\n" +
+      "The current model is not saved and will be destroyed\n " +
+       "if you exit. Do you want to exit without saving the\n" +
+       "current model?";
+     frame = new JFrame("reMIND: Please wait... Creating MPS File");
+     label = new JLabel("Information: Please wait... Creating MPS File");
+     btnQuit = new JButton("Quit");
+     upperpanel = new JPanel();
+     lowerpanel = new JPanel();
+     mainpanel = new JPanel();
+     upperpanel.add(label);
+     lowerpanel.add(btnQuit);
+     mainpanel.add(upperpanel);
+     mainpanel.add(lowerpanel);
+     frame.getContentPane().add(mainpanel);
+     frame.addWindowListener(new WindowAdapter() 
+     {
+      public void windowClosing(WindowEvent evt)
         {
         int  select = JOptionPane.showConfirmDialog(frame, exitMessage,"Confirm dialog",JOptionPane.YES_NO_OPTION);
         if (select == JOptionPane.YES_OPTION)
@@ -399,31 +359,29 @@ public class Mps
             frame.dispose();
              System.exit(0);
             }
-        }  });  
+        }
+     });
 
-        button.addActionListener(new ActionListener() 
-        {public void actionPerformed(ActionEvent e)
+     btnQuit.addActionListener(new ActionListener()
+       {
+       public void actionPerformed(ActionEvent e)
          {
-             
-           int  selection = JOptionPane.showConfirmDialog(frame, exitMessage,"Confirm dialog",JOptionPane.YES_NO_OPTION);
-        if (selection == JOptionPane.YES_OPTION)
-            {
-               
+         int  selection = JOptionPane.showConfirmDialog(frame, exitMessage,"Confirm dialog",JOptionPane.YES_NO_OPTION);
+         if (selection == JOptionPane.YES_OPTION)
+            {   
             frame.setVisible(false);
             frame.dispose();
             System.exit(0);
-            //throw new FileInteractionException("ddad");
             }
-        }
+         }
         } );
-        frame.setSize(350,120);
+     frame.setSize(350,120);
        
-        Dimension d = frame.getToolkit().getScreenSize();
-        Rectangle b = frame.getBounds();
-        frame.setLocation((d.width-b.width)/2, (d.height-b.height)/2);
-        frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-         
-        frame.setVisible(true);
+     Dimension d = frame.getToolkit().getScreenSize();
+     Rectangle b = frame.getBounds();
+     frame.setLocation((d.width-b.width)/2, (d.height-b.height)/2);
+     frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+     frame.setVisible(true);
   
     }
     
