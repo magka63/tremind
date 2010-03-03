@@ -4,14 +4,14 @@
  * Martin Hagman <marha189@student.liu.se>
  * Henrik Norin <henno776@student.liu.se>
  * Anna Stjerneby <annst566@student.liu.se>
- * Tim Terlegård <timte878@student.liu.se>
+ * Tim Terlegï¿½rd <timte878@student.liu.se>
  * Johan Trygg <johtr599@student.liu.se>
- * Peter Åstrand <petas096@student.liu.se>
+ * Peter ï¿½strand <petas096@student.liu.se>
  *
  * Copyright 2004
  * Johan Bengtgsson <johbe496@student.liu.se>
  * Daniel Campos <danca226@student.liu.se>
- * Martin Fagerfjäll <marfa233@student.liu.se>
+ * Martin Fagerfjï¿½ll <marfa233@student.liu.se>
  * Daniel Ferm <danfe666@student.liu.se>
  * Able Mahari <ablma616@student.liu.se>
  * Andreas Remar <andre063@student.liu.se>
@@ -19,12 +19,12 @@
  *
  * Copyright 2007:
  * Per Fredriksson <perfr775@student.liu.se>
- * David Karlslätt <davka417@student.liu.se>
+ * David Karlslï¿½tt <davka417@student.liu.se>
  * Tor Knutsson	<torkn754@student.liu.se>
- * Daniel Källming <danka053@student.liu.se>
+ * Daniel Kï¿½llming <danka053@student.liu.se>
  * Ted Palmgren <tedpa175@student.liu.se>
  * Freddie Pintar <frepi150@student.liu.se>
- * Mårten Thurén <marth852@student.liu.se>
+ * Mï¿½rten Thurï¿½n <marth852@student.liu.se>
  *
  * This file is part of reMIND.
  *
@@ -122,10 +122,10 @@ import javax.swing.JButton;
  * the user makes. GUI is a singleton, hence the GUI() constructor is private and
  * the getInstance method should be used instead.
  *
- * @author Tim Terlegård
+ * @author Tim Terlegï¿½rd
  * @author Johan Trygg
- * @author Jonas Sääv
- * @author Daniel Källming
+ * @author Jonas Sï¿½ï¿½v
+ * @author Daniel Kï¿½llming
  * @author Ted Palmgren
  * @version 2007-12-14
 */
@@ -331,7 +331,7 @@ public class GUI
 	c_app.setLocation(x, y);
 	c_app.show();
         initInformationComponent();
-        waiting();
+       // waiting();
     }
 
     /**
@@ -1753,7 +1753,7 @@ public class GUI
 	dialog.show();
 
 	// assuming something was changed with the resources
-	setChanged(false);
+	setChanged(true);
     }
     
     
@@ -2574,77 +2574,6 @@ public class GUI
      */
     private void initInformationComponent () 
     {
-       
-        /*JLabel label;
-        JButton button;
-        JPanel upperpanel,lowerpanel,mainpanel;
-        frame = new JFrame("reMIND");
-        label = new JLabel("Information: Please wait... Creating MPS File");
-        button = new JButton("Cancel");
-        upperpanel = new JPanel();
-        lowerpanel = new JPanel();
-        mainpanel = new JPanel();
-        upperpanel.add(label);
-        lowerpanel.add(button);
-        mainpanel.add(upperpanel);
-        mainpanel.add(lowerpanel);
-        frame.getContentPane().add(mainpanel);
-        frame.addWindowListener(new WindowAdapter() {
-     public void windowClosing(WindowEvent evt) 
-        {
-        int  select = JOptionPane.showConfirmDialog(frame, exitMessage,"Confirm dialog",JOptionPane.YES_NO_OPTION);
-        if (select == JOptionPane.YES_OPTION)
-            {
-            frame.setVisible(false);
-            frame.dispose();
-             System.exit(0);
-            }
-        }  });  
-
-        button.addActionListener(new ActionListener() 
-        {public void actionPerformed(ActionEvent e)
-         {
-             
-           int  selection = JOptionPane.showConfirmDialog(frame, exitMessage,"Confirm dialog",JOptionPane.YES_NO_OPTION);
-        if (selection == JOptionPane.YES_OPTION)
-            {
-               
-            frame.setVisible(false);
-            frame.dispose();
-            System.exit(0);
-            //throw new FileInteractionException("ddad");
-            }
-        }
-        } );
-        frame.setSize(350,120);
-       
-        Dimension d = frame.getToolkit().getScreenSize();
-        Rectangle b = frame.getBounds();
-        frame.setLocation((d.width-b.width)/2, (d.height-b.height)/2);
-        frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-         
-        frame.setVisible(true);*/
-    /*    import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import javax.swing.event.*;*/
-
-/**
- * Help window for Function Editor
- * @author Nils-Oskar Spett och Richard Harju
- * @author Jonas Sääv
- * @version 2004-03-04
- */
-/*
-public class AboutDialog extends JDialog implements HyperlinkListener{
-    /**
-     * Constructor
-     * Creates an about dialog
-     * and loads the file about.htm into it
-     */
-    /*public AboutDialog(java.awt.Frame parent, boolean modal) {
-      super(parent, modal);*/
       dialog = new JDialog();
       dialog.setTitle("reMIND - version " + mind.GlobalStringConstants.reMIND_version);
       dialog.setSize(450, 520);
@@ -2654,43 +2583,13 @@ public class AboutDialog extends JDialog implements HyperlinkListener{
       button.setMnemonic(KeyEvent.VK_O);
       button.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          /*try{
-            s.join(10);
-          }
-          catch(Exception m) {
-                System.out.println(" "+ m);
-            }
-         if(!s.isInterrupted())
-                s.interrupt();
-            /*   if(s.isAlive())
-           // if(s!=null)
-            try{
-            s.interrupt();
-            }
-            catch (Exception m) {
-                System.out.println(" "+ m);
-            }
-            
-            if(!s.isInterrupted())
-                s.interrupt(); 
-            if(!s.isInterrupted())
-                s.interrupt(); 
-            if(!s.isInterrupted())
-                s.interrupt();
-             if(!s.isInterrupted())
-                s.interrupt(); 
-            if(!s.isInterrupted())
-                s.interrupt(); 
-            if(!s.isInterrupted())
-                s.interrupt();*/ 
-           
           dialog.setVisible(false);
           dialog.dispose();
         }
       });
 
-        JEditorPane aboutText = null;
-        try {
+     JEditorPane aboutText = null;
+     try {
           aboutText = new JEditorPane(getClass().getResource("about.htm"));
           //aboutText.setBackground(new Color(237, 237, 237));
           aboutText.setMargin(new Insets(15, 15, 15, 15));
@@ -2698,45 +2597,26 @@ public class AboutDialog extends JDialog implements HyperlinkListener{
          // aboutText.addHyperlinkListener(this);
         }
 
-        catch (IOException e) {
+     catch (IOException e) {
           System.out.println(e.getMessage());
           dialog.dispose();
         }
 
-        JPanel buttonp = new JPanel();
-        buttonp.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
-        buttonp.setLayout(new FlowLayout());
-        buttonp.add(button);
+     JPanel buttonp = new JPanel();
+     buttonp.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+     buttonp.setLayout(new FlowLayout());
+     buttonp.add(button);
 
-        JScrollPane textp = new JScrollPane(aboutText);
-        textp.setBackground(Color.WHITE);
+     JScrollPane textp = new JScrollPane(aboutText);
+     textp.setBackground(Color.WHITE);
 
-        dialog.getContentPane().add(textp,BorderLayout.CENTER);
-        dialog.getContentPane().add(buttonp,BorderLayout.SOUTH);
-        Dimension d = dialog.getToolkit().getScreenSize();
-        Rectangle b = dialog.getBounds();
-        dialog.setLocation((d.width-b.width)/2, (d.height-b.height)/2);
-        //frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        dialog.setVisible(true);
-
-    /*}
-
-    public void hyperlinkUpdate(HyperlinkEvent e) {
-        if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-            JEditorPane pane = (JEditorPane) e.getSource();
-            try {
-                   //   pane.setPage(e.getURL());
-                   Runtime rt = Runtime.getRuntime();
-                   rt.exec("rundll32 url.dll, FileProtocolHandler " + e.getURL().toString());
-            } catch (Throwable t) {
-                      t.printStackTrace();
-                  }
-                }
-        }
-}*/
-
-
-  
+     dialog.getContentPane().add(textp,BorderLayout.CENTER);
+     dialog.getContentPane().add(buttonp,BorderLayout.SOUTH);
+     Dimension d = dialog.getToolkit().getScreenSize();
+     Rectangle b = dialog.getBounds();
+     dialog.setLocation((d.width-b.width)/2, (d.height-b.height)/2);
+    //frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+    dialog.setVisible(true);
     }
     
     // Added by Nawzad Mardan 2008-02-10
