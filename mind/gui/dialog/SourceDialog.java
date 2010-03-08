@@ -112,15 +112,15 @@ public class SourceDialog extends mind.gui.dialog.FunctionDialog {
 
 	private javax.swing.JPanel pnlCost;
 
-	private javax.swing.JPanel pnlCopyPaste;
+//	private javax.swing.JPanel pnlCopyPaste;
 
-	private javax.swing.JButton btnCopyFrom;
+	//private javax.swing.JButton btnCopyFrom;
 
-	private javax.swing.JButton btnCopy;
+	//private javax.swing.JButton btnCopy;
 
-	private javax.swing.JButton btnPasteTo;
+	//private javax.swing.JButton btnPasteTo;
 
-	private javax.swing.JButton btnPaste;
+//	private javax.swing.JButton btnPaste;
 
 	private javax.swing.JLabel lblTimestep;
 
@@ -392,16 +392,16 @@ public class SourceDialog extends mind.gui.dialog.FunctionDialog {
 		}
 
 		//Copy & paste panel
-		pnlCopyPaste = new javax.swing.JPanel();
-		btnCopyFrom = new javax.swing.JButton();
-		btnCopy = new javax.swing.JButton();
-		btnPasteTo = new javax.swing.JButton();
-		btnPaste = new javax.swing.JButton();
+//		pnlCopyPaste = new javax.swing.JPanel();
+//		btnCopyFrom = new javax.swing.JButton();
+//		btnCopy = new javax.swing.JButton();
+//		btnPasteTo = new javax.swing.JButton();
+//		btnPaste = new javax.swing.JButton();
 
-		pnlCopyPaste.setLayout(new java.awt.GridBagLayout());
+		//pnlCopyPaste.setLayout(new java.awt.GridBagLayout());
 		java.awt.GridBagConstraints gridBagConstraints3;
 
-		btnCopyFrom.setEnabled(false);
+	/*	btnCopyFrom.setEnabled(false);
 		btnCopyFrom.setText("Copy from range");
 		btnCopyFrom.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -413,9 +413,9 @@ public class SourceDialog extends mind.gui.dialog.FunctionDialog {
 
 		gridBagConstraints3 = new java.awt.GridBagConstraints();
 		//	gridBagConstraints3.insets = new java.awt.Insets (10, 10, 10, 10);
-		pnlCopyPaste.add(btnCopyFrom, gridBagConstraints3);
+		pnlCopyPaste.add(btnCopyFrom, gridBagConstraints3);*/
 
-		btnCopy.setEnabled(false);
+	/*	btnCopy.setEnabled(false);
 		btnCopy.setPreferredSize(new java.awt.Dimension(85, 27));
 		btnCopy.setText("Copy");
 		btnCopy.addActionListener(new java.awt.event.ActionListener() {
@@ -426,9 +426,9 @@ public class SourceDialog extends mind.gui.dialog.FunctionDialog {
 
 		gridBagConstraints3 = new java.awt.GridBagConstraints();
 		gridBagConstraints3.insets = new java.awt.Insets(10, 10, 10, 10);
-		pnlCopyPaste.add(btnCopy, gridBagConstraints3);
+		pnlCopyPaste.add(btnCopy, gridBagConstraints3);*/
 
-		btnPasteTo.setEnabled(false);
+		/*btnPasteTo.setEnabled(false);
 		btnPasteTo.setPreferredSize(new java.awt.Dimension(117, 27));
 		btnPasteTo.setText("Paste to range");
 		btnPasteTo.addActionListener(new java.awt.event.ActionListener() {
@@ -440,9 +440,9 @@ public class SourceDialog extends mind.gui.dialog.FunctionDialog {
 		gridBagConstraints3 = new java.awt.GridBagConstraints();
 		gridBagConstraints3.gridx = 0;
 		//	gridBagConstraints3.insets = new java.awt.Insets (10, 10, 10, 10);
-		pnlCopyPaste.add(btnPasteTo, gridBagConstraints3);
+		pnlCopyPaste.add(btnPasteTo, gridBagConstraints3); */
 
-		btnPaste.setEnabled(false);
+		/*btnPaste.setEnabled(false);
 		btnPaste.setPreferredSize(new java.awt.Dimension(85, 27));
 		btnPaste.setText("Paste");
 		btnPaste.addActionListener(new java.awt.event.ActionListener() {
@@ -454,14 +454,14 @@ public class SourceDialog extends mind.gui.dialog.FunctionDialog {
 		gridBagConstraints3 = new java.awt.GridBagConstraints();
 		gridBagConstraints3.gridx = 1;
 		//	gridBagConstraints3.insets = new java.awt.Insets (10, 10, 10, 10);
-		pnlCopyPaste.add(btnPaste, gridBagConstraints3);
+		pnlCopyPaste.add(btnPaste, gridBagConstraints3); */
 
-		gridBagConstraints1 = new java.awt.GridBagConstraints();
+		/*gridBagConstraints1 = new java.awt.GridBagConstraints();
 		gridBagConstraints1.gridx = 1;
 		gridBagConstraints1.gridy = 4;
 		gridBagConstraints1.insets = new java.awt.Insets(0, 6, 0, 10);
 		gridBagConstraints1.anchor = java.awt.GridBagConstraints.NORTHWEST;
-		getContentPane().add(pnlCopyPaste, gridBagConstraints1);
+		getContentPane().add(pnlCopyPaste, gridBagConstraints1);*/
 
 		//Resource list panel
 		pnlResource = new javax.swing.JPanel();
