@@ -176,8 +176,11 @@ public class FlowRelationDialog extends mind.gui.dialog.FunctionDialog
 	    inOutState = new String("IN");
 	    inRadio.setSelected(true);
 	}
-	pack();
+    //int txtwidth = lblSettings.getWidth();
+    //this.setSize( new Dimension(txtwidth*3, 200));
 	UpdateAll();
+    pack();
+	
 	confirmResourceChange = true;
     }
 
@@ -189,6 +192,8 @@ public class FlowRelationDialog extends mind.gui.dialog.FunctionDialog
     private void UpdateAll()
     {
 	int direction = c_function.getDirection();
+    descr.setText(descriptionText);
+
 
 	if (direction == IN)
 	    c_resources = getResources(c_inFlows);
@@ -202,7 +207,7 @@ public class FlowRelationDialog extends mind.gui.dialog.FunctionDialog
 	    //Hide parts of the dialog objects
 	    resourceCombo.removeAllItems();
 	    listFlows.setListData(new Vector());
-	    lblSettings.setText("");
+	    lblSettings.setText("                       ");
 	    radioFree.setVisible(false);
 	    radioLt.setVisible(false);
 	    radioGt.setVisible(false);
@@ -250,7 +255,20 @@ public class FlowRelationDialog extends mind.gui.dialog.FunctionDialog
 	updateFlowSettings();
 
 	updateFlowList();
-	//Det fungerade bra n�r dessa tv� rader var med
+
+    /* Added by Nawzad Mardan 20100308
+    int txtwidth = lblSettings.getText().length();
+    if(txtwidth!=0)
+        {
+        if(txtwidth <=27)
+            descr.setPreferredSize(new java.awt.Dimension(450, 100));
+        else
+            descr.setPreferredSize(new java.awt.Dimension(txtwidth*12, 70));
+
+        }
+    else
+       descr.setPreferredSize(new java.awt.Dimension(450, 100));*/
+    //Det fungerade bra n�r dessa tv� rader var med
 	//men jag tror det g�r lika bra utan...
 	//	listFlows.setSelectedIndex(0);
 	// updateFlowSettings();
@@ -381,15 +399,16 @@ public class FlowRelationDialog extends mind.gui.dialog.FunctionDialog
 	gbc.anchor = java.awt.GridBagConstraints.WEST;
 	pnlDescr.add(lblDescription, gbc);
 
-	JTextArea descr = new javax.swing.JTextArea(descriptionText);
-        descr.setFont(new Font("SansSerif", Font.PLAIN, 11));
+	//descr = new javax.swing.JTextArea(descriptionText);
+    descr = new javax.swing.JTextArea();
+    descr.setFont(new Font("SansSerif", Font.BOLD, 12));
 	descr.setLineWrap(true);
-        descr.setWrapStyleWord(true);
+    descr.setWrapStyleWord(true);
 	descr.setEnabled(false);
 	descr.setDisabledTextColor(Color.black);
-	descr.setBackground(new Color(204,204,204));
+	//descr.setBackground(new Color(204,204,204));
 
-	descr.setPreferredSize(new java.awt.Dimension(420, 100));
+	descr.setPreferredSize(new java.awt.Dimension(450, 100));
 	gbc = new java.awt.GridBagConstraints();
 	gbc.gridy = 1;
 	gbc.gridwidth = 2;
@@ -680,11 +699,14 @@ public class FlowRelationDialog extends mind.gui.dialog.FunctionDialog
 
 	//Flow list
 	listFlows = new javax.swing.JList();
-	//	listFlows.setPreferredSize(new java.awt.Dimension(120, 70));
+    flowListScroll = new JScrollPane(listFlows);
+	flowListScroll.setPreferredSize(new Dimension(150, 80));
+	//listFlows.setPreferredSize(new java.awt.Dimension(120, 70));
 	listFlows.addListSelectionListener(new ListSelectionListener() {
 		public void valueChanged(ListSelectionEvent e)
 		{
 		    newFlowSelected();
+            flowListScroll.setMinimumSize(new Dimension(155, 80));
 		}
 	    });
 
@@ -693,9 +715,7 @@ public class FlowRelationDialog extends mind.gui.dialog.FunctionDialog
 	gbc.gridy = 1;
 	gbc.anchor = GridBagConstraints.NORTHWEST;
 	gbc.weightx = 1.0;
-        JScrollPane flowListScroll = new JScrollPane(listFlows);
-	flowListScroll.setPreferredSize(new Dimension(150, 100));
-	//flowListScroll.setPreferredSize(new Dimension(120, 70));
+  
 	pnlFlow.add(flowListScroll, gbc);
 
 
@@ -712,9 +732,12 @@ public class FlowRelationDialog extends mind.gui.dialog.FunctionDialog
 	//	gbc.fill = GridBagConstraints.HORIZONTAL;
        	gbc.insets = new java.awt.Insets (0, 10, 10, 5);
 	pnlFlow.add(pnlFlowSettings, gbc);
+//    updateFlowList();
 
 	//Settings Label
 	lblSettings = new javax.swing.JLabel();
+   // updateFlowSettings();
+     //updateFlowList();
 	gbc = new java.awt.GridBagConstraints();
 	gbc.gridx = 0;
 	gbc.gridy = 0;
@@ -886,6 +909,10 @@ public class FlowRelationDialog extends mind.gui.dialog.FunctionDialog
 		}
 	    });
 	pnlButtons.add(btnCancel);
+  //  updateFlowSettings();
+    //updateFlowList();
+  // this.pack();
+   // this.setResizable(false);
     }
 
     /**
@@ -1163,6 +1190,7 @@ public class FlowRelationDialog extends mind.gui.dialog.FunctionDialog
 	case EQUAL:
 	    spinLimit1.setVisible(false);
 	    spinLimit2.setVisible(true);
+        spinLimit2.setSize(new Dimension(114, 20));
 	    lblSpin.setText("        X =");
 	    break;
 	case LESS_GREATER:
@@ -1238,6 +1266,8 @@ public class FlowRelationDialog extends mind.gui.dialog.FunctionDialog
 
     //GUI objects
     JLabel lblDescription;
+    // Adedd by Nawzad Mardan 20100308
+    JTextArea descr;
     JSeparator sep1;
 
     JPanel pnlLabel;
@@ -1280,5 +1310,7 @@ public class FlowRelationDialog extends mind.gui.dialog.FunctionDialog
     JPanel pnlButtons;
     JButton btnOk;
     JButton btnCancel;
+    // Added by Nawzad Mardan 20100309
+    JScrollPane flowListScroll;
 }
 
