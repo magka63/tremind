@@ -4,12 +4,14 @@
  * 
  * Copyright 2007:
  * Per Fredriksson <perfr775@student.liu.se>
- * David Karlslätt <davka417@student.liu.se>
+ * David Karlslï¿½tt <davka417@student.liu.se>
  * Tor Knutsson	<torkn754@student.liu.se>
- * Daniel Källming <danka053@student.liu.se>
+ * Daniel Kï¿½llming <danka053@student.liu.se>
  * Ted Palmgren <tedpa175@student.liu.se>
  * Freddie Pintar <frepi150@student.liu.se>
- * Mårten Thurén <marth852@student.liu.se>
+ * Mï¿½rten Thurï¿½n <marth852@student.liu.se>
+ * Copyright 2010:
+ * Nawzad Mardan <nawzad.mardan@liu.se>
  *
  * This file is part of reMIND.
  *
@@ -38,6 +40,13 @@ import mind.EventHandlerClient;
 import mind.gui.*;
 import mind.model.*;
 import mind.model.function.*;
+// Added by Nawzad Mardan 20100306
+import javax.swing.table.AbstractTableModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 
 
 /**
@@ -74,8 +83,14 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
     private JButton btnAddout;
     private JButton btnRemoveout;
     private SpinButton spinTSL[];
+    // Added by Nawzad Mardan 20100306
+    private JPanel pnlEquation;
+    private JLabel lblEquationP1;
+    private JLabel lblEquationP2;
+    private JLabel lblEquationP3;
     private JButton btnOk;
     private JButton btnCancel;
+    private boolean c_coefFieldEmpty;
 
     //the selected flows with coefficients for in and out
     private FlowEquationValue flowValues;
@@ -332,7 +347,7 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
 	flowValues.setCoeffOut(c_function.getCoeffOut());
 	flowValues.setIsIntegerOut(c_function.getIsIntegerOut());
 	flowValues.setEquationValue(c_function.getEquationValue());
-        flowValues.setRhsConstraint(c_function.getRhsConstraint());
+    flowValues.setRhsConstraint(c_function.getRhsConstraint());
     }
 
     /*
@@ -368,11 +383,13 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
 	    JOptionPane.showMessageDialog( this, "Type a float coefficient value",
 						   "FlowEqutaionDialog.parseFloat",
 						   JOptionPane.INFORMATION_MESSAGE);
+        c_coefFieldEmpty =true;
 	}catch(Exception e){
 	    e.printStackTrace();
 	    JOptionPane.showMessageDialog( this, "Exception",
 						   "FlowEqutaionDialog.parseFloat",
 						   JOptionPane.INFORMATION_MESSAGE);
+        c_coefFieldEmpty =true;
 	}
 	return floatvalue;
     }
@@ -384,11 +401,20 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
 	//selected row
 	int rowNumber = tblIN.getSelectedRow();
 	tblIN.setValueAt( selectedValue, rowNumber, 0);
+      // Added by Nawzad Mardan 20100308
+    if(c_coefFieldEmpty == false)
+        {
+        updateLable();
+         save();
+        }
     }
     private void btnRemoveinActionPerformed(ActionEvent e){
 	int rowNumber = tblIN.getSelectedRow();
 	tblIN.setValueAt( "", rowNumber, 0);
 	tblIN.setValueAt( "", rowNumber, 1);
+    // Added by Nawzad Mardan 20100308
+    updateLable();
+    save();
     }
     private void btnAddoutActionPerformed(ActionEvent e){
 	Object selectedValue = lstOutFlow.getSelectedValue();
@@ -396,11 +422,20 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
 	//selected row
 	int rowNumber = tblOUT.getSelectedRow();
 	tblOUT.setValueAt( selectedValue, rowNumber, 0);
+      // Added by Nawzad Mardan 20100308
+    if(c_coefFieldEmpty == false)
+        {
+        updateLable();
+         save();
+        }
     }
     private void btnRemoveoutActionPerformed(ActionEvent e){
 	int rowNumber = tblOUT.getSelectedRow();
 	tblOUT.setValueAt( "", rowNumber, 0);
 	tblOUT.setValueAt( "", rowNumber, 1);
+     // Added by Nawzad Mardan 20100308
+    updateLable();
+    save();
     }
     private void btnOkActionPerformed(ActionEvent e){
 	save();//current timestep
@@ -458,8 +493,20 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
 	lblRHSValue = new JLabel("RHS value    ");
 	txtLabel =  new JTextField(20);
 	txtRHSValue = new NumberField( 	flowValues.getEquationValue(), 10);
+    // Added by Nawzad Mardan 20100306
+    txtRHSValue.addActionListener (new java.awt.event.ActionListener () {
+		public void actionPerformed (java.awt.event.ActionEvent evt) {
+		    save();
+            updateLable();
+		}
+	    });
         String[] items = {"=", ">=", "<="};
-        rshConstraintComboBox = new JComboBox(items);
+      rshConstraintComboBox = new JComboBox(items);
+
+  
+      // Added by Nawzad Mardan 20100306
+    rshConstraintComboBox.addItemListener(new MyItemListener());
+    
 	//arrays with all existing flows
 
 	Flow[] inFlow = c_gui.getInFlows(c_nodeID);
@@ -473,7 +520,22 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
 	String[] columnnames = { "flow", "coeff" };
 	tblIN = new JTable( new Object[TABLE_HEIGHT][2], columnnames );
 	tblOUT = new JTable( new Object[TABLE_HEIGHT][2], columnnames);
-	loadTables();
+    // Added by Nawzad Mardan 20100306
+    tblOUT.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+        public void valueChanged(ListSelectionEvent event) {
+
+            save();
+            updateLable();
+            }
+    });
+	tblIN.getSelectionModel().addListSelectionListener(new ListSelectionListener(){ 
+        public void valueChanged(ListSelectionEvent event) {
+            
+            save();
+            updateLable();
+            }   
+    });
+    loadTables();
 	JScrollPane scrollpane1 = new JScrollPane(tblIN);
 	tblIN.setPreferredScrollableViewportSize(new Dimension(100,120));
 	JScrollPane scrollpane2 = new JScrollPane(tblOUT);
@@ -609,7 +671,7 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
 	panel12.add(btnOk);
 	panel12.add(btnCancel);
 	panel13.add(lblRHSValue);
-        panel13.add(rshConstraintComboBox);
+    panel13.add(rshConstraintComboBox);
 	panel13.add(txtRHSValue);
 	GridBagLayout gridbag = new GridBagLayout();
 	GridBagConstraints gc = new GridBagConstraints();
@@ -639,14 +701,43 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
 	gc.gridy = 7;
 	this.getContentPane().add( sep4, gc);
 	gc.gridy = 8;
+    //gc = new GridBagConstraints();
+    gc.insets = new java.awt.Insets(0, 0, 5, 50);
+   // new java.awt.Insets(WIDTH, WIDTH, WIDTH, WIDTH)
+	//gc.anchor = java.awt.GridBagConstraints.NORTHWEST;
 	this.getContentPane().add( panel13, gc);
 	gc.gridy = 9;
-	this.getContentPane().add( sep5, gc);
-	gc.gridy = 10;
+
+	// Added by Nawzad Mardan 20100307
+    lblEquationP1 = new JLabel("");
+    lblEquationP2 = new JLabel("");
+    lblEquationP3 = new JLabel("");
+    lblEquationP1.setFont(new Font("SansSerif", Font.ITALIC, 13));
+    lblEquationP1.setBackground(Color.BLUE);
+    lblEquationP1.setForeground(Color.BLUE);
+    lblEquationP2.setFont(new Font("SansSerif", Font.ITALIC, 13));
+    lblEquationP2.setBackground(Color.BLUE);
+    lblEquationP2.setForeground(Color.BLUE);
+    lblEquationP3.setFont(new Font("SansSerif", Font.ITALIC, 13));
+    lblEquationP3.setBackground(Color.BLUE);
+    lblEquationP3.setForeground(Color.BLUE);
+    updateLable();
+    pnlEquation = new JPanel();
+    pnlEquation.add(lblEquationP1);
+    pnlEquation.add(lblEquationP2);
+    pnlEquation.add(lblEquationP3);
+    gc.insets = new java.awt.Insets(5, 0, 5, 50);
+    this.getContentPane().add( pnlEquation, gc);
+    gc.gridy = 10;
+    gc.insets = new java.awt.Insets(5, 0, 5, 0);
+    //gc = new GridBagConstraints();
+    this.getContentPane().add( sep5, gc);
+	gc.gridy = 11;
 	this.getContentPane().add( panel12, gc);
 	//show this dialog window and commit the layout
 	//this.show(); done by parent
 	this.pack();
+    this.setResizable(false);
 
     }
     /*
@@ -706,6 +797,7 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
         if (tempstring.equals("L"))
           tempindex = 2;
         rshConstraintComboBox.setSelectedIndex(tempindex);
+       // updateLable();
     }
     /*
      * Update timestep
@@ -731,12 +823,118 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
 	loadTables();
 
     }
+  // Added by Nawzad Mardan 20100306
+  // To display the equations
+  private void updateLable()
+    {
+    if(flowValues!=null)
+        {
+        Vector incoeff ,inflow, outcoeff, outflow;
+        incoeff= flowValues.getCoeffIn();
+        inflow = flowValues.getFlowIn();
+        outcoeff = flowValues.getCoeffOut();
+        outflow = flowValues.getFlowOut();
+
+        String equation = " ";
+        Float o;
+        float incoef, outcoef;
+        for(int i = 0; i< incoeff.size();i++)
+            {
+            //Objeck o equation + = (String)incoeff.elementAt(i);
+             o  = (Float)incoeff.elementAt(i);
+             incoef = o.floatValue();
+             if(incoef == -1)
+                 equation  = equation + "-";
+             else if(incoef == 1)
+                 equation = equation +"";
+             else if((incoef > 1) && (i != 0))
+                 equation = equation + " + "+ incoef + " * ";
+             else
+                 equation = equation + " "+ incoef + " * ";
+             if(inflow!=null)
+               equation = equation +  inflow.elementAt(i) + " ";
+
+            }
+        for(int i = 0; i< outcoeff.size();i++)
+            {
+            o  = (Float)outcoeff.elementAt(i);
+            outcoef = o.floatValue();
+            outcoef = outcoef * -1;
+             if(outcoef == -1)
+                 equation  = equation + "-";
+             else if((outcoef == 1))
+                {
+                 if(i != 0)
+                    equation = equation +"";
+                 else
+                     equation = equation +" +";
+                }
+            else if((outcoef > 1) && (i == 0))
+                equation = equation +" + "+outcoef + " * ";
+             else
+                 equation = equation + " "+ outcoef + " * ";
+             if(outflow!=null)
+               equation = equation +  outflow.elementAt(i) + " ";
+
+            }
+        lblEquationP1.setText(equation);
+        if((lblEquationP1.getText().equals(" ")))
+            lblEquationP2.setText("");
+        else
+            lblEquationP2.setText(getRHS());
+        if((lblEquationP1.getText().equals(" ")) && (lblEquationP2.getText().equals("")) )
+            lblEquationP3.setText("  " + " ");
+        else
+            lblEquationP3.setText("  " + " "+ flowValues.getEquationValue());
+        }
+
+    }
+  private String getRHS()
+  {
+   String rhs =" = ";
+    if(flowValues!=null)
+        {
+        rhs = flowValues.getRhsConstraint();
+        if(rhs.equals("E"))
+            rhs = " = ";
+        else if(rhs.equals("G"))
+            rhs = " >= ";
+        else if(rhs.equals("L"))
+            rhs = " <= ";
+        }
+   return rhs;
+
+  }
+
+ public class MyItemListener implements  ItemListener
+    {
+    public void itemStateChanged(ItemEvent e)
+        {
+        if(lblEquationP2 != null)
+            {
+            String rhs = (String)rshConstraintComboBox.getSelectedItem();
+            if(lblEquationP1.getText().equals(" "))
+               {
+                lblEquationP2.setText("");
+                return;
+               }
+            else
+                lblEquationP2.setText(rhs);
+
+            switch (rshConstraintComboBox.getSelectedIndex())
+                {
+                case 0:
+                    rhs = "E";
+                    break;
+                case 1:
+                    rhs = "G";
+                    break;
+                case 2:
+                    rhs = "L";
+                    break;
+                }
+            flowValues.setRhsConstraint(rhs);
+            }
+        }
+    }
 }
-
-
-
-
-
-
-
-
