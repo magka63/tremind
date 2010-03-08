@@ -4,18 +4,21 @@
  * Martin Hagman <marha189@student.liu.se>
  * Henrik Norin <henno776@student.liu.se>
  * Anna Stjerneby <annst566@student.liu.se>
- * Tim Terlegård <timte878@student.liu.se>
+ * Tim Terlegï¿½rd <timte878@student.liu.se>
  * Johan Trygg <johtr599@student.liu.se>
- * Peter Åstrand <petas096@student.liu.se>
+ * Peter ï¿½strand <petas096@student.liu.se>
  * 
  * Copyright 2007:
  * Per Fredriksson <perfr775@student.liu.se>
- * David Karlslätt <davka417@student.liu.se>
+ * David Karlslï¿½tt <davka417@student.liu.se>
  * Tor Knutsson	<torkn754@student.liu.se>
- * Daniel Källming <danka053@student.liu.se>
+ * Daniel Kï¿½llming <danka053@student.liu.se>
  * Ted Palmgren <tedpa175@student.liu.se>
  * Freddie Pintar <frepi150@student.liu.se>
- * Mårten Thurén <marth852@student.liu.se>
+ * Mï¿½rten Thurï¿½n <marth852@student.liu.se>
+ *
+ * Copyright 2010:
+ * Nawzad Mardan <nawzad.mardan@liu.se>
  *
  * This file is part of reMIND.
  *
@@ -247,8 +250,8 @@ public class FlowRelationDialog extends mind.gui.dialog.FunctionDialog
 	updateFlowSettings();
 
 	updateFlowList();
-	//Det fungerade bra när dessa två rader var med
-	//men jag tror det går lika bra utan...
+	//Det fungerade bra nï¿½r dessa tvï¿½ rader var med
+	//men jag tror det gï¿½r lika bra utan...
 	//	listFlows.setSelectedIndex(0);
 	// updateFlowSettings();
     }
@@ -516,16 +519,16 @@ public class FlowRelationDialog extends mind.gui.dialog.FunctionDialog
 
 
 	//Copy & paste panel
-	pnlCopyPaste = new javax.swing.JPanel ();
-	btnCopyFrom = new javax.swing.JButton ();
- 	btnCopy = new javax.swing.JButton ();
-	btnPasteTo = new javax.swing.JButton ();
-	btnPaste = new javax.swing.JButton ();
+//	pnlCopyPaste = new javax.swing.JPanel ();
+//	btnCopyFrom = new javax.swing.JButton ();
+// 	btnCopy = new javax.swing.JButton ();
+//	btnPasteTo = new javax.swing.JButton ();
+//	btnPaste = new javax.swing.JButton ();
 
- 	pnlCopyPaste.setLayout(new java.awt.GridBagLayout());
-	java.awt.GridBagConstraints gridBagConstraints3;
+ //	pnlCopyPaste.setLayout(new java.awt.GridBagLayout());
+	//java.awt.GridBagConstraints gridBagConstraints3;
 
-	btnCopyFrom.setEnabled(false);
+	/*btnCopyFrom.setEnabled(false);
 	btnCopyFrom.setText ("Copy from range");
 	btnCopyFrom.addActionListener (new java.awt.event.ActionListener () {
 		public void actionPerformed (java.awt.event.ActionEvent evt) {
@@ -536,9 +539,9 @@ public class FlowRelationDialog extends mind.gui.dialog.FunctionDialog
 	    });
 
        	gridBagConstraints3 = new java.awt.GridBagConstraints ();
-	pnlCopyPaste.add (btnCopyFrom, gridBagConstraints3);
+	pnlCopyPaste.add (btnCopyFrom, gridBagConstraints3);*/
 
-	btnCopy.setEnabled(false);
+	/*btnCopy.setEnabled(false);
 	btnCopy.setPreferredSize(new java.awt.Dimension(85, 27));
 	btnCopy.setText("Copy");
 	btnCopy.addActionListener(new java.awt.event.ActionListener () {
@@ -549,9 +552,9 @@ public class FlowRelationDialog extends mind.gui.dialog.FunctionDialog
 
 	gridBagConstraints3 = new java.awt.GridBagConstraints ();
 	gridBagConstraints3.insets = new java.awt.Insets(10, 10, 10, 10);
-	pnlCopyPaste.add(btnCopy, gridBagConstraints3);
+	pnlCopyPaste.add(btnCopy, gridBagConstraints3);*/
 
-	btnPasteTo.setEnabled(false);
+/*	btnPasteTo.setEnabled(false);
 	btnPasteTo.setPreferredSize (new java.awt.Dimension(117, 27));
 	btnPasteTo.setText("Paste to range");
 	btnPasteTo.addActionListener(new java.awt.event.ActionListener () {
@@ -562,9 +565,9 @@ public class FlowRelationDialog extends mind.gui.dialog.FunctionDialog
 
 	gridBagConstraints3 = new java.awt.GridBagConstraints ();
 	gridBagConstraints3.gridx = 0;
-	pnlCopyPaste.add (btnPasteTo, gridBagConstraints3);
+	pnlCopyPaste.add (btnPasteTo, gridBagConstraints3);*/
 
-	btnPaste.setEnabled(false);
+	/* btnPaste.setEnabled(false);
 	btnPaste.setPreferredSize (new java.awt.Dimension(85, 27));
 	btnPaste.setText("Paste");
 	btnPaste.addActionListener (new java.awt.event.ActionListener() {
@@ -575,14 +578,14 @@ public class FlowRelationDialog extends mind.gui.dialog.FunctionDialog
 
 	gridBagConstraints3 = new java.awt.GridBagConstraints();
 	gridBagConstraints3.gridx = 1;
-	pnlCopyPaste.add(btnPaste, gridBagConstraints3);
+	pnlCopyPaste.add(btnPaste, gridBagConstraints3); */
 
-	gbc = new java.awt.GridBagConstraints();
+	/* gbc = new java.awt.GridBagConstraints();
 	gbc.gridx = 1;
 	gbc.gridy = 4;
 	gbc.insets = new java.awt.Insets(0, 6, 0, 10);
 	gbc.anchor = java.awt.GridBagConstraints.NORTHWEST;
-	getContentPane().add(pnlCopyPaste, gbc);
+	getContentPane().add(pnlCopyPaste, gbc); */
 
 
 	// *** Flow Control Header ***
@@ -993,7 +996,7 @@ public class FlowRelationDialog extends mind.gui.dialog.FunctionDialog
 	//Get value for new timestep
 	c_function.setTimestep(c_timestep);
 	//UpdateAll();
-	//Ska dessa vara tvärt om?
+	//Ska dessa vara tvï¿½rt om?
 	updateFlowSettings();
 	updateFlowList();
 
@@ -1207,12 +1210,12 @@ public class FlowRelationDialog extends mind.gui.dialog.FunctionDialog
 	r3 = new Resource(r3ID,"Potatis och makaronipudding","","");
 	Flow f[] = new Flow[3];
 	Flow t[] = new Flow[3];
-	f[0] = new Flow(new ID(ID.FLOW), "Flöde 1", r1ID, null);
-	f[1] = new Flow(new ID(ID.FLOW), "Flöde 2", r1ID, null);
-	f[2] = new Flow(new ID(ID.FLOW), "Flöde 3", r2ID, null);
-	t[0] = new Flow(new ID(ID.FLOW), "Flöde 4", r1ID, null);
-	t[1] = new Flow(new ID(ID.FLOW), "Flöde 5", r1ID, null);
-	t[2] = new Flow(new ID(ID.FLOW), "Flöde 6", r3ID, null);
+	f[0] = new Flow(new ID(ID.FLOW), "Flï¿½de 1", r1ID, null);
+	f[1] = new Flow(new ID(ID.FLOW), "Flï¿½de 2", r1ID, null);
+	f[2] = new Flow(new ID(ID.FLOW), "Flï¿½de 3", r2ID, null);
+	t[0] = new Flow(new ID(ID.FLOW), "Flï¿½de 4", r1ID, null);
+	t[1] = new Flow(new ID(ID.FLOW), "Flï¿½de 5", r1ID, null);
+	t[2] = new Flow(new ID(ID.FLOW), "Flï¿½de 6", r3ID, null);
 	FlowRelation fr = new FlowRelation();
 
 	//fr.setTimesteplevel(null); // !!!!
@@ -1247,11 +1250,11 @@ public class FlowRelationDialog extends mind.gui.dialog.FunctionDialog
     JLabel lblTSL[];
     SpinButton spinTSL[];
 
-    JPanel pnlCopyPaste;
-    JButton btnCopyFrom;
-    JButton btnCopy;
-    JButton btnPasteTo;
-    JButton btnPaste;
+  //  JPanel pnlCopyPaste;
+    //JButton btnCopyFrom;
+  //  JButton btnCopy;
+  //  JButton btnPasteTo;
+  //  JButton btnPaste;
 
     JLabel lblTypeResource;
     JList listFlows;
