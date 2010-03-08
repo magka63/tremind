@@ -4,18 +4,21 @@
  * Martin Hagman <marha189@student.liu.se>
  * Henrik Norin <henno776@student.liu.se>
  * Anna Stjerneby <annst566@student.liu.se>
- * Tim Terlegård <timte878@student.liu.se>
+ * Tim Terlegï¿½rd <timte878@student.liu.se>
  * Johan Trygg <johtr599@student.liu.se>
- * Peter Åstrand <petas096@student.liu.se>
+ * Peter ï¿½strand <petas096@student.liu.se>
  * 
  * Copyright 2007:
  * Per Fredriksson <perfr775@student.liu.se>
- * David Karlslätt <davka417@student.liu.se>
+ * David Karlslï¿½tt <davka417@student.liu.se>
  * Tor Knutsson	<torkn754@student.liu.se>
- * Daniel Källming <danka053@student.liu.se>
+ * Daniel Kï¿½llming <danka053@student.liu.se>
  * Ted Palmgren <tedpa175@student.liu.se>
  * Freddie Pintar <frepi150@student.liu.se>
- * Mårten Thurén <marth852@student.liu.se>
+ * Mï¿½rten Thurï¿½n <marth852@student.liu.se>
+ *
+ * Copyright 2010:
+ * Nawzad Mardan <nawzad.mardan@liu.se>
  *
  * This file is part of reMIND.
  *
@@ -54,7 +57,7 @@ import mind.EventHandlerClient;
 
 /**
  *
- * @author Tim Terlegård
+ * @author Tim Terlegï¿½rd
  * @author Johan Trygg
  * @author  Per Fredriksson
  * @author 	Tor Knutsson
@@ -198,11 +201,11 @@ public class BoundaryDialog extends mind.gui.dialog.FunctionDialog {
 	lblMinimumUnit = new javax.swing.JLabel ();
 	chkMinimum = new javax.swing.JCheckBox("Minimum");
 	txtMinimum = new PositiveNumberField();
-	pnlCopyPaste = new javax.swing.JPanel ();
-	btnCopyFrom = new javax.swing.JButton ();
-	btnCopy = new javax.swing.JButton ();
-	btnPasteTo = new javax.swing.JButton ();
-	btnPaste = new javax.swing.JButton ();
+//	pnlCopyPaste = new javax.swing.JPanel ();
+	//btnCopyFrom = new javax.swing.JButton ();
+//	btnCopy = new javax.swing.JButton ();
+//	btnPasteTo = new javax.swing.JButton ();
+//	btnPaste = new javax.swing.JButton ();
 	lblTimestep = new javax.swing.JLabel ();
 	pnlLabel = new javax.swing.JPanel ();
 	lblLabel = new javax.swing.JLabel ();
@@ -215,7 +218,7 @@ public class BoundaryDialog extends mind.gui.dialog.FunctionDialog {
 	pnlResource = new javax.swing.JPanel ();
 	lblTypeResource = new javax.swing.JLabel ();
 	listResource = new javax.swing.JList ();
-	btnNewResource = new javax.swing.JButton ();
+//	btnNewResource = new javax.swing.JButton ();
 	getContentPane ().setLayout (new java.awt.GridBagLayout ());
 	java.awt.GridBagConstraints gridBagConstraints1;
 	setName ("Boundary");
@@ -346,10 +349,10 @@ public class BoundaryDialog extends mind.gui.dialog.FunctionDialog {
 
 
 	//Copy & Paste
-	pnlCopyPaste.setLayout (new java.awt.GridBagLayout ());
+//	pnlCopyPaste.setLayout (new java.awt.GridBagLayout ());
 	java.awt.GridBagConstraints gridBagConstraints3;
 
-	btnCopyFrom.setEnabled(false);
+	/*btnCopyFrom.setEnabled(false);
 	btnCopyFrom.setText ("Copy from range");
 	btnCopyFrom.addActionListener (new java.awt.event.ActionListener () {
 		public void actionPerformed (java.awt.event.ActionEvent evt) {
@@ -357,52 +360,52 @@ public class BoundaryDialog extends mind.gui.dialog.FunctionDialog {
 		    copyFromRange (evt);
           btnCopyFromActionPerformed (evt);
 		}
-	    });
+	    });*/
 
-       	gridBagConstraints3 = new java.awt.GridBagConstraints ();
+      // 	gridBagConstraints3 = new java.awt.GridBagConstraints ();
 	//	gridBagConstraints3.insets = new java.awt.Insets (10, 10, 10, 10);
-	pnlCopyPaste.add (btnCopyFrom, gridBagConstraints3);
+//	pnlCopyPaste.add (btnCopyFrom, gridBagConstraints3);
 
-	btnCopy.setEnabled(false);
+/*	btnCopy.setEnabled(false);
 	btnCopy.setPreferredSize (new java.awt.Dimension(85, 27));
 	btnCopy.setText ("Copy");
 	btnCopy.addActionListener (new java.awt.event.ActionListener () {
 		public void actionPerformed (java.awt.event.ActionEvent evt) {
 		    btnCopyActionPerformed (evt);
 		}
-	    });
+	    });*/
 
-	gridBagConstraints3 = new java.awt.GridBagConstraints ();
-	gridBagConstraints3.insets = new java.awt.Insets (10, 10, 10, 10);
-	pnlCopyPaste.add (btnCopy, gridBagConstraints3);
+	//gridBagConstraints3 = new java.awt.GridBagConstraints ();
+	//gridBagConstraints3.insets = new java.awt.Insets (10, 10, 10, 10);
+//	pnlCopyPaste.add (btnCopy, gridBagConstraints3);
 
-	btnPasteTo.setEnabled(false);
+/*	btnPasteTo.setEnabled(false);
 	btnPasteTo.setPreferredSize (new java.awt.Dimension(117, 27));
 	btnPasteTo.setText ("Paste to range");
 	btnPasteTo.addActionListener (new java.awt.event.ActionListener () {
 		public void actionPerformed (java.awt.event.ActionEvent evt) {
 		    btnPasteToRangeActionPerformed (evt);
 		}
-	    });
+	    });*/
 
-	gridBagConstraints3 = new java.awt.GridBagConstraints ();
-	gridBagConstraints3.gridx = 0;
+	//gridBagConstraints3 = new java.awt.GridBagConstraints ();
+	//gridBagConstraints3.gridx = 0;
 	//	gridBagConstraints3.insets = new java.awt.Insets (10, 10, 10, 10);
-	pnlCopyPaste.add (btnPasteTo, gridBagConstraints3);
+//	pnlCopyPaste.add (btnPasteTo, gridBagConstraints3);
 
-	btnPaste.setEnabled(false);
+/*	btnPaste.setEnabled(false);
 	btnPaste.setPreferredSize (new java.awt.Dimension(85, 27));
 	btnPaste.setText ("Paste");
 	btnPaste.addActionListener (new java.awt.event.ActionListener () {
 		public void actionPerformed (java.awt.event.ActionEvent evt) {
 		    btnPasteActionPerformed (evt);
 		}
-	    });
+	    });*/
 
-	gridBagConstraints3 = new java.awt.GridBagConstraints ();
+/*	gridBagConstraints3 = new java.awt.GridBagConstraints ();
 	gridBagConstraints3.gridx = 1;
 	//	gridBagConstraints3.insets = new java.awt.Insets (10, 10, 10, 10);
-	pnlCopyPaste.add (btnPaste, gridBagConstraints3);
+//	pnlCopyPaste.add (btnPaste, gridBagConstraints3);
 
 	gridBagConstraints1 = new java.awt.GridBagConstraints ();
 	gridBagConstraints1.gridx = 1;
@@ -681,11 +684,11 @@ public class BoundaryDialog extends mind.gui.dialog.FunctionDialog {
   private javax.swing.JLabel lblMinimumUnit;
   private javax.swing.JCheckBox chkMinimum;
   private javax.swing.JPanel pnlBoundaries;
-  private javax.swing.JPanel pnlCopyPaste;
-  private javax.swing.JButton btnCopyFrom;
-  private javax.swing.JButton btnCopy;
-  private javax.swing.JButton btnPasteTo;
-  private javax.swing.JButton btnPaste;
+  //private javax.swing.JPanel pnlCopyPaste;
+  //private javax.swing.JButton btnCopyFrom;
+//  private javax.swing.JButton btnCopy;
+//  private javax.swing.JButton btnPasteTo;
+ // private javax.swing.JButton btnPaste;
   private javax.swing.JLabel lblTimestep;
   private javax.swing.JPanel pnlLabel;
   private javax.swing.JLabel lblLabel;
@@ -697,7 +700,7 @@ public class BoundaryDialog extends mind.gui.dialog.FunctionDialog {
   private javax.swing.JPanel pnlResource;
   private javax.swing.JLabel lblTypeResource;
   private javax.swing.JList listResource;
-  private javax.swing.JButton btnNewResource;
+//  private javax.swing.JButton btnNewResource;
   // Added by Nawzad Mardan 080910
   private JRadioButton c_radIn = new JRadioButton("In");
   private JRadioButton c_radOut = new JRadioButton("Out");
