@@ -48,6 +48,7 @@ import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
+import java.awt.event.*;
 
 import mind.gui.*;
 import mind.model.*;
@@ -278,11 +279,11 @@ public class FlowDependencyDialog
 	sep1 = new javax.swing.JSeparator ();
 	sep2 = new javax.swing.JSeparator ();
 	pnlTimestep = new javax.swing.JPanel ();
-	pnlCopyPaste = new javax.swing.JPanel ();
-	btnCopyFrom = new javax.swing.JButton ();
-	btnCopy = new javax.swing.JButton ();
-	btnPasteTo = new javax.swing.JButton ();
-	btnPaste = new javax.swing.JButton ();
+//	pnlCopyPaste = new javax.swing.JPanel ();
+//	btnCopyFrom = new javax.swing.JButton ();
+//	btnCopy = new javax.swing.JButton ();
+//	btnPasteTo = new javax.swing.JButton ();
+//	btnPaste = new javax.swing.JButton ();
 	lblTimestep = new javax.swing.JLabel ();
 	pnlLabel = new javax.swing.JPanel ();
 	lblLabel = new javax.swing.JLabel ();
@@ -293,8 +294,27 @@ public class FlowDependencyDialog
 	btnCancel = new javax.swing.JButton ();
 	pnlResource = new javax.swing.JPanel ();
 	listResourceX = new javax.swing.JList ();
+    // Added by Nawzad Mardan 20100306
+    listResourceX.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                Resource resource = (Resource) listResourceX.getSelectedValue();
+                updateLimitPanel();
+                //lblresX.setText(" * "+resource.getLabel() +"  + ");
+
+            }
+    });
 	listResourceY = new javax.swing.JList ();
-	getContentPane ().setLayout (new GridBagLayout ());
+    // Added by Nawzad Mardan 20100306
+	listResourceY.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                Resource resource = (Resource) listResourceY.getSelectedValue();
+            //lblresY.setText(resource.getLabel() + " = ");
+            updateLimitPanel();
+
+            }
+    });
+
+    getContentPane ().setLayout (new GridBagLayout ());
 	GridBagConstraints constraints;
 	addWindowListener (new java.awt.event.WindowAdapter () {
 		public void windowClosing (java.awt.event.WindowEvent evt) {
@@ -446,10 +466,10 @@ public class FlowDependencyDialog
 
 
 	// --- add Copy & Paste buttons ---
-	pnlCopyPaste.setLayout (new java.awt.GridBagLayout ());
+//	pnlCopyPaste.setLayout (new java.awt.GridBagLayout ());
 	java.awt.GridBagConstraints gridBagConstraints3;
 
-	btnCopyFrom.setEnabled(false);
+/*	btnCopyFrom.setEnabled(false);
 	btnCopyFrom.setText ("Copy from range");
 	btnCopyFrom.addActionListener (new java.awt.event.ActionListener () {
 		public void actionPerformed (java.awt.event.ActionEvent evt) {
@@ -457,72 +477,72 @@ public class FlowDependencyDialog
 		    copyFromRange (evt);
 		    btnCopyFromActionPerformed (evt);
 		}
-	    });
+	    });*/
 
-       	gridBagConstraints3 = new java.awt.GridBagConstraints ();
+/*       	gridBagConstraints3 = new java.awt.GridBagConstraints ();
 	gridBagConstraints3.gridx = 0;
 	gridBagConstraints3.gridy = 0;
 	gridBagConstraints3.weightx = 1.0;
 	gridBagConstraints3.anchor = GridBagConstraints.EAST;
-	pnlCopyPaste.add (btnCopyFrom, gridBagConstraints3);
+	pnlCopyPaste.add (btnCopyFrom, gridBagConstraints3);*/
 
-	btnCopy.setEnabled(false);
+/*	btnCopy.setEnabled(false);
 	btnCopy.setPreferredSize (new java.awt.Dimension(85, 27));
 	btnCopy.setText ("Copy");
 	btnCopy.addActionListener (new java.awt.event.ActionListener () {
 		public void actionPerformed (java.awt.event.ActionEvent evt) {
 		    btnCopyActionPerformed (evt);
 		}
-	    });
+	    });*/
 
-	gridBagConstraints3 = new java.awt.GridBagConstraints ();
+	/*gridBagConstraints3 = new java.awt.GridBagConstraints ();
 	gridBagConstraints3.gridx = 1;
 	gridBagConstraints3.gridy = 0;
 	gridBagConstraints3.insets = new java.awt.Insets (10, 10, 10, 10);
-	pnlCopyPaste.add (btnCopy, gridBagConstraints3);
+	pnlCopyPaste.add (btnCopy, gridBagConstraints3);*/
 
-	btnPasteTo.setEnabled(false);
+/*	btnPasteTo.setEnabled(false);
 	btnPasteTo.setPreferredSize (new java.awt.Dimension(117, 27));
 	btnPasteTo.setText ("Paste to range");
 	btnPasteTo.addActionListener (new java.awt.event.ActionListener () {
 		public void actionPerformed (java.awt.event.ActionEvent evt) {
 		    btnPasteToRangeActionPerformed (evt);
 		}
-	    });
+	    });*/
 
-	gridBagConstraints3 = new java.awt.GridBagConstraints ();
+	/*gridBagConstraints3 = new java.awt.GridBagConstraints ();
 	gridBagConstraints3.gridx = 0;
 	gridBagConstraints3.gridy = 1;
 	gridBagConstraints3.weightx = 1.0;
 	gridBagConstraints3.anchor = GridBagConstraints.EAST;
-	pnlCopyPaste.add (btnPasteTo, gridBagConstraints3);
+	pnlCopyPaste.add (btnPasteTo, gridBagConstraints3);*/
 
-	btnPaste.setEnabled(false);
+	/*btnPaste.setEnabled(false);
 	btnPaste.setPreferredSize (new java.awt.Dimension(85, 27));
 	btnPaste.setText ("Paste");
 	btnPaste.addActionListener (new java.awt.event.ActionListener () {
 		public void actionPerformed (java.awt.event.ActionEvent evt) {
 		    btnPasteActionPerformed (evt);
 		}
-	    });
+	    });*/
 
-	gridBagConstraints3 = new java.awt.GridBagConstraints ();
+	/*gridBagConstraints3 = new java.awt.GridBagConstraints ();
 	gridBagConstraints3.gridx = 1;
 	gridBagConstraints3.gridy = 1;
 	// gridBagConstraints3.insets = new java.awt.Insets (10, 10, 10, 10);
-	pnlCopyPaste.add(btnPaste, gridBagConstraints3);
+	pnlCopyPaste.add(btnPaste, gridBagConstraints3);*/
 
-	constraints = new java.awt.GridBagConstraints ();
+	/*constraints = new java.awt.GridBagConstraints ();
 	constraints.gridx = 1;
 	constraints.gridy = 4;
 	constraints.weightx = 1.0;
 	constraints.insets = new java.awt.Insets (0, 6, 0, 10);
 	constraints.anchor = java.awt.GridBagConstraints.EAST;
-	getContentPane().add(pnlCopyPaste, constraints);
+	getContentPane().add(pnlCopyPaste, constraints);*/
 
 	// --- add the resources panel ---
 	pnlResource = createResourcePanel();
-	//	pnlResource.setPreferredSize(new Dimension(700, 700));
+	pnlResource.setPreferredSize(new Dimension(340, 200));
 	constraints = new GridBagConstraints();
 	constraints.gridx = 0;
 	constraints.gridy = 5;
@@ -534,7 +554,7 @@ public class FlowDependencyDialog
 	c_scrollEquations = new JScrollPane(c_pnlLimits);
 	c_scrollEquations.setVerticalScrollBarPolicy(ScrollPaneConstants.
 					      VERTICAL_SCROLLBAR_ALWAYS);
-	c_scrollEquations.setPreferredSize(new Dimension(100, 100));
+	c_scrollEquations.setPreferredSize(new Dimension(150, 100));
 	constraints = new GridBagConstraints();
 	constraints.gridx = 0;
 	constraints.gridy = 6;
@@ -645,11 +665,11 @@ public class FlowDependencyDialog
     private javax.swing.JPanel pnlTimestep;
     private javax.swing.JLabel lblTSL[];
     private SpinButton spinTSL[];
-    private javax.swing.JPanel pnlCopyPaste;
-    private javax.swing.JButton btnCopyFrom;
-    private javax.swing.JButton btnCopy;
-    private javax.swing.JButton btnPasteTo;
-    private javax.swing.JButton btnPaste;
+  //  private javax.swing.JPanel pnlCopyPaste;
+    //private javax.swing.JButton btnCopyFrom;
+   // private javax.swing.JButton btnCopy;
+   // private javax.swing.JButton btnPasteTo;
+  //  private javax.swing.JButton btnPaste;
     private javax.swing.JLabel lblTimestep;
     private javax.swing.JPanel pnlLabel;
     private javax.swing.JLabel lblLabel;
@@ -662,6 +682,10 @@ public class FlowDependencyDialog
     private javax.swing.JList listResourceX;
     private javax.swing.JList listResourceY;
     private javax.swing.JButton btnNewResource;
+    // Added by Nawzad Mardan 20100305
+    private javax.swing.JPanel pnlEquation;
+    private javax.swing.JLabel lblresY;
+    private javax.swing.JLabel lblresX;
 
     private JPanel createResourcePanel()
     {
@@ -898,8 +922,9 @@ public class FlowDependencyDialog
 	Component slope;
 	Component offset;
 	JPanel pnlLimit;
-	JPanel pnlEquation;
 	GridBagConstraints constraints;
+    // Added by Nawzad Mardan 20100305
+    String resouceLable = "";
 
 	c_pnlLimits.removeAll();
 
@@ -935,9 +960,25 @@ public class FlowDependencyDialog
 	    pnlEquation = new JPanel();
 	    pnlEquation.setLayout(new BoxLayout(pnlEquation,
 						BoxLayout.X_AXIS));
-	    pnlEquation.add(new JLabel("<res-Y> = "));
+        // Added by Nawzad Mardan 20100305
+        lblresY = new JLabel("<res-Y> = ");
+        if (listResourceY.getSelectedIndex() != -1)
+            {
+            Resource resource = (Resource) listResourceY.getSelectedValue();
+            resouceLable = resource.getLabel();
+            lblresY.setText(resouceLable + " = ");
+            }
+        pnlEquation.add(lblresY);
+        // Added by Nawzad Mardan 20100305
 	    pnlEquation.add(slope);
-	    pnlEquation.add(new JLabel(" * <res-X> + "));
+        lblresX = new JLabel(" * <res-X> + ");
+        if (listResourceX.getSelectedIndex() != -1)
+            {
+            Resource resource = (Resource) listResourceX.getSelectedValue();
+            resouceLable = resource.getLabel();
+            lblresX.setText(" * "+resouceLable +"  + ");
+            }
+        pnlEquation.add(lblresX);
 	    pnlEquation.add(offset);
 	    constraints = new GridBagConstraints();
 	    constraints.gridx = 0;
