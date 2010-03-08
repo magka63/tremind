@@ -1,15 +1,15 @@
 /*
  * Copyright 2004:
- * Jonas Sääv <js@acesimulation.com>
+ * Jonas Sï¿½ï¿½v <js@acesimulation.com>
  * 
  * Copyright 2007:
  * Per Fredriksson <perfr775@student.liu.se>
- * David Karlslätt <davka417@student.liu.se>
+ * David Karlslï¿½tt <davka417@student.liu.se>
  * Tor Knutsson	<torkn754@student.liu.se>
- * Daniel Källming <danka053@student.liu.se>
+ * Daniel Kï¿½llming <danka053@student.liu.se>
  * Ted Palmgren <tedpa175@student.liu.se>
  * Freddie Pintar <frepi150@student.liu.se>
- * Mårten Thurén <marth852@student.liu.se>
+ * Mï¿½rten Thurï¿½n <marth852@student.liu.se>
  *
  * This file is part of reMIND.
  *
@@ -56,7 +56,7 @@ import java.awt.event.ItemListener;
  * A dialog used for handling global Logical Equation properties.
  * Logical Equation was previosly named Binary Function, hence the name confusion.
  * You will just have to live with it, I'm afraid.
- * @author  Jonas Sääv
+ * @author  Jonas Sï¿½ï¿½v
  * @author  Per Fredriksson
  * @author 	Tor Knutsson
  */
@@ -431,6 +431,7 @@ public class BinaryFunctionDialog extends mind.gui.dialog.FunctionDialog impleme
       int index = c_Flow.indexOf(flowId);
       c_FlowMin.remove(index);
       c_FlowMax.remove(index);
+      c_Coeff.remove(index);
 
       return c_Flow.removeElement(flowId);
     }
@@ -677,6 +678,14 @@ public class BinaryFunctionDialog extends mind.gui.dialog.FunctionDialog impleme
         "type a negative max value for a free maximum");
 
     /*  Register event listeners  */
+    // Added by Nawzad Mardan 20100308
+    c_lstSelectedFlow.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+        public void valueChanged(ListSelectionEvent event) {
+
+            save();
+            updateLable();
+            }
+    });
     txtRHSValue.addFocusListener(this);
     rhsConstraintComboBox.addItemListener(this);
 
@@ -793,7 +802,7 @@ public class BinaryFunctionDialog extends mind.gui.dialog.FunctionDialog impleme
     gridBagConstraints4.fill = java.awt.GridBagConstraints.BOTH;
     gridBagConstraints4.insets = new java.awt.Insets(0, 0, 0, 5);
     gridBagConstraints4.weightx = 0;
-    gridBagConstraints4.weighty = 0.5;  // här!!!
+    gridBagConstraints4.weighty = 0.5;  // hï¿½r!!!
     pnlFlow.add(scrollAvailFlow, gridBagConstraints4);
 
     btnAddFlow.setText("=>");
@@ -852,7 +861,7 @@ public class BinaryFunctionDialog extends mind.gui.dialog.FunctionDialog impleme
     gridBagConstraints1.gridx = 0;
     gridBagConstraints1.gridy = 6;
     gridBagConstraints1.gridwidth = 2;
-    gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH; // här!!!
+    gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH; // hï¿½r!!!
     gridBagConstraints1.insets = new java.awt.Insets(10, 10, 10, 10);
     gridBagConstraints1.weightx = 1.0;
     gridBagConstraints1.weighty = 0.5;
@@ -860,7 +869,7 @@ public class BinaryFunctionDialog extends mind.gui.dialog.FunctionDialog impleme
     getContentPane().add(pnlFlow, gridBagConstraints1);
 
     /* Storage Panel
-       Added by Jonas Sääv */
+       Added by Jonas Sï¿½ï¿½v */
 
     JPanel pnlRHS = new JPanel();
     pnlRHS.setLayout(new java.awt.GridBagLayout());
@@ -887,11 +896,38 @@ public class BinaryFunctionDialog extends mind.gui.dialog.FunctionDialog impleme
 
     getContentPane().add(pnlRHS, gridBagConstraints1);
 
+    // Added by Nawzad Mardan 20100307
+    lblEquationP1 = new JLabel("");
+    lblEquationP2 = new JLabel("");
+    lblEquationP3 = new JLabel("");
+    lblEquationP1.setFont(new Font("SansSerif", Font.ITALIC, 15));
+    lblEquationP1.setBackground(Color.BLUE);
+    lblEquationP1.setForeground(Color.BLUE);
+    lblEquationP2.setFont(new Font("SansSerif", Font.ITALIC, 15));
+    lblEquationP2.setBackground(Color.BLUE);
+    lblEquationP2.setForeground(Color.BLUE);
+    lblEquationP3.setFont(new Font("SansSerif", Font.ITALIC, 15));
+    lblEquationP3.setBackground(Color.BLUE);
+    lblEquationP3.setForeground(Color.BLUE);
+    updateLable();
+    pnlEquation = new JPanel();
+    pnlEquation.add(lblEquationP1);
+    pnlEquation.add(lblEquationP2);
+    pnlEquation.add(lblEquationP3);
+   // gc.insets = new java.awt.Insets(5, 0, 5, 50);
+    //gridBagConstraints3 = new java.awt.GridBagConstraints();
+    //gridBagConstraints3.gridx = 0;
+    gridBagConstraints1.gridy = 16;
+    //gridBagConstraints3.gridwidth = 2;
+    //gridBagConstraints3.insets = new java.awt.Insets(0, 0, 10, 5);
+    //gridBagConstraints3.anchor = java.awt.GridBagConstraints.HORIZONTAL;
+    //gridBagConstraints3.weightx = 1.0;
+    this.getContentPane().add( pnlEquation, gridBagConstraints1);
     /* End Storage Panel */
 
     gridBagConstraints1 = new java.awt.GridBagConstraints();
     gridBagConstraints1.gridx = 0;
-    gridBagConstraints1.gridy = 16;
+    gridBagConstraints1.gridy = 17;
     gridBagConstraints1.gridwidth = 2;
     gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
     getContentPane().add(sep3, gridBagConstraints1);
@@ -923,7 +959,7 @@ public class BinaryFunctionDialog extends mind.gui.dialog.FunctionDialog impleme
 
     gridBagConstraints1 = new java.awt.GridBagConstraints();
     gridBagConstraints1.gridx = 0;
-    gridBagConstraints1.gridy = 17;
+    gridBagConstraints1.gridy = 18;
     gridBagConstraints1.gridwidth = 2;
     gridBagConstraints1.insets = new java.awt.Insets(10, 10, 10, 10);
     getContentPane().add(pnlButtons, gridBagConstraints1);
@@ -982,6 +1018,9 @@ public class BinaryFunctionDialog extends mind.gui.dialog.FunctionDialog impleme
     loadTables();
     if (currentTimestepInfo.getFlow().isEmpty())
       btnRemoveFlow.setEnabled(false);
+    // Added by Nawzad Mardan 20100308
+    //save();
+    //updateLable();
   } //GEN-LAST:event_btnRemoveInflowActionPerformed
 
   /**
@@ -1003,6 +1042,9 @@ public class BinaryFunctionDialog extends mind.gui.dialog.FunctionDialog impleme
 
     loadTables();
     btnRemoveFlow.setEnabled(true);
+    // Added by Nawzad Mardan 20100308
+    save();
+    updateLable();
   } //GEN-LAST:event_btnAddInflowActionPerformed
 
   /**
@@ -1064,7 +1106,12 @@ public class BinaryFunctionDialog extends mind.gui.dialog.FunctionDialog impleme
   private javax.swing.JPanel pnlButtons;
   private javax.swing.JButton btnOk;
   private javax.swing.JButton btnCancel;
-// End of variables declaration//GEN-END:variables
+ // Added by Nawzad Mardan 20100308
+  private JPanel pnlEquation;
+  private JLabel lblEquationP1;
+  private JLabel lblEquationP2;
+  private JLabel lblEquationP3;
+  // End of variables declaration//GEN-END:variables
 
   /**
    * Update selected in- and outflows according to new timestep.
@@ -1164,6 +1211,9 @@ public class BinaryFunctionDialog extends mind.gui.dialog.FunctionDialog impleme
     if (comp == txtRHSValue) {
         float value = txtRHSValue.getFloatValue();
         info.setRHSValue((int) value);
+        // Added by Nawzad Mardan 20100308
+        save();
+        updateLable();
     }
 
   }
@@ -1185,6 +1235,80 @@ public class BinaryFunctionDialog extends mind.gui.dialog.FunctionDialog impleme
         break;
     }
     info.setRHSConstraint(tempstring);
+    // Added by Nawzad Mardan 20100308
+    save();
+    updateLable();
+
+  }
+
+  private void updateLable()
+    {
+    TimestepInfo info = getTimestepInfo(c_timestep);
+    if(info!=null)
+        {
+        Vector flows, coeff;
+        flows = info.getFlow();
+        coeff = info.getCoeff();
+        String equation = " ";
+        Integer o;
+        int coef;
+        for(int i = 0; i< coeff.size();i++)
+            {
+            //Objeck o equation + = (String)incoeff.elementAt(i);
+             o  = (Integer)coeff.elementAt(i);
+             coef = o.intValue();
+             if((coef == -1))
+                 equation  = equation + "-";
+             //else if((coef == -1) && (i != 0))
+               //  equation  = equation + "+ -";
+             else if((coef == 1)&& (i == 0))
+                 equation = equation +"";
+             else if((coef == 1) && (i != 0))
+                 equation = equation + " + " ;
+             else
+                {
+                 if(coef > 1)
+                    {
+                     if(i != 0)
+                        equation = equation + " + "+ coef ;
+                     else
+                         equation = equation + coef ;
+                    }
+                 else
+                    equation = equation + " "+ coef ;
+                }
+             if(flows!=null)
+               equation = equation +  flows.elementAt(i) + " ";
+
+            }
+        lblEquationP1.setText(equation);
+        if((lblEquationP1.getText().equals(" ")))
+            lblEquationP2.setText("");
+        else
+            lblEquationP2.setText(getRHS(info.getRHSConstraint()));
+        if((lblEquationP1.getText().equals(" ")) && (lblEquationP2.getText().equals("")) )
+            lblEquationP3.setText("  " + " ");
+        else
+            lblEquationP3.setText("  " + " "+ info.getRHSValue());
+        }
+
+    }
+
+  private String getRHS(String rhs)
+  {
+
+    if(rhs!=null)
+        {
+        if(rhs.equals("E"))
+            rhs = " = ";
+        else if(rhs.equals("G"))
+            rhs = " >= ";
+        else if(rhs.equals("L"))
+            rhs = " <= ";
+        }
+    else
+        rhs = " = ";
+   return rhs;
 
   }
 }
