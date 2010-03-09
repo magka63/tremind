@@ -4,19 +4,19 @@
  * Martin Hagman <marha189@student.liu.se>
  * Henrik Norin <henno776@student.liu.se>
  * Anna Stjerneby <annst566@student.liu.se>
- * Tim Terlegård <timte878@student.liu.se>
+ * Tim Terlegï¿½rd <timte878@student.liu.se>
  * Johan Trygg <johtr599@student.liu.se>
- * Peter Åstrand <petas096@student.liu.se>
+ * Peter ï¿½strand <petas096@student.liu.se>
  * 
  * 
  * Copyright 2007:
  * Per Fredriksson <perfr775@student.liu.se>
- * David Karlslätt <davka417@student.liu.se>
+ * David Karlslï¿½tt <davka417@student.liu.se>
  * Tor Knutsson	<torkn754@student.liu.se>
- * Daniel Källming <danka053@student.liu.se>
+ * Daniel Kï¿½llming <danka053@student.liu.se>
  * Ted Palmgren <tedpa175@student.liu.se>
  * Freddie Pintar <frepi150@student.liu.se>
- * Mårten Thurén <marth852@student.liu.se> 
+ * Mï¿½rten Thurï¿½n <marth852@student.liu.se> 
  *
  * This file is part of reMIND.
  *
@@ -42,7 +42,7 @@ import javax.swing.*;
 /**
  * This class represents the main top menu.
  *
- * @author Tim Terlegård
+ * @author Tim Terlegï¿½rd
  * @version 2001-04-04
  */
 public class TopMenu
@@ -64,7 +64,7 @@ public class TopMenu
 	JMenu menuImport = new JMenu("Import");
 	// End PUM5
 	JMenu edit = new JMenu("Edit");
-        model = new JMenu("Model");
+    model = new JMenu("Model");
 	//JMenu model = new JMenu("Model");
 	JMenu help = new JMenu("Help");
 	JMenu modelNode = new JMenu("Node");
@@ -89,10 +89,11 @@ public class TopMenu
 	file.addSeparator();
 	file.add(newMenuItem(actions.c_exit, 'x', 0));
 	add(file);
+    // Nawzad Mardan 20100310
+	//edit.add(newMenuItem(actions.c_undo, 'U', KeyEvent.VK_Z));
 
-	edit.add(newMenuItem(actions.c_undo, 'U', KeyEvent.VK_Z));
 	//edit.addSeparator();
-        /*  2005-05-11 Jonas Sääv
+        /*  2005-05-11 Jonas Sï¿½ï¿½v
             These functions has been deactivated in order to maintain consistency
             in the model database. cut-copy-paste actions are not dealt with properly
             in the current system architecture. Think twice before re-activation
@@ -110,8 +111,10 @@ public class TopMenu
 
 	modelNode.add(newMenuItem(actions.c_newNode, 'N', 0));
 	modelNode.add(newMenuItem(actions.c_deleteNode, 'D', 0));
-	modelNode.add(newMenuItem(actions.c_addNodeToCollection, 'A', 0));
-	modelNode.add(newMenuItem(actions.c_manageNodeCollection, 'M', 0));
+    // Nawzad Mardan 20100310
+	//modelNode.add(newMenuItem(actions.c_addNodeToCollection, 'A', 0));
+	//modelNode.add(newMenuItem(actions.c_manageNodeCollection, 'M', 0));
+    //
 	modelNode.add(newMenuItem(actions.c_nodeProperties, 'P', 0));
 	modelNode.addSeparator();
 	nodeShow.add(c_showNodeIDsCheckBox = newCheckBoxItem(actions.c_showNodeIDs, 't', 0));
