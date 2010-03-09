@@ -180,6 +180,7 @@ public class FlowRelationDialog extends mind.gui.dialog.FunctionDialog
     //this.setSize( new Dimension(txtwidth*3, 200));
 	UpdateAll();
     pack();
+    //this.setResizable(false);
 	
 	confirmResourceChange = true;
     }
@@ -855,7 +856,7 @@ public class FlowRelationDialog extends mind.gui.dialog.FunctionDialog
 	gbc.gridy = 2;
 	gbc.insets = new java.awt.Insets (10, 144, 0, 5);
 	gbc.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        pnlFlowSettings.add(spinLimit2,gbc);
+    pnlFlowSettings.add(spinLimit2,gbc);
 	/*spinLimit2.addListener(new SpinButtonListener() {
 		public void valueDecreased()
 		{
@@ -871,6 +872,16 @@ public class FlowRelationDialog extends mind.gui.dialog.FunctionDialog
 	// *** OK and CANCEL buttons ***
 
 	//Separator 3
+    // Added by Nawzad Mardan 20100310
+    lblPercentage = new JLabel(" % ");
+    lblPercentage.setFont(new Font("SansSerif", Font.BOLD, 13));
+    gbcPercentage = new java.awt.GridBagConstraints();
+	gbcPercentage.gridx = 0;
+	gbcPercentage.gridy = 2;
+	gbcPercentage.insets = new java.awt.Insets (12, 258, 0, 0);
+	gbcPercentage.anchor = java.awt.GridBagConstraints.NORTHWEST;
+    pnlFlowSettings.add(lblPercentage,gbcPercentage);
+    //
 	sep3 = new javax.swing.JSeparator ();
 	gbc = new java.awt.GridBagConstraints();
 	gbc.gridy = 8;
@@ -1175,28 +1186,38 @@ public class FlowRelationDialog extends mind.gui.dialog.FunctionDialog
 	case FREE:
 	    spinLimit1.setVisible(false);
 	    spinLimit2.setVisible(false);
+        // Added by Nawzad Mardan 20100310
+        lblPercentage.setVisible(false);
 	    lblSpin.setText("");
 	    break;
 	case GREATER:
 	    spinLimit1.setVisible(true);
 	    spinLimit2.setVisible(false);
-	    lblSpin.setText("          < X");
+	    lblSpin.setText("          < X       %");
+        // Added by Nawzad Mardan 20100310
+        lblPercentage.setVisible(false);
 	    break;
 	case LESS:
 	    spinLimit1.setVisible(false);
 	    spinLimit2.setVisible(true);
 	    lblSpin.setText("        X <");
+        // Added by Nawzad Mardan 20100310
+        lblPercentage.setVisible(true);
 	    break;
 	case EQUAL:
 	    spinLimit1.setVisible(false);
 	    spinLimit2.setVisible(true);
         spinLimit2.setSize(new Dimension(114, 20));
 	    lblSpin.setText("        X =");
+        // Added by Nawzad Mardan 20100310
+        lblPercentage.setVisible(true);
 	    break;
 	case LESS_GREATER:
 	    spinLimit1.setVisible(true);
 	    spinLimit2.setVisible(true);
 	    lblSpin.setText("        <X<");
+        // Added by Nawzad Mardan 20100310
+        lblPercentage.setVisible(true);
 	    break;
 	}
     }
@@ -1312,5 +1333,7 @@ public class FlowRelationDialog extends mind.gui.dialog.FunctionDialog
     JButton btnCancel;
     // Added by Nawzad Mardan 20100309
     JScrollPane flowListScroll;
+    JLabel lblPercentage;
+    java.awt.GridBagConstraints gbcPercentage;
 }
 
