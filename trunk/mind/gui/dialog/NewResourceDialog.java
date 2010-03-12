@@ -4,9 +4,9 @@
  * Martin Hagman <marha189@student.liu.se>
  * Henrik Norin <henno776@student.liu.se>
  * Anna Stjerneby <annst566@student.liu.se>
- * Tim Terlegård <timte878@student.liu.se>
+ * Tim Terlegï¿½rd <timte878@student.liu.se>
  * Johan Trygg <johtr599@student.liu.se>
- * Peter Åstrand <petas096@student.liu.se>
+ * Peter ï¿½strand <petas096@student.liu.se>
  *
  * This file is part of reMIND.
  *
@@ -33,7 +33,7 @@
 
 /**
  *
- * @author Tim Terlegård
+ * @author Tim Terlegï¿½rd
  * @version 2001-05-01
  */
 
@@ -66,9 +66,9 @@ public class NewResourceDialog extends javax.swing.JDialog {
     pnlUnit = new javax.swing.JPanel ();
     lblUnit = new javax.swing.JLabel ();
     txtUnit = new javax.swing.JTextField ();
-    pnlPrefix = new javax.swing.JPanel ();
-    lblPrefix = new javax.swing.JLabel ();
-    txtPrefix = new javax.swing.JTextField ();
+//    pnlPrefix = new javax.swing.JPanel ();
+//    lblPrefix = new javax.swing.JLabel ();
+//    txtPrefix = new javax.swing.JTextField ();
     pnlColor = new javax.swing.JPanel();
     lblColor = new javax.swing.JLabel();
     comboBoxColor = new ColorComboBox();
@@ -139,8 +139,9 @@ public class NewResourceDialog extends javax.swing.JDialog {
     gridBagConstraints1.weightx = 1.0;
     getContentPane ().add (pnlUnit, gridBagConstraints1);
 
-    pnlPrefix.setLayout (new java.awt.GridBagLayout ());
-    java.awt.GridBagConstraints gridBagConstraints4;
+     java.awt.GridBagConstraints gridBagConstraints4;
+/*    pnlPrefix.setLayout (new java.awt.GridBagLayout ());
+   
 
       lblPrefix.setText ("Prefix:");
 
@@ -158,14 +159,13 @@ public class NewResourceDialog extends javax.swing.JDialog {
       gridBagConstraints4.weightx = 1.0;
       pnlPrefix.add (txtPrefix, gridBagConstraints4);
 
-
     gridBagConstraints1 = new java.awt.GridBagConstraints ();
     gridBagConstraints1.gridx = 0;
     gridBagConstraints1.gridy = 2;
     gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
     gridBagConstraints1.insets = new java.awt.Insets (10, 10, 10, 10);
     gridBagConstraints1.weightx = 1.0;
-    getContentPane ().add (pnlPrefix, gridBagConstraints1);
+    getContentPane ().add (pnlPrefix, gridBagConstraints1);*/
 
     //Setting label
     lblColor.setText("Color:");
@@ -242,8 +242,7 @@ public class NewResourceDialog extends javax.swing.JDialog {
   }
 
   private void btnOKActionPerformed (java.awt.event.ActionEvent evt) {
-      c_gui.addResource(txtName.getText(), txtUnit.getText(),
-			   txtPrefix.getText(), (ExtendedColor)comboBoxColor.getSelectedItem());
+      c_gui.addResource(txtName.getText(), txtUnit.getText(),"", (ExtendedColor)comboBoxColor.getSelectedItem());
       closeDialog(null);
   }
 
@@ -265,9 +264,9 @@ public class NewResourceDialog extends javax.swing.JDialog {
     private javax.swing.JPanel pnlUnit;
     private javax.swing.JLabel lblUnit;
     private javax.swing.JTextField txtUnit;
-    private javax.swing.JPanel pnlPrefix;
-    private javax.swing.JLabel lblPrefix;
-    private javax.swing.JTextField txtPrefix;
+  //  private javax.swing.JPanel pnlPrefix;
+  //  private javax.swing.JLabel lblPrefix;
+   // private javax.swing.JTextField txtPrefix;
     private javax.swing.JPanel pnlColor;
     private javax.swing.JLabel lblColor;
     private ColorComboBox comboBoxColor;
