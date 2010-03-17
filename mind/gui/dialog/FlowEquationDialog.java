@@ -846,7 +846,12 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
              if(incoef == -1)
                  equation  = equation + "-";
              else if(incoef == 1)
-                 equation = equation +"";
+                 {
+                 if(i == 0)
+                    equation = equation +"";
+                 else
+                     equation = equation +" +";
+                 }
              else if((incoef > 1) && (i != 0))
                  equation = equation + " + "+ incoef + " * ";
              else
