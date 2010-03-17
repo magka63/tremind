@@ -280,7 +280,8 @@ public class FlowRelationDialog extends mind.gui.dialog.FunctionDialog
      */
     private void updateFlowList()
     {
-	String flowLabels[] = c_function.getFlowLabels();
+    // Changed by Nawzad Mardan 20100317
+	String flowLabels[] = c_function.getFlowIDs();
 	String flowData[] = new String[flowLabels.length];
 	int operator;
 	String tmpStr;
