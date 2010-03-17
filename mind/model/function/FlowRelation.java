@@ -4,18 +4,18 @@
  * Martin Hagman <marha189@student.liu.se>
  * Henrik Norin <henno776@student.liu.se>
  * Anna Stjerneby <annst566@student.liu.se>
- * Tim Terlegård <timte878@student.liu.se>
+ * Tim Terlegï¿½rd <timte878@student.liu.se>
  * Johan Trygg <johtr599@student.liu.se>
- * Peter Åstrand <petas096@student.liu.se>
+ * Peter ï¿½strand <petas096@student.liu.se>
  *
  * Copyright 2007:
  * Per Fredriksson <perfr775@student.liu.se>
- * David Karlslätt <davka417@student.liu.se>
+ * David Karlslï¿½tt <davka417@student.liu.se>
  * Tor Knutsson	<torkn754@student.liu.se>
- * Daniel Källming <danka053@student.liu.se>
+ * Daniel Kï¿½llming <danka053@student.liu.se>
  * Ted Palmgren <tedpa175@student.liu.se>
  * Freddie Pintar <frepi150@student.liu.se>
- * Mårten Thurén <marth852@student.liu.se>  *
+ * Mï¿½rten Thurï¿½n <marth852@student.liu.se>  *
  *
  * This file is part of reMIND.
  *
@@ -209,6 +209,21 @@ public class FlowRelation extends NodeFunction implements Cloneable {
 			flows[i] = (String) c_flowLabels.get(i);
 		}
 		return flows;
+	}
+
+// Added by Nawzad Mardan 20100317
+    /**
+	 * Returns an array of strings with all flow labels
+	 *
+	 * @return flow IDs
+	 */
+	public String[] getFlowIDs() {
+		int numFlows = getNumberOfFlows();
+		String flowIDs[] = new String[numFlows];
+		for (int i = 0; i < numFlows; i++) {
+			flowIDs[i] = (String) c_flowIDs.get(i);
+		}
+		return flowIDs;
 	}
 
 	/**
