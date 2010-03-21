@@ -909,4 +909,23 @@ public class FlowDependency
   public boolean isRelatedToFlow(ID flow) {
     return false;
   }
+
+   /* Added by Nawzad Mardan 20100321 at 23.51
+    To solve the bug in the FlowDependency function. If the user add a new FlowDependency function in a node
+    which have several levels of time steps and user enter only the values for the first time steps instead for alls
+    time steps and save the model. If the user try to open the model an errer  occur and the model can not be opened
+    */
+   public void setDetailedDataToRemainedTimesteps(int factor)
+    {
+	//int newsize = oldsize * factor;
+
+	//Copy values from the first time step to new array
+	Vector newTimestepInfo = new Vector(factor,1);
+	TimestepInfo info = (TimestepInfo) c_timesteps.get(0);
+	for(int i = 0; i < factor; i++)
+        {
+		newTimestepInfo.add(new TimestepInfo(info));
+        }
+	c_timesteps = newTimestepInfo;
+    }
 }
