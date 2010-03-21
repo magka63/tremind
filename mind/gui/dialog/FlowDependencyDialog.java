@@ -103,6 +103,10 @@ public class FlowDependencyDialog
 	"therefore these equations could not be saved.\n" +
 	"The upper limit must be bigger than the lower limit.";
 
+    // Added by Nawzad Mardan 20100319
+    private int c_maxTimeSteps = 1;
+    private String c_currentTimestep;
+
     class TimestepInfo
     {
 	// Vector of Integers saying what limits the y=k*x+m holds
@@ -225,6 +229,19 @@ public class FlowDependencyDialog
 	Timesteplevel level = c_gui.getTopTimesteplevel();
 	Timesteplevel thisLevel = c_function.getTimesteplevel();
 	c_timesteplevels = thisLevel.toInt() + 1;
+
+
+    // Added by Nawzad Mardan 20100319
+    NodeControl nodeControl = c_gui.getAllNodes();
+    Timesteplevel tsl2 = nodeControl.getTimesteplevel(c_nodeID);
+    c_currentTimestep  = tsl2.getLabel();
+    Timesteplevel tstl = level;
+    if(tstl.getNextLevel() == null)
+         c_maxTimeSteps = 0;
+    while ((tstl = tstl.getNextLevel()) != null)
+            {
+            c_maxTimeSteps *= tstl.getTimesteps();
+            }
 
 	//Get all timesteplevels
 	tsl = new Timesteplevel[c_timesteplevels];
@@ -631,6 +648,32 @@ public class FlowDependencyDialog
 	c_function.setXIn(c_radXIn.isSelected());
 	c_function.setYIn(c_radYIn.isSelected());
 
+   /* Added by Nawzad Mardan 20100321 at 23.51
+    To solve the bug in the FlowDependency function. If the user add a new FlowDependency function in a node
+    which have several levels of time steps and user enter only the values for the first time steps instead for alls
+    time steps and save the model. If the user try to open the model an errer  occur and the model can not be opened
+    */
+   
+    if(!(c_currentTimestep.equals("TOP")) && (c_maxTimeSteps > 1))
+        {
+        if(c_function.getTimestep()> 1)
+            {
+            boolean dataNotEnterd = false;
+            for(int i = 1; i < c_maxTimeSteps; i++)
+                {
+                if((c_function.getSlope(i) ==0) && (c_function.getOffset(i) == 0) &&
+                    (c_function.getLowerLimit(1) == 0) && (c_function.getUpperLimit(1) == 0) )
+                    {
+                    dataNotEnterd =true;
+                    break;
+                    }
+                }
+            if(dataNotEnterd)
+                 {
+                 c_function.setDetailedDataToRemainedTimesteps(c_maxTimeSteps);
+                 }
+            }
+        }
 	// close the dialog
 	closeDialog(null);
     }
