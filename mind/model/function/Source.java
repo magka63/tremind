@@ -116,7 +116,18 @@ public class Source extends NodeFunction implements Cloneable {
 	 */
 	public Vector getCost() {
 		if (c_cost.size() > 0)
-			return (Vector) c_cost.get(getTimestep() - 1);
+            {
+            try
+              {
+              Vector v = (Vector) c_cost.get(getTimestep() - 1);
+              return v;//((Vector) c_cost.get(timestep - 1));
+              }
+            catch(Exception e)
+              {
+              return null;
+              }
+            }
+			//return (Vector) c_cost.get(getTimestep() - 1);
 
 		return null;
 	}
@@ -139,7 +150,17 @@ public class Source extends NodeFunction implements Cloneable {
 	 */
 	public Vector getCost(int timestep) {
 		if (c_cost.size() > 0)
-			return ((Vector) c_cost.get(timestep - 1));
+            {
+            try
+              {
+              Vector v = (Vector) c_cost.get(timestep - 1);
+              return v;//((Vector) c_cost.get(timestep - 1));
+              }
+            catch(Exception e)
+              {
+              return null;
+              }
+            }
 		else
 			return null;
 	}
@@ -645,7 +666,26 @@ public class Source extends NodeFunction implements Cloneable {
 		c_cost = newCost;
 	}
 
-    // Added by Nawzad Mardan 20100209
+// Added by Nawzad Mardan 20100321
+  /* To solve the bug in the Source function. If the user add a new Source function in a node
+    which have several levels of time steps and user enter only the values for the first time steps instead for alls
+    time steps and save the model. If the user try to open the model an errer  occur and the model can not be opened
+   */
+   public void setDetailedDataToRemainedTimesteps(int factor)
+    {
+	//int newsize = oldsize * factor;
+
+	//Copy values from the first time step to new array
+	Vector newTimestepInfo = new Vector(factor,1);
+	TimestepInfo info = (TimestepInfo) c_cost.get(0);
+	for(int i = 0; i < factor; i++)
+        {
+		newTimestepInfo.add(info.clone());
+        }
+	c_cost = newTimestepInfo;
+    }
+
+   // Added by Nawzad Mardan 20100209
 	public void updateCost(int factor) {
 		int oldsize = c_cost.size();
 		int newsize = oldsize * factor;

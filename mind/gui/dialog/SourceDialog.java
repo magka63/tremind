@@ -166,7 +166,7 @@ public class SourceDialog extends mind.gui.dialog.FunctionDialog {
 		Timesteplevel level = c_eventhandler.getTopTimesteplevel();
 		Timesteplevel thisLevel = c_function.getTimesteplevel();
 
-        // Added by Nawzad Mardan 20100210
+        // Added by Nawzad Mardan 20100221
         NodeControl nodeControl = c_gui.getAllNodes();
         Timesteplevel tsl2 = nodeControl.getTimesteplevel(c_nodeID);
         c_currentTimestep  = tsl2.getLabel();
@@ -603,8 +603,10 @@ public class SourceDialog extends mind.gui.dialog.FunctionDialog {
 		dispose();
 	}
 
-	private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {
-		try {
+	private void btnOkActionPerformed(java.awt.event.ActionEvent evt)
+        {
+		try
+            {
 			float cost = 0;
 			if (tblCostPerUnit.isEditing()) {
 				tblCostPerUnit.getCellEditor().stopCellEditing();
@@ -615,17 +617,42 @@ public class SourceDialog extends mind.gui.dialog.FunctionDialog {
 			Resource resource = (Resource) listResource.getSelectedValue();
 			if (resource != null)
 				c_function.setResource(resource.getID());
+            else
+                {
+                JOptionPane.showMessageDialog(null, "The Resource for Source function is not specified", "Can not optimize ",JOptionPane.WARNING_MESSAGE);
+                return;
+                
+                }
+            //"Resource for Source function in Node "
+			//		+ node + " not specified.\n\n" + "Can not optimize.");
 
 			//Save the values for the selected timestep
 			updateTimestep();
-            /* Added by Nawzad Mardan 20100209 at 23.30 
-            To solve the bug for the source function. If you add a new source function in a node
-            which has several levels of time steps must be taken to add value for
-            each time step, otherwise you can not open model without error
-             */
-            if(!(c_currentTimestep.equals("TOP")))
-                if(!c_function.getCostSize())
-                    c_function.updateCost(c_maxTimeSteps);
+
+  /* Added by Nawzad Mardan 20100321 at 23.51
+    To solve the bug in the Source function. If the user add a new Source function in a node
+    which have several levels of time steps and user enter only the values for the first time steps instead for alls
+    time steps and save the model. If the user try to open the model an errer  occur and the model can not be opened
+    */
+             if(!(c_currentTimestep.equals("TOP")) && (c_maxTimeSteps > 1))
+                {
+                boolean dataNotEnterd = false;
+                for(int i = 2; i <= c_maxTimeSteps; i++)
+                  {
+                 //Vector tempCost =  c_function.getCost(i);
+                  if(c_function.getCost(i) == null)//c_function.getCost(i).isEmpty())
+                    {
+                    dataNotEnterd =true;
+                    break;
+                    }
+                  }
+                if(dataNotEnterd)
+                   {
+                   c_function.setDetailedDataToRemainedTimesteps(c_maxTimeSteps);
+                   }
+                //if(!c_function.getCostSize())
+                  //  c_function.updateCost(c_maxTimeSteps);
+                }
 
 			// close the dialog
 			closeDialog(null);
