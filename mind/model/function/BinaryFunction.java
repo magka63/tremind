@@ -108,6 +108,16 @@ public Vector getFlow() {
   TimestepInfo info = (TimestepInfo) c_timesteps.elementAt(getTimestep() - 1);
   return info.getFlow();
 }
+// Added by Nawzad Mardan 20100321 23.57
+ /**
+ * Get the flows and coefficients from this timestep info
+ */
+ public boolean getFlows(int index)
+   {
+   TimestepInfo info = (TimestepInfo) c_timesteps.elementAt(index);
+   Vector outFlow = info.getFlow();
+   return outFlow.isEmpty();
+   }
 
 public Vector getMin() {
   TimestepInfo info = (TimestepInfo) c_timesteps.elementAt(getTimestep() - 1);
@@ -740,4 +750,23 @@ public int getTimesteps(){
 
       return isRelated;
     }
+  // Added by Nawzad Mardan 20100321  23.58
+  /* Added by Nawzad Mardan 20100321 at 23.51
+    To solve the bug in the Binary function. If the user add a new Binary function in a node
+    which have several levels of time steps and user enter only the values for the first time steps instead for alls
+    time steps and save the model. If the user try to open the model an errer  occur and the model can not be opened
+    */
+   public void setDetailedDataToRemainedTimesteps(int factor)
+    {
+	//int newsize = oldsize * factor;
+
+	 //Copy values from the first time step to new array
+	Vector newTimestepInfo = new Vector(factor,1);
+	TimestepInfo info = (TimestepInfo) c_timesteps.get(0);
+	for(int i = 0; i < factor; i++)
+        {
+		newTimestepInfo.add((TimestepInfo)info.clone());
+        }
+	c_timesteps = newTimestepInfo;
+   }
 }

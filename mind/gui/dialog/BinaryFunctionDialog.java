@@ -118,10 +118,14 @@ public class BinaryFunctionDialog extends mind.gui.dialog.FunctionDialog impleme
       "The maximum value must not be less than the .\n" +
       "minimum value. Please re-enter";
   // Added by Nawzad Mardan 20100317
-  private final String strEquationInformation ="Observe that the variables included below represent"
-          +" the binaries\nfor each flow!";
+  //private final String strEquationInformation ="Observe that the variables included below represent"
+   //       +" the binaries\nfor each flow!";
+  private final String strEquationInformation ="OBS. the variables included below represent"
+          +" the binaries for each flow!";
 
-
+ // Added by Nawzad Mardan 20100221 23.47
+    private int c_maxTimeSteps = 1;
+    private String c_currentTimestep;
   /**
    * This class describes the abstract table model used for the selected flows
    * tables.
@@ -468,6 +472,18 @@ public class BinaryFunctionDialog extends mind.gui.dialog.FunctionDialog impleme
 
     c_maxTimesteps = lvl.getBottomLevel().timestepDifference(null);
 
+     // Added by Nawzad Mardan 20100221
+        NodeControl nodeControl = c_gui.getAllNodes();
+        Timesteplevel tsl2 = nodeControl.getTimesteplevel(c_nodeID);
+        c_currentTimestep  = tsl2.getLabel();
+        Timesteplevel tstl = lvl;
+        if(tstl.getNextLevel() == null)
+            c_maxTimeSteps = 0;
+
+        while ((tstl = tstl.getNextLevel()) != null)
+            {
+            c_maxTimeSteps *= tstl.getTimesteps();
+            }
       /* Load values from function */
     load();
 
@@ -798,11 +814,11 @@ public class BinaryFunctionDialog extends mind.gui.dialog.FunctionDialog impleme
                                                  HORIZONTAL_SCROLLBAR_NEVER);
     scrollAvailFlow.setVerticalScrollBarPolicy(javax.swing.JScrollPane.
                                                VERTICAL_SCROLLBAR_ALWAYS);
-    scrollAvailFlow.setPreferredSize(new java.awt.Dimension(200, 300));
+    scrollAvailFlow.setMinimumSize(new java.awt.Dimension(100, 400));
     gridBagConstraints4 = new java.awt.GridBagConstraints();
     gridBagConstraints4.gridx = 0;
     gridBagConstraints4.gridy = 1;
-    gridBagConstraints4.gridheight = 4;
+    gridBagConstraints4.gridheight = 6;
     gridBagConstraints4.fill = java.awt.GridBagConstraints.BOTH;
     gridBagConstraints4.insets = new java.awt.Insets(0, 0, 0, 5);
     gridBagConstraints4.weightx = 0;
@@ -839,11 +855,11 @@ public class BinaryFunctionDialog extends mind.gui.dialog.FunctionDialog impleme
         HORIZONTAL_SCROLLBAR_NEVER);
     scrollSelectedFlow.setVerticalScrollBarPolicy(javax.swing.JScrollPane.
                                                   VERTICAL_SCROLLBAR_ALWAYS);
-    scrollSelectedFlow.setPreferredSize(new java.awt.Dimension(200, 300));
+    scrollSelectedFlow.setPreferredSize(new java.awt.Dimension(200, 400));
     gridBagConstraints4 = new java.awt.GridBagConstraints();
     gridBagConstraints4.gridx = 2;
     gridBagConstraints4.gridy = 1;
-    gridBagConstraints4.gridheight = 4;
+    gridBagConstraints4.gridheight = 6;
     gridBagConstraints4.fill = java.awt.GridBagConstraints.BOTH;
     gridBagConstraints4.insets = new java.awt.Insets(0, 5, 0, 0);
     gridBagConstraints4.weightx = 0.5;
@@ -873,7 +889,7 @@ public class BinaryFunctionDialog extends mind.gui.dialog.FunctionDialog impleme
     getContentPane().add(pnlFlow, gridBagConstraints1);
 
     /* Storage Panel
-       Added by Jonas S��v */
+       Added by Jonas Sääv */
 
     JPanel pnlRHS = new JPanel();
     pnlRHS.setLayout(new java.awt.GridBagLayout());
@@ -893,7 +909,7 @@ public class BinaryFunctionDialog extends mind.gui.dialog.FunctionDialog impleme
     pnlRHS.add(txtRHSValue, gridBagConstraints1);
 
     gridBagConstraints1.gridx = 0;
-    gridBagConstraints1.gridy = 15;
+    gridBagConstraints1.gridy = 7;
     gridBagConstraints1.gridwidth = 3;
     gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
     gridBagConstraints1.insets = new java.awt.Insets(10, 10, 10, 10);
@@ -902,14 +918,17 @@ public class BinaryFunctionDialog extends mind.gui.dialog.FunctionDialog impleme
     
     // Added by Nawzad Mardan 20100317
    // GridBagConstraints gbc;
-    lblInformation = new javax.swing.JTextArea();
-    lblInformation.setPreferredSize(new java.awt.Dimension(150, 50));
-    lblInformation.setText("                                                            " +
-     "                                   \n"+"     ");
+   // lblInformation = new javax.swing.JTextArea();
+    lblInformation = new JLabel("                                        ");
+    //lblInformation.setPreferredSize(new java.awt.Dimension(150, 50));
+    //lblInformation.setText("                                                            " +
+     //"                                   \n"+"     ");
     //lblInformation.setForeground(Color.GRAY);
    // lblInformation.setBackground(new Color(204,204,204));
-    lblInformation.setFont(new Font("SansSerif", Font.BOLD, 13));
-    lblInformation.setDisabledTextColor(Color.BLUE);
+    lblInformation.setFont(new Font("SansSerif", Font.BOLD, 12));
+   // lblInformation.setDisabledTextColor(Color.BLUE);
+    lblInformation.setBackground(Color.BLUE);
+    lblInformation.setForeground(Color.BLUE);
     pnlInformation = new JPanel();
     pnlInformation.setLayout(new java.awt.GridBagLayout());
 	gridBagConstraints1 = new java.awt.GridBagConstraints();
@@ -917,7 +936,7 @@ public class BinaryFunctionDialog extends mind.gui.dialog.FunctionDialog impleme
 	//gbc.gridwidth = 2;
 	//gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
 	gridBagConstraints1.insets = new java.awt.Insets(5, 5, 0, 0);
-	gridBagConstraints1.anchor = java.awt.GridBagConstraints.WEST;
+	//gridBagConstraints1.anchor = java.awt.GridBagConstraints.WEST;
     pnlInformation.add(lblInformation,gridBagConstraints1);
 
 	gridBagConstraints1 = new java.awt.GridBagConstraints ();
@@ -925,7 +944,7 @@ public class BinaryFunctionDialog extends mind.gui.dialog.FunctionDialog impleme
 	//gbc.weightx = 1.0;
 	gridBagConstraints1.insets = new java.awt.Insets (0, 5, 0, 0);
 	//gbc.anchor = java.awt.GridBagConstraints.NORTHWEST;
-    gridBagConstraints1.gridy = 16;
+    gridBagConstraints1.gridy = 8;
     this.getContentPane().add( pnlInformation, gridBagConstraints1);
 
 
@@ -949,20 +968,26 @@ public class BinaryFunctionDialog extends mind.gui.dialog.FunctionDialog impleme
    // gc.insets = new java.awt.Insets(5, 0, 5, 50);
     //gridBagConstraints3 = new java.awt.GridBagConstraints();
     //gridBagConstraints3.gridx = 0;
-    gridBagConstraints1.gridy = 17;
+    gridBagConstraints3 = new java.awt.GridBagConstraints();
+	//gbc.gridy = 1;
+	//gbc.gridwidth = 2;
+	//gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
+	//gridBagConstraints1.insets = new java.awt.Insets(5, 5, 0, 0);
+	//gridBagConstraints1.anchor = java.awt.GridBagConstraints.WEST;
+    gridBagConstraints3.gridy = 9;
     //gridBagConstraints3.gridwidth = 2;
     //gridBagConstraints3.insets = new java.awt.Insets(0, 0, 10, 5);
     //gridBagConstraints3.anchor = java.awt.GridBagConstraints.HORIZONTAL;
     //gridBagConstraints3.weightx = 1.0;
-    this.getContentPane().add( pnlEquation, gridBagConstraints1);
+    this.getContentPane().add( pnlEquation, gridBagConstraints3);
     /* End Storage Panel */
 
-    gridBagConstraints1 = new java.awt.GridBagConstraints();
-    gridBagConstraints1.gridx = 0;
-    gridBagConstraints1.gridy = 18;
-    gridBagConstraints1.gridwidth = 2;
-    gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
-    getContentPane().add(sep3, gridBagConstraints1);
+    gridBagConstraints4 = new java.awt.GridBagConstraints();
+    gridBagConstraints4.gridx = 0;
+    gridBagConstraints4.gridy = 10;
+    gridBagConstraints4.gridwidth = 2;
+    gridBagConstraints4.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    getContentPane().add(sep3, gridBagConstraints4);
 
     pnlButtons.setLayout(new java.awt.GridBagLayout());
     java.awt.GridBagConstraints gridBagConstraints8;
@@ -991,7 +1016,7 @@ public class BinaryFunctionDialog extends mind.gui.dialog.FunctionDialog impleme
 
     gridBagConstraints1 = new java.awt.GridBagConstraints();
     gridBagConstraints1.gridx = 0;
-    gridBagConstraints1.gridy = 19;
+    gridBagConstraints1.gridy = 11;
     gridBagConstraints1.gridwidth = 2;
     gridBagConstraints1.insets = new java.awt.Insets(10, 10, 10, 10);
     getContentPane().add(pnlButtons, gridBagConstraints1);
@@ -1098,6 +1123,31 @@ public class BinaryFunctionDialog extends mind.gui.dialog.FunctionDialog impleme
     if (!save()) {
       return;
     }
+/* Added by Nawzad Mardan 20100321 at 23.51
+    To solve the bug in the Binary function. If the user add a new Binary function in a node
+    which have several levels of time steps and user enter only the values for the first time steps instead for alls
+    time steps and save the model. If the user try to open the model an errer  occur and the model can not be opened
+    */
+
+    if(!(c_currentTimestep.equals("TOP")) && (c_maxTimeSteps > 1))
+        {
+        if(c_function.getTimesteps()> 1)
+           {
+            boolean dataNotEnterd = false;
+            for(int i = 1; i <c_maxTimeSteps; i++)
+                {
+                if(c_function.getFlows(i))
+                    {
+                    dataNotEnterd =true;
+                    break;
+                    }
+                }
+                if(dataNotEnterd)
+                  {
+                  c_function.setDetailedDataToRemainedTimesteps(c_maxTimeSteps);
+                  }
+           }
+        }
 
     closeDialog(null);
   } //GEN-LAST:event_btnOkActionPerformed
@@ -1139,7 +1189,8 @@ public class BinaryFunctionDialog extends mind.gui.dialog.FunctionDialog impleme
   private javax.swing.JButton btnCancel;
  // Added by Nawzad Mardan 20100308
   private JPanel pnlInformation;
-  private JTextArea lblInformation;
+ // private JTextArea lblInformation;
+  private JLabel lblInformation;
   private JPanel pnlEquation;
   private JLabel lblEquationP1;
   private JLabel lblEquationP2;
@@ -1321,7 +1372,7 @@ public class BinaryFunctionDialog extends mind.gui.dialog.FunctionDialog impleme
         else
             {
             lblEquationP2.setText(getRHS(info.getRHSConstraint()));
-            lblInformation.setDisabledTextColor(Color.BLUE);
+            //lblInformation.setDisabledTextColor(Color.BLUE);
             lblInformation.setText(strEquationInformation);
             }
         if((lblEquationP1.getText().equals(" ")) && (lblEquationP2.getText().equals("")) )
