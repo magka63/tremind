@@ -1,15 +1,18 @@
 /*
  * Copyright 2004:
- * Jonas Sääv <js@acesimulation.com>
+ * Jonas Sï¿½ï¿½v <js@acesimulation.com>
  * 
  * Copyright 2007:
  * Per Fredriksson <perfr775@student.liu.se>
- * David Karlslätt <davka417@student.liu.se>
+ * David Karlslï¿½tt <davka417@student.liu.se>
  * Tor Knutsson	<torkn754@student.liu.se>
- * Daniel Källming <danka053@student.liu.se>
+ * Daniel Kï¿½llming <danka053@student.liu.se>
  * Ted Palmgren <tedpa175@student.liu.se>
  * Freddie Pintar <frepi150@student.liu.se>
- * Mårten Thurén <marth852@student.liu.se>
+ * Mï¿½rten Thurï¿½n <marth852@student.liu.se>
+ *
+ * Copyright 2010
+ * Nawzad Mardan <nawzad.mardan@liu.se>
  *
  * This file is part of reMIND.
  *
@@ -55,7 +58,7 @@ import javax.swing.table.*;
 
 /**
  * A dialog used for handling node batch storage properties.
- * @author  Jonas Sääv
+ * @author  Jonas Sï¿½ï¿½v
  * @author  Per Fredriksson
  * @author 	Tor Knutsson
  * @author  pum7
@@ -83,6 +86,10 @@ public class BatchDialog extends mind.gui.dialog.FunctionDialog implements Focus
     private JTable c_lstSelectedOutflow;
     private SelectedFlowsTableModel c_inFlowsTableModel;
     private SelectedFlowsTableModel c_outFlowsTableModel;
+
+    // Added by Nawzad Mardan 20100322
+    private int c_maxTimeSteps = 1;
+    private String c_currentTimestep;
 
     /* Total and Efficiency panel */
     JPanel pnlInFlowTotalAndEfficiency = new JPanel();
@@ -400,6 +407,19 @@ public class BatchDialog extends mind.gui.dialog.FunctionDialog implements Focus
 
         Timesteplevel lvl = c_gui.getTopTimesteplevel();
         c_maxTimesteps = lvl.getBottomLevel().timestepDifference(null);
+
+        // Added by Nawzad Mardan 20100322
+        NodeControl nodeControl = c_gui.getAllNodes();
+        Timesteplevel tsl2 = nodeControl.getTimesteplevel(c_nodeID);
+        c_currentTimestep  = tsl2.getLabel();
+        Timesteplevel tstl = lvl;
+        if(tstl.getNextLevel() == null)
+            c_maxTimeSteps = 0;
+        while ((tstl = tstl.getNextLevel()) != null)
+            {
+            c_maxTimeSteps *= tstl.getTimesteps();
+            }
+
 
         /* Load values from function */
         load();
@@ -1051,7 +1071,7 @@ public class BatchDialog extends mind.gui.dialog.FunctionDialog implements Focus
         getContentPane().add(pnlCostAtZero, gridBagConstraints1);
 
         /* Storage Panel
-           Added by Jonas Sääv */
+           Added by Jonas Sï¿½ï¿½v */
 
         lblUnit.setHorizontalAlignment(SwingConstants.LEFT);
         lblUnit.setText("n/a");
@@ -1326,6 +1346,32 @@ public class BatchDialog extends mind.gui.dialog.FunctionDialog implements Focus
         if(!save())
         {
             return;
+        }
+
+    /* Added by Nawzad Mardan 20100322 at 21.00
+    To solve the bug in the Batch function. If the user add a new Batch function in a node
+    which have several levels of time steps and user enter only the values for the first time steps instead for alls
+    time steps and save the model. If the user try to open the model an errer  occur and the model can not be opened
+    */
+
+    if(!(c_currentTimestep.equals("TOP")) && (c_maxTimeSteps > 1))
+        {
+        if(c_function.getTimesteps()> 1)
+           {
+            boolean dataNotEnterd = false;
+            for(int i = 1; i <c_maxTimeSteps; i++)
+                {
+                if((c_function.getOutFlow(i)) && (c_function.getInFlow(i)))
+                    {
+                    dataNotEnterd =true;
+                    break;
+                    }
+                }
+                if(dataNotEnterd)
+                  {
+                  c_function.setDetailedDataToRemainedTimesteps(c_maxTimeSteps);
+                  }
+           }
         }
 
         closeDialog(null);
