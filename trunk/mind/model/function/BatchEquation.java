@@ -1,15 +1,15 @@
 /*
  * Copyright 2003:
- * Jonas Sääv <js@acesimulation.com>
+ * Jonas Sï¿½ï¿½v <js@acesimulation.com>
  *
  * Copyright 2007:
  * Per Fredriksson <perfr775@student.liu.se>
- * David Karlslätt <davka417@student.liu.se>
+ * David Karlslï¿½tt <davka417@student.liu.se>
  * Tor Knutsson	<torkn754@student.liu.se>
- * Daniel Källming <danka053@student.liu.se>
+ * Daniel Kï¿½llming <danka053@student.liu.se>
  * Ted Palmgren <tedpa175@student.liu.se>
  * Freddie Pintar <frepi150@student.liu.se>
- * Mårten Thurén <marth852@student.liu.se> 
+ * Mï¿½rten Thurï¿½n <marth852@student.liu.se> 
  * 
  * This file is part of reMIND.
  *
@@ -40,7 +40,7 @@ import java.util.*;
 /**
  * The function class BatchEquation
  *
- * @author Jonas Sääv
+ * @author Jonas Sï¿½ï¿½v
  * @author Freddie Pintar
  * @author Tor Knutsson
  * @version 2007-12-12
@@ -418,7 +418,7 @@ private void stringToID( Vector flowid, Vector flows){
      throws ModelException
  {
 
-/*   Nedanstående taget från "specen":
+/*   Nedanstï¿½ende taget frï¿½n "specen":
 
      FmTi, FnTi, BaNjTitot, Ti = kontinuerliga variabler
      BaNjmin, BaNjmax = koefficienter
@@ -426,13 +426,13 @@ private void stringToID( Vector flowid, Vector flows){
      Ba = batch
      i = tidssteg
      j = nodnummer
-     m = id nummer för flöde
-     n = id nummer för flöde
+     m = id nummer fï¿½r flï¿½de
+     n = id nummer fï¿½r flï¿½de
      min = minimum
      max = maximum
-     x = det tidssteg som batchen från Tidssteg 1 lämnar Nod 1
-     y = det tidssteg som batchen från Tidssteg 2 lämnar Nod 1
-     z = det tidssteg som batchen från Tidssteg i lämnar Nod 1
+     x = det tidssteg som batchen frï¿½n Tidssteg 1 lï¿½mnar Nod 1
+     y = det tidssteg som batchen frï¿½n Tidssteg 2 lï¿½mnar Nod 1
+     z = det tidssteg som batchen frï¿½n Tidssteg i lï¿½mnar Nod 1
      b = batchtid
      q = totalt antal tidssteg
      tot = total
@@ -461,27 +461,27 @@ private void stringToID( Vector flowid, Vector flows){
      Main Storage Equation. Generate only of c_intBatchTime is 1 timestep or
      more, and if timestep <= maxTimesteps - c_intBatchTime
      Example:
-        T1*(F1T1+F2T1+… +FmT1) = (F3Tx+F4Tx+… +FnTx)*Tx     (mainBatchEq)
-        T2*(F1T2+F2T2+… +FmT2) = (F3Ty+F4Ty+… +FnTy)*Ty
+        T1*(F1T1+F2T1+ï¿½ +FmT1) = (F3Tx+F4Tx+ï¿½ +FnTx)*Tx     (mainBatchEq)
+        T2*(F1T2+F2T2+ï¿½ +FmT2) = (F3Ty+F4Ty+ï¿½ +FnTy)*Ty
         .
         .
         .
-        T(q-b)*(F1T(q-b)+F2T(q-b)+… +FmT(q-b)) = (F3Tq+F4Tq+… +FnTq)*Tq
+        T(q-b)*(F1T(q-b)+F2T(q-b)+ï¿½ +FmT(q-b)) = (F3Tq+F4Tq+ï¿½ +FnTq)*Tq
 
 
-     (F1T1+F2T1+… +FmT1)*T1<= BaN1T1*BaN1max             (mainBatchUpperBoundaryEq)
-     (F1T2+F2T2+… +FmT2)*T2<= BaN1T2*BaN1max
+     (F1T1+F2T1+ï¿½ +FmT1)*T1<= BaN1T1*BaN1max             (mainBatchUpperBoundaryEq)
+     (F1T2+F2T2+ï¿½ +FmT2)*T2<= BaN1T2*BaN1max
      .
      .
      .
-     (F1T(q-b)+F2T(q-b)+… +FmT(q-b))*T(q-b)<= BaN1T(q-b)*BaN1max
+     (F1T(q-b)+F2T(q-b)+ï¿½ +FmT(q-b))*T(q-b)<= BaN1T(q-b)*BaN1max
 
-     (F1T1+F2T1+… +FmT1)*T1 >= BaN1T1*BaN1min          (mainBatchLowerBoundaryEq)
-     (F1T2+F2T2+… +FmT2)*T2 >= BaN1T2*BaN1min
+     (F1T1+F2T1+ï¿½ +FmT1)*T1 >= BaN1T1*BaN1min          (mainBatchLowerBoundaryEq)
+     (F1T2+F2T2+ï¿½ +FmT2)*T2 >= BaN1T2*BaN1min
      .
      .
      .
-     (F1T(q-b)+F2T(q-b)+… +FmT(q-b)) *T(q-b) >= BaN1T(q-b)*BaN1min
+     (F1T(q-b)+F2T(q-b)+ï¿½ +FmT(q-b)) *T(q-b) >= BaN1T(q-b)*BaN1min
      */
 
     if ((c_intBatchTime) > 0 && (timestep <= maxTimesteps - c_intBatchTime))
@@ -664,12 +664,12 @@ private void stringToID( Vector flowid, Vector flows){
         /* Integer variable relations
         BaN1T1 = 1
 
-        BaN1T1+ BaN1T2+… +BaN1Tx = 1				(7)
-        BaN1T2+ BaN1T3+… +BaN1Ty = 1
+        BaN1T1+ BaN1T2+ï¿½ +BaN1Tx = 1				(7)
+        BaN1T2+ BaN1T3+ï¿½ +BaN1Ty = 1
          .
          .
          .
-        BaN1T(q-b-b+1)+ BaN1T(q-b-b+2)+… +BaN1T(q-b) = 1  */
+        BaN1T(q-b-b+1)+ BaN1T(q-b-b+2)+ï¿½ +BaN1T(q-b) = 1  */
 
         /* the equation BaN1T1 = 1 */
         intEq = new Equation(node, getID().toString() + "IntRel", 0, Equation.EQUAL);
@@ -701,12 +701,12 @@ private void stringToID( Vector flowid, Vector flows){
         Equation intEq;
 
         /* Integer variable relations
-        BaN1T1+ BaN1T2+… +BaN1Tx <= 1				(4)
-        BaN1T2+ BaN1T3+… +BaN1Ty <= 1
+        BaN1T1+ BaN1T2+ï¿½ +BaN1Tx <= 1				(4)
+        BaN1T2+ BaN1T3+ï¿½ +BaN1Ty <= 1
          .
          .
          .
-        BaN1T(q-b-b+1)+ BaN1T(q-b-b+2)+… +BaN1T(q-b) <= 1  */
+        BaN1T(q-b-b+1)+ BaN1T(q-b-b+2)+ï¿½ +BaN1T(q-b) <= 1  */
         for (int i=1; i <= maxTimesteps - 2*c_intBatchTime + 1; i++) {
 
           /* intEq name example:  N2T3Fu23IntRel  */
@@ -763,7 +763,7 @@ private void stringToID( Vector flowid, Vector flows){
    * time steps. Note that this check doesn't deal with logical errors. E.g. if there exists
    * 10 timesteps the variable BaN1T10 is concidered valid even if it is not logical for this
    * variable to exist.
-   * @author Jonas Sääv
+   * @author Jonas Sï¿½ï¿½v
    * @param timestep the value that needs to be checked
    * @param maxTimesteps maximum number of timesteps
    * @param message the name of the value that needs to be checked, e.g. "timestep" or "step + a - b"
@@ -985,4 +985,45 @@ public boolean isRelatedToFlow(ID theFlow) {
 
     return isRelated;
   }
+
+ /* Added by Nawzad Mardan 20100322 at 21.00
+    To solve the bug in the Batch function. If the user add a new Batch function in a node
+    which have several levels of time steps and user enter only the values for the first time steps instead for alls
+    time steps and save the model. If the user try to open the model an errer  occur and the model can not be opened
+    */
+   public void setDetailedDataToRemainedTimesteps(int factor)
+    {
+	//int newsize = oldsize * factor;
+
+	 //Copy values from the first time step to new array
+	Vector newTimestepInfo = new Vector(factor,1);
+	TimestepInfo info = (TimestepInfo) c_timesteps.get(0);
+	for(int i = 0; i < factor; i++)
+        {
+		newTimestepInfo.add((TimestepInfo)info.clone());
+        }
+	c_timesteps = newTimestepInfo;
+   }
+
+// Added by Nawzad Mardan 20100322
+ /**
+ * Get the flows and coefficients from this timestep info
+ */
+ public boolean getOutFlow(int index)
+   {
+   TimestepInfo info = (TimestepInfo) c_timesteps.elementAt(index);
+   Vector outFlow = info.getOutFlow();
+   return outFlow.isEmpty();
+   }
+
+ // Added by Nawzad Mardan 20100322
+ /**
+ * Get the flows and coefficients from this timestep info
+ */
+ public boolean getInFlow(int index)
+   {
+   TimestepInfo info = (TimestepInfo) c_timesteps.elementAt(index);
+   Vector inFlow = info.getInFlow();
+   return inFlow.isEmpty();
+   }
 }

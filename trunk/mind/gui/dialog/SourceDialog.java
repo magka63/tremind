@@ -216,6 +216,31 @@ public class SourceDialog extends mind.gui.dialog.FunctionDialog {
 		//set table with all labels and all costs with a matching label
 		//only right column is editable
 
+                 /* Added by Nawzad Mardan 20100322 at 22.00
+    To solve the bug in the Source function. If the user add a new Source function in a node
+    which have several levels of time steps and user enter only the values for the first time steps instead for alls
+    time steps and save the model. If the user try to open the model an errer  occur and the model can not be opened
+    */
+             if(!(c_currentTimestep.equals("TOP")) && (c_maxTimeSteps > 1))
+                {
+                boolean dataNotEnterd = false;
+                for(int i = 2; i <= c_maxTimeSteps; i++)
+                  {
+                 //Vector tempCost =  c_function.getCost(i);
+                  if(c_function.getCost(i) == null)//c_function.getCost(i).isEmpty())
+                    {
+                    dataNotEnterd =true;
+                    break;
+                    }
+                  }
+                if(dataNotEnterd)
+                   {
+                   c_function.setDetailedDataToRemainedTimesteps(c_maxTimeSteps);
+                   }
+                //if(!c_function.getCostSize())
+                  //  c_function.updateCost(c_maxTimeSteps);
+                }
+
 		Object[][] data = new Object[n][2];
 
 		Vector costs = c_function.getCost();
@@ -227,6 +252,31 @@ public class SourceDialog extends mind.gui.dialog.FunctionDialog {
 				data[i][1] = new Float(0.0f);
 		}
 
+
+    /* Added by Nawzad Mardan 20100322 at 22.00
+    To solve the bug in the Source function. If the user add a new Source function in a node
+    which have several levels of time steps and user enter only the values for the first time steps instead for alls
+    time steps and save the model. If the user try to open the model an errer  occur and the model can not be opened
+    */
+             if(!(c_currentTimestep.equals("TOP")) && (c_maxTimeSteps > 1))
+                {
+                boolean dataNotEnterd = false;
+                for(int i = 2; i <= c_maxTimeSteps; i++)
+                  {
+                 //Vector tempCost =  c_function.getCost(i);
+                  if(c_function.getCost(i) == null)//c_function.getCost(i).isEmpty())
+                    {
+                    dataNotEnterd =true;
+                    break;
+                    }
+                  }
+                if(dataNotEnterd)
+                   {
+                   c_function.setDetailedDataToRemainedTimesteps(c_maxTimeSteps);
+                   }
+                //if(!c_function.getCostSize())
+                  //  c_function.updateCost(c_maxTimeSteps);
+                }
 		c_myTableModel.setData(data);
 		c_myTableModel.fireTableDataChanged();
 	}
@@ -474,26 +524,36 @@ public class SourceDialog extends mind.gui.dialog.FunctionDialog {
 
 		gridBagConstraints4 = new java.awt.GridBagConstraints();
 		//      gridBagConstraints4.insets = new java.awt.Insets (10, 10, 0, 10);
+                //gridBagConstraints4.insets = new java.awt.Insets(10, 10, 10, 5);
 		gridBagConstraints4.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints4.anchor = GridBagConstraints.CENTER;
 		pnlResource.add(lblTypeResource, gridBagConstraints4);
 
 		listResource = new javax.swing.JList();
-		//      listResource.setPreferredSize (new java.awt.Dimension(10, 50));
-		listResource.addListSelectionListener(new ListSelectionListener() {
+                //listResource.setMinimumSize(new Dimension(150, 100));
+
+		gridBagConstraints4 = new java.awt.GridBagConstraints();
+		gridBagConstraints4.gridx = 0;
+                //gbc.gridx = 1;
+                //gridBagConstraints4.gridy = 0;
+                //gridBagConstraints4.gridwidth = 1;
+                //gridBagConstraints4.weightx = 1.0;
+               // gridBagConstraints4.gridy =5;
+               // gridBagConstraints4.gridheight = 30;//gridBagConstraints4.RELATIVE;
+                //gridBagConstraints4.gridwidth = 30;
+		//      gridBagConstraints4.insets = new java.awt.Insets (4, 10, 9, 10);
+
+		JScrollPane scrollPane = new JScrollPane(listResource);
+		
+                scrollPane.setPreferredSize(new Dimension(135, 100));
+
+                pnlResource.add(scrollPane, gridBagConstraints4);
+
+                listResource.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
 				newResourceSelected();
 			}
 		});
-
-		gridBagConstraints4 = new java.awt.GridBagConstraints();
-		gridBagConstraints4.gridx = 0;
-		//      gridBagConstraints4.insets = new java.awt.Insets (4, 10, 9, 10);
-
-		JScrollPane scrollPane = new JScrollPane(listResource);
-		scrollPane.setPreferredSize(new Dimension(150, 100));
-		pnlResource.add(scrollPane, gridBagConstraints4);
-
 		//New resource button
 		/*
 		 //Do we really want to be able to create resources from inside this dialog?
@@ -515,7 +575,7 @@ public class SourceDialog extends mind.gui.dialog.FunctionDialog {
 
 		gridBagConstraints1 = new java.awt.GridBagConstraints();
 		gridBagConstraints1.gridx = 0;
-		gridBagConstraints1.gridy = 6;
+		gridBagConstraints1.gridy = 5;
 		gridBagConstraints1.insets = new java.awt.Insets(10, 10, 10, 5);
 		getContentPane().add(pnlResource, gridBagConstraints1);
 
@@ -526,7 +586,7 @@ public class SourceDialog extends mind.gui.dialog.FunctionDialog {
 
 		gridBagConstraints1 = new java.awt.GridBagConstraints();
 		gridBagConstraints1.gridx = 1;
-		gridBagConstraints1.gridy = 6;
+		gridBagConstraints1.gridy = 5;
 		gridBagConstraints1.weightx = 1.0;
 		gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints1.insets = new java.awt.Insets(10, 5, 10, 10);
@@ -539,13 +599,12 @@ public class SourceDialog extends mind.gui.dialog.FunctionDialog {
 		c_myTableModel = new MyTableModel();
 		tblCostPerUnit = new JTable(c_myTableModel);
 		//pnlCost.add(tblCostPerUnit);
-
-		tblCostPerUnit
-				.setPreferredScrollableViewportSize(new Dimension(150, 80));
+                //tblCostPerUnit.setSize(new Dimension(10, 10));
+		tblCostPerUnit.setPreferredScrollableViewportSize(new Dimension(135, 100));
 
 		//Create the scroll pane and add the table to it.
 		JScrollPane scrollPane2 = new JScrollPane(tblCostPerUnit);
-
+                scrollPane2.setPreferredSize(new Dimension(135, 100));
 		//Add the scroll pane to this panel.
 		//this.getContentPane().add(scrollPane2);
 		//gridBagConstraints1 = new java.awt.GridBagConstraints();
@@ -595,6 +654,7 @@ public class SourceDialog extends mind.gui.dialog.FunctionDialog {
 		});
 
 		pnlButtons.add(btnCancel);
+               // this.setResizable(false);
 
 	}
 
