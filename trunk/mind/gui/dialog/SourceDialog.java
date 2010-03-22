@@ -216,30 +216,6 @@ public class SourceDialog extends mind.gui.dialog.FunctionDialog {
 		//set table with all labels and all costs with a matching label
 		//only right column is editable
 
-                 /* Added by Nawzad Mardan 20100322 at 22.00
-    To solve the bug in the Source function. If the user add a new Source function in a node
-    which have several levels of time steps and user enter only the values for the first time steps instead for alls
-    time steps and save the model. If the user try to open the model an errer  occur and the model can not be opened
-    */
-             if(!(c_currentTimestep.equals("TOP")) && (c_maxTimeSteps > 1))
-                {
-                boolean dataNotEnterd = false;
-                for(int i = 2; i <= c_maxTimeSteps; i++)
-                  {
-                 //Vector tempCost =  c_function.getCost(i);
-                  if(c_function.getCost(i) == null)//c_function.getCost(i).isEmpty())
-                    {
-                    dataNotEnterd =true;
-                    break;
-                    }
-                  }
-                if(dataNotEnterd)
-                   {
-                   c_function.setDetailedDataToRemainedTimesteps(c_maxTimeSteps);
-                   }
-                //if(!c_function.getCostSize())
-                  //  c_function.updateCost(c_maxTimeSteps);
-                }
 
 		Object[][] data = new Object[n][2];
 
@@ -253,7 +229,7 @@ public class SourceDialog extends mind.gui.dialog.FunctionDialog {
 		}
 
 
-    /* Added by Nawzad Mardan 20100322 at 22.00
+    /* Added by Nawzad Mardan 20100322 at 24.00
     To solve the bug in the Source function. If the user add a new Source function in a node
     which have several levels of time steps and user enter only the values for the first time steps instead for alls
     time steps and save the model. If the user try to open the model an errer  occur and the model can not be opened
@@ -274,8 +250,6 @@ public class SourceDialog extends mind.gui.dialog.FunctionDialog {
                    {
                    c_function.setDetailedDataToRemainedTimesteps(c_maxTimeSteps);
                    }
-                //if(!c_function.getCostSize())
-                  //  c_function.updateCost(c_maxTimeSteps);
                 }
 		c_myTableModel.setData(data);
 		c_myTableModel.fireTableDataChanged();
