@@ -673,7 +673,7 @@ public class SourceDialog extends mind.gui.dialog.FunctionDialog {
                 int numberOfDataNotEnterd = 0;
                 float value, tempValue;
                 value = c_function.getCostValue(0);
-                if(value > 0)
+                if(value != 0)
                     {
                     for(int i = 1; i < c_maxTimeSteps; i++)
                      {
@@ -683,7 +683,7 @@ public class SourceDialog extends mind.gui.dialog.FunctionDialog {
                     }
                 }
 
-                if(numberOfDataNotEnterd > (c_maxTimeSteps/2) )
+                if(numberOfDataNotEnterd >= (c_maxTimeSteps/2) )
                    {
                    c_function.setDetailedDataToRemainedTimesteps(c_maxTimeSteps);
                    }
