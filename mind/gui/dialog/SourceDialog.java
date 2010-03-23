@@ -670,17 +670,20 @@ public class SourceDialog extends mind.gui.dialog.FunctionDialog {
     */
              if(!(c_currentTimestep.equals("TOP")) && (c_maxTimeSteps > 1))
                 {
-                boolean dataNotEnterd = false;
-                for(int i = 2; i <= c_maxTimeSteps; i++)
-                  {
-                 //Vector tempCost =  c_function.getCost(i);
-                  if(c_function.getCost(i) == null)//c_function.getCost(i).isEmpty())
+                int numberOfDataNotEnterd = 0;
+                float value, tempValue;
+                value = c_function.getCostValue(0);
+                if(value > 0)
                     {
-                    dataNotEnterd =true;
-                    break;
+                    for(int i = 1; i < c_maxTimeSteps; i++)
+                     {
+                     tempValue = c_function.getCostValue(i);
+                     if(tempValue== 0)
+                        numberOfDataNotEnterd++;
                     }
-                  }
-                if(dataNotEnterd)
+                }
+
+                if(numberOfDataNotEnterd > (c_maxTimeSteps/2) )
                    {
                    c_function.setDetailedDataToRemainedTimesteps(c_maxTimeSteps);
                    }

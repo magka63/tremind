@@ -685,6 +685,19 @@ public class Source extends NodeFunction implements Cloneable {
 	c_cost = newTimestepInfo;
     }
 
+
+public float getCostValue(int index)
+    {
+    TimestepInfo info = (TimestepInfo)c_cost.get(index);
+    CostTuple tuple ;
+    if(info.size()== 0)
+        return 0;
+    else
+        tuple= (CostTuple)info.get(0);
+
+    return tuple.getValue();
+    }
+
    // Added by Nawzad Mardan 20100209
 	public void updateCost(int factor) {
 		int oldsize = c_cost.size();
