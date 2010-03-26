@@ -106,6 +106,9 @@ public class FlowDependencyDialog
     // Added by Nawzad Mardan 20100319
     private int c_maxTimeSteps = 1;
     private String c_currentTimestep;
+    // Added by Nawzad Mardan 20100325
+    String xInOut = "";
+    String yInOut = "";
 
     class TimestepInfo
     {
@@ -739,6 +742,18 @@ public class FlowDependencyDialog
 	JPanel pnlDrawing = new JPanel();
 	JScrollPane scrollResourceX;
 	JScrollPane scrollResourceY;
+    // Added by Nawzad Mardan 20100325
+    OperatorListener ol  = new OperatorListener();
+    c_radXIn.setActionCommand("Xin");
+    c_radXIn.addActionListener(ol);
+    c_radXOut.setActionCommand("Xout");
+    c_radXOut.addActionListener(ol);
+    c_radYIn.setActionCommand("Yin");
+    c_radYIn.addActionListener(ol);
+    c_radYOut.setActionCommand("Yout");
+    c_radYOut.addActionListener(ol);
+
+    //
 	ButtonGroup groupX = new ButtonGroup();
 	ButtonGroup groupY = new ButtonGroup();
 	groupX.add(c_radXIn);
@@ -748,13 +763,26 @@ public class FlowDependencyDialog
 
 	// setup default of radio buttons
 	if (c_function.isXIn())
+        {
 	    c_radXIn.setSelected(true);
+        xInOut = "(In)";
+        }
 	else
+        {
 	    c_radXOut.setSelected(true);
+        xInOut = "(Out)";
+        }
+
 	if (c_function.isYIn())
+        {
 	    c_radYIn.setSelected(true);
+        yInOut = "(In)";
+        }
 	else
+        {
 	    c_radYOut.setSelected(true);
+        yInOut = "(Out)";
+        }
 
 	// highligh the former selected resources
 	if (c_function.getResourceX() != null) {
@@ -966,8 +994,9 @@ public class FlowDependencyDialog
 	Component offset;
 	JPanel pnlLimit;
 	GridBagConstraints constraints;
-    // Added by Nawzad Mardan 20100305
-    String resouceLable = "";
+    // Added by Nawzad Mardan 20100325
+    String resouceLable1 = "";
+    String resouceLable2 = "";
 
 	c_pnlLimits.removeAll();
 
@@ -1008,8 +1037,8 @@ public class FlowDependencyDialog
         if (listResourceY.getSelectedIndex() != -1)
             {
             Resource resource = (Resource) listResourceY.getSelectedValue();
-            resouceLable = resource.getLabel();
-            lblresY.setText(resouceLable + " = ");
+            resouceLable1 = resource.getLabel();
+            lblresY.setText(resouceLable1 + " = ");
             }
         pnlEquation.add(lblresY);
         // Added by Nawzad Mardan 20100305
@@ -1018,8 +1047,14 @@ public class FlowDependencyDialog
         if (listResourceX.getSelectedIndex() != -1)
             {
             Resource resource = (Resource) listResourceX.getSelectedValue();
-            resouceLable = resource.getLabel();
-            lblresX.setText(" * "+resouceLable +"  + ");
+            resouceLable2 = resource.getLabel();
+            if(resouceLable2.equals(resouceLable1))
+               {
+               lblresX.setText(" * "+resouceLable2 +xInOut+"  + ");
+               lblresY.setText(resouceLable1 + yInOut+" = ");
+               }
+            else
+               lblresX.setText(" * "+resouceLable2 +"  + ");
             }
         pnlEquation.add(lblresX);
 	    pnlEquation.add(offset);
@@ -1110,4 +1145,28 @@ public class FlowDependencyDialog
 				  new NumberField(offset, 8));
 	}
     }
+
+  /**
+     * Called when one of the operator radio buttons is pressed
+     */
+ private class OperatorListener implements ActionListener
+    {
+	public void actionPerformed(ActionEvent e)
+        {
+	    String action = e.getActionCommand();
+        if (action.equals("Xin"))
+            xInOut = "(In)";
+        else if (action.equals("Xout"))
+            xInOut = "(Out)";
+        else if (action.equals("Yout"))
+            yInOut = "(Out)";
+        else if (action.equals("Yin"))
+            yInOut = "(In)";
+
+
+         updateLimitPanel();
+
+        }
+    }
+
 }
