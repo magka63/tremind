@@ -587,15 +587,22 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
 		public void valueDecreased()
 		{
 		    updateTimestep();
+            // Added by Nawzad Mardan 20100326
+            save();
+            updateLable();
+
 		}
 		public void valueIncreased()
 		{
 		    updateTimestep();
+            // Added by Nawzad Mardan 20100326
+            save();
+            updateLable();
 		}
 	    });
 	    spinTSL[i].addFocusListener(new SpinButtonUpdateListener(spinTSL[i]) {
 	    	public void valueUpdated() {
-	    		updateTimestep();	
+	    		updateTimestep();
 	    	}
 	    });
 	    level = level.getNextLevel();
@@ -836,6 +843,7 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
         outflow = flowValues.getFlowOut();
 
         String equation = " ";
+        String tempEquation = "";
         Float o;
         float incoef, outcoef;
         for(int i = 0; i< incoeff.size();i++)
@@ -862,6 +870,8 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
             }
         for(int i = 0; i< outcoeff.size();i++)
             {
+            if(i== 0)
+                tempEquation = equation;
             o  = (Float)outcoeff.elementAt(i);
             outcoef = o.floatValue();
             outcoef = outcoef * -1;
@@ -869,13 +879,16 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
                  equation  = equation + "-";
              else if((outcoef == 1))
                 {
-                 if(i != 0)
-                    equation = equation +"";
-                 else
-                     equation = equation +" +";
+                if(!tempEquation.equals(equation))
+                         equation = equation +" +";
                 }
-            else if((outcoef > 1) && (i == 0))
-                equation = equation +" + "+outcoef + " * ";
+            else if(outcoef > 1)
+                {//&& (i == 0))
+                 if(tempEquation.equals(equation))
+                     equation = equation + outcoef + " * ";
+                 else
+                    equation = equation +" + "+outcoef + " * ";
+                }
              else
                  equation = equation + " "+ outcoef + " * ";
              if(outflow!=null)
@@ -894,6 +907,9 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
         }
 
     }
+
+   // Added by Nawzad Mardan 20100306
+  // To display the equations
   private String getRHS()
   {
    String rhs =" = ";
@@ -910,7 +926,8 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
    return rhs;
 
   }
-
+ // Added by Nawzad Mardan 20100306
+  // To display the equations
  public class MyItemListener implements  ItemListener
     {
     public void itemStateChanged(ItemEvent e)
