@@ -104,6 +104,9 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
     private int c_timesteplevels;//number of levels
     private int c_timestep;//current timestep
     private Timesteplevel c_tsl[];
+    // Added by Nawzad Mardan 20100328 23.00
+    private int c_maxTimeSteps = 1;
+    private String c_currentTimestep;
 
     /**
      * Inner class representing the in flows with coefficients
@@ -228,11 +231,26 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
 	//calculate number of timestepslevels in the function
 	c_timesteplevels = 1;
 	Timesteplevel level = c_eventhandler.getTopTimesteplevel();
+    //Added by Nawzad Mardan 20100328
+    Timesteplevel tstl = level;
 	Timesteplevel thisLevel = c_function.getTimesteplevel();
 	while (level != thisLevel) {
 	    c_timesteplevels++;
 	    level = level.getNextLevel();
 	}
+
+    // Added by Nawzad Mardan 20100328
+    NodeControl nodeControl = c_gui.getAllNodes();
+    Timesteplevel tsl2 = nodeControl.getTimesteplevel(c_nodeID);
+    c_currentTimestep  = tsl2.getLabel();
+    //Timesteplevel tstl = level;
+    if(tstl.getNextLevel() == null)
+            c_maxTimeSteps = 0;
+
+    while ((tstl = tstl.getNextLevel()) != null)
+            {
+            c_maxTimeSteps *= tstl.getTimesteps();
+            }
 	//Get all timesteplevels
 	c_tsl = new Timesteplevel[c_timesteplevels];
 	level = c_eventhandler.getTopTimesteplevel();
@@ -243,6 +261,7 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
 
 	c_timestep = 1;
 	c_function.setTimestep(c_timestep);
+
 
 	initComponents();
     }
@@ -441,11 +460,36 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
    // save();
     }
     private void btnOkActionPerformed(ActionEvent e){
-	save();//current timestep
+	
+    save();//current timestep
 	c_function.setTimestep( 1 );
 	load();//values into flowValues
 	loadTables();// to dialog window
+   /* Added by Nawzad Mardan 20100328 at 23.00
+    To solve the bug in the FlowEquation function. If the user add a new FlowEquation function in a node
+    which have several levels of time steps and user enter only the values for the first time steps instead for alls
+    time steps and save the model. If the user try to open the model an errer  occur and the model can not be opened
+    */
 
+    if(!(c_currentTimestep.equals("TOP")) && (c_maxTimeSteps > 1))
+        {
+        if(c_function.getTimesteps()> 1)
+           {
+            boolean dataNotEnterd = false;
+            for(int i = 1; i <c_maxTimeSteps; i++)
+                {
+                if((c_function.getOutFlow(i)) && (c_function.getInFlow(i)))
+                    {
+                    dataNotEnterd =true;
+                    break;
+                    }
+                }
+                if(dataNotEnterd)
+                  {
+                  c_function.setDetailedDataToRemainedTimesteps(c_maxTimeSteps);
+                  }
+           }
+        }
 	setVisible(false);
 	dispose();
     }
