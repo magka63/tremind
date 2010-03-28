@@ -76,6 +76,7 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
     private JComboBox rshConstraintComboBox;
     private JList lstInFlow;
     private JList lstOutFlow;
+
     private JTable tblIN;
     private JTable tblOUT;
     private JButton btnAddin;
@@ -86,19 +87,19 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
     // Added by Nawzad Mardan 20100306
     private JPanel pnlEquation;
     private JLabel lblEquationP1;
-    private JLabel lblEquationP2;
-    private JLabel lblEquationP3;
     private JButton btnOk;
     private JButton btnCancel;
     private boolean c_coefFieldEmpty;
 
     //the selected flows with coefficients for in and out
-    private FlowEquationValue flowValues;
+    private FlowEquationValue flowValues, temFlowValues;
     private ID	c_nodeID;
     private GUI	c_gui;
     private FlowEquation c_function;
     private EventHandlerClient c_eventhandler;
-
+    // Added by Nawzad Mardan 20100326
+    private JScrollPane scrollInFlowList;
+    private JScrollPane scrollOutFlowList;
     //timestep handling
     private int c_timesteplevels;//number of levels
     private int c_timestep;//current timestep
@@ -404,8 +405,8 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
       // Added by Nawzad Mardan 20100308
     if(c_coefFieldEmpty == false)
         {
+        saveEquationLables();
         updateLable();
-         save();
         }
     }
     private void btnRemoveinActionPerformed(ActionEvent e){
@@ -413,8 +414,9 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
 	tblIN.setValueAt( "", rowNumber, 0);
 	tblIN.setValueAt( "", rowNumber, 1);
     // Added by Nawzad Mardan 20100308
+    saveEquationLables();
     updateLable();
-    save();
+    
     }
     private void btnAddoutActionPerformed(ActionEvent e){
 	Object selectedValue = lstOutFlow.getSelectedValue();
@@ -425,8 +427,8 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
       // Added by Nawzad Mardan 20100308
     if(c_coefFieldEmpty == false)
         {
+        saveEquationLables();
         updateLable();
-         save();
         }
     }
     private void btnRemoveoutActionPerformed(ActionEvent e){
@@ -434,8 +436,9 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
 	tblOUT.setValueAt( "", rowNumber, 0);
 	tblOUT.setValueAt( "", rowNumber, 1);
      // Added by Nawzad Mardan 20100308
+    saveEquationLables();
     updateLable();
-    save();
+   // save();
     }
     private void btnOkActionPerformed(ActionEvent e){
 	save();//current timestep
@@ -447,6 +450,7 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
 	dispose();
     }
     private void btnCancelActionPerformed(ActionEvent e){
+    temFlowValues = flowValues;
 	this.setVisible(false);
 	this.dispose();
     }
@@ -457,17 +461,9 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
     }
     */
     private void initComponents(){
-	JPanel panel1 = new JPanel();
+	//JPanel panel1 = new JPanel();
 	JPanel panel2 = new JPanel();
 	JPanel panel3 = new JPanel();
-	JPanel panel4 = new JPanel();
-	JPanel panel5 = new JPanel();
-	JPanel panel6 = new JPanel();
-	JPanel panel7 = new JPanel();
-	JPanel panel8 = new JPanel();
-	JPanel panel9 = new JPanel();
-	JPanel panel10 = new JPanel();
-	JPanel panel11 = new JPanel();
 	JPanel panel12 = new JPanel();
 	JPanel panel13 = new JPanel();
 	JSeparator sep1 = new JSeparator();
@@ -475,6 +471,12 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
 	JSeparator sep3 = new JSeparator();
 	JSeparator sep4 = new JSeparator();
 	JSeparator sep5 = new JSeparator();
+    // Added by Nawzad Mardan 2030326
+    JPanel   pnlInFlow = new javax.swing.JPanel();
+    pnlInFlow.setLayout(new java.awt.GridBagLayout());
+    JPanel   pnlOutFlow = new javax.swing.JPanel();
+    pnlOutFlow.setLayout(new java.awt.GridBagLayout());
+    java.awt.GridBagConstraints gridBagConstraints4;
 	//	panel3.setLayout( new java.awt.GridBagLayout());
 
 	//Main timestep panel
@@ -496,7 +498,7 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
     // Added by Nawzad Mardan 20100306
     txtRHSValue.addActionListener (new java.awt.event.ActionListener () {
 		public void actionPerformed (java.awt.event.ActionEvent evt) {
-		    save();
+		   saveEquationLables();
             updateLable();
 		}
 	    });
@@ -516,7 +518,19 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
 	String[] outFlowString = convertToString(outFlow);
 
 	lstInFlow = new JList(inFlowString);
+    scrollInFlowList = new JScrollPane(lstInFlow);
+    scrollInFlowList.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.
+                                                 HORIZONTAL_SCROLLBAR_NEVER);
+    scrollInFlowList.setVerticalScrollBarPolicy(javax.swing.JScrollPane.
+                                               VERTICAL_SCROLLBAR_ALWAYS);
+    scrollInFlowList.setPreferredSize(new Dimension(80, 110));
 	lstOutFlow = new JList(outFlowString);
+    scrollOutFlowList = new JScrollPane(lstOutFlow);
+    scrollOutFlowList.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.
+                                                 HORIZONTAL_SCROLLBAR_NEVER);
+    scrollOutFlowList.setVerticalScrollBarPolicy(javax.swing.JScrollPane.
+                                               VERTICAL_SCROLLBAR_ALWAYS);
+    scrollOutFlowList.setPreferredSize(new Dimension(80, 110));
 	String[] columnnames = { "flow", "coeff" };
 	tblIN = new JTable( new Object[TABLE_HEIGHT][2], columnnames );
 	tblOUT = new JTable( new Object[TABLE_HEIGHT][2], columnnames);
@@ -524,22 +538,31 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
     tblOUT.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
         public void valueChanged(ListSelectionEvent event) {
 
-            save();
+           saveEquationLables();
             updateLable();
             }
     });
 	tblIN.getSelectionModel().addListSelectionListener(new ListSelectionListener(){ 
         public void valueChanged(ListSelectionEvent event) {
             
-            save();
+          saveEquationLables();
             updateLable();
             }   
     });
     loadTables();
 	JScrollPane scrollpane1 = new JScrollPane(tblIN);
-	tblIN.setPreferredScrollableViewportSize(new Dimension(100,120));
+    scrollpane1.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.
+                                                 HORIZONTAL_SCROLLBAR_NEVER);
+    scrollpane1.setVerticalScrollBarPolicy(javax.swing.JScrollPane.
+                                               VERTICAL_SCROLLBAR_ALWAYS);
+
+	tblIN.setPreferredScrollableViewportSize(new Dimension(110,80));
 	JScrollPane scrollpane2 = new JScrollPane(tblOUT);
-	tblOUT.setPreferredScrollableViewportSize( new Dimension(100,120));
+    scrollpane2.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.
+                                                 HORIZONTAL_SCROLLBAR_NEVER);
+    scrollpane2.setVerticalScrollBarPolicy(javax.swing.JScrollPane.
+                                               VERTICAL_SCROLLBAR_ALWAYS);
+	tblOUT.setPreferredScrollableViewportSize( new Dimension(110,80));
 	btnAddin = new JButton("=>");
 	btnRemovein = new JButton("<=");
 	btnAddout = new JButton("=>");
@@ -553,60 +576,22 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
 	level = c_eventhandler.getTopTimesteplevel();
 
 	//add label
-	GridBagConstraints gridBagConstraints1 = new java.awt.GridBagConstraints();
+    GridBagConstraints gridBagConstraints1;
+	gridBagConstraints1 = new java.awt.GridBagConstraints();
 	gridBagConstraints1.gridx = 0;
 	gridBagConstraints1.gridy = 0;
+	gridBagConstraints1.gridwidth = 2;
+    gridBagConstraints1.weightx = 1.0;
+	//constraints.fill = GridBagConstraints.HORIZONTAL;
+	gridBagConstraints1.insets = new java.awt.Insets (0, 0, 10, 5);
+	gridBagConstraints1.anchor = java.awt.GridBagConstraints.NORTHWEST;
 	panel3.add(lblTimestep, gridBagConstraints1);
+
+
+	//panel3.add(lblTimestep, gridBagConstraints1);
 	//panel3.add(lblTimestep);
 
-	for(int i=0; i<c_timesteplevels; i++){
 
-	    //Add timestep labels
-
-	    gridBagConstraints1.gridx = 0;
-	    gridBagConstraints1.gridy = i + 1;
-	    gridBagConstraints1.anchor = java.awt.GridBagConstraints.NORTHWEST;
-
-	    lblTSL[i] = new javax.swing.JLabel();
-	    lblTSL[i].setText(level.getLabel());
-	    panel3.add(lblTSL[i],gridBagConstraints1);
-
-	    //Add timestep spinbuttons
-	    gridBagConstraints1 = new java.awt.GridBagConstraints();
-	    gridBagConstraints1.gridx = 1;
-	    gridBagConstraints1.gridy = i + 1;
-	    gridBagConstraints1.insets = new java.awt.Insets (0, 15, 0, 0);
-	    gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
-	    gridBagConstraints1.weightx = 1.0;
-
-	    spinTSL[i] = new SpinButton(1,level.getMaxTimesteps(),1,1);
-	    panel3.add(spinTSL[i],gridBagConstraints1);
-
-	    //final int button = i;
-	    spinTSL[i].addListener(new SpinButtonListener() {
-		public void valueDecreased()
-		{
-		    updateTimestep();
-            // Added by Nawzad Mardan 20100326
-            save();
-            updateLable();
-
-		}
-		public void valueIncreased()
-		{
-		    updateTimestep();
-            // Added by Nawzad Mardan 20100326
-            save();
-            updateLable();
-		}
-	    });
-	    spinTSL[i].addFocusListener(new SpinButtonUpdateListener(spinTSL[i]) {
-	    	public void valueUpdated() {
-	    		updateTimestep();
-	    	}
-	    });
-	    level = level.getNextLevel();
-	}
 
 
 	//add button listeners
@@ -643,108 +628,308 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
 
 
 	//add components using nested panels and java.awt.GridBagLayout
-	panel1.add(lblDescription);
-	panel2.add(lblLabel);
-	panel2.add(txtLabel);
-	//panel3.add(lblTimestep);
-	//panel3.add(lblCurrentTimestep);
-	//panel3.add(spinbutton);
-	//add a label and a spinbutton for each timestep
 
-	panel6.setLayout(new BorderLayout());
-	panel7.setLayout(new BorderLayout());
-	panel8.setLayout(new BorderLayout());
-	panel6.add(lblInFlow, BorderLayout.NORTH);
-	panel6.add(lstInFlow, BorderLayout.CENTER);
-	panel7.add(btnAddin, BorderLayout.CENTER);
-	panel7.add(btnRemovein, BorderLayout.SOUTH);
-	panel8.add(lblIN, BorderLayout.NORTH);
-	panel8.add(scrollpane1, BorderLayout.CENTER);
-	panel4.add(panel6);
-	panel4.add(panel7);
-	panel4.add(panel8);
-	panel9.setLayout(new BorderLayout());
-	panel10.setLayout(new BorderLayout());
-	panel11.setLayout(new BorderLayout());
-	panel9.add(lblOutFlow, BorderLayout.NORTH);
-	panel9.add(lstOutFlow, BorderLayout.CENTER);
-	panel10.add(btnAddout, BorderLayout.CENTER);
-	panel10.add(btnRemoveout, BorderLayout.SOUTH);
-	panel11.add(lblOUT, BorderLayout.NORTH);
-	panel11.add(scrollpane2, BorderLayout.CENTER);
-	panel5.add(panel9);
-	panel5.add(panel10);
-	panel5.add(panel11);
-	panel12.add(btnOk);
-	panel12.add(btnCancel);
-	panel13.add(lblRHSValue);
-    panel13.add(rshConstraintComboBox);
-	panel13.add(txtRHSValue);
+    GridBagConstraints gridBagConstraints5 ;
+        /*  panel1.setLayout(new GridBagLayout());
+    
+    
+    gridBagConstraints5 = new GridBagConstraints ();
+	//gridBagConstraints5.insets = new java.awt.Insets (10, 10, 10, 10);
+	gridBagConstraints5.anchor = java.awt.GridBagConstraints.WEST;
+	panel1.add (lblDescription, gridBagConstraints5);*/
+
+    panel2.setLayout(new GridBagLayout());
+    
+    gridBagConstraints5 = new GridBagConstraints ();
+	//gridBagConstraints5.insets = new java.awt.Insets (10, 10, 10, 10);
+	gridBagConstraints5.anchor = java.awt.GridBagConstraints.WEST;
+	panel2.add (lblLabel, gridBagConstraints5);
+	gridBagConstraints5 = new GridBagConstraints ();
+	gridBagConstraints5.fill = java.awt.GridBagConstraints.HORIZONTAL;
+	gridBagConstraints5.insets = new Insets (0, 10, 0, 0);
+	gridBagConstraints5.anchor = java.awt.GridBagConstraints.WEST;
+	gridBagConstraints5.weightx = 1.0;
+	panel2.add (txtLabel, gridBagConstraints5);
+    // Added By Nawzad Mardan 20100326
+    gridBagConstraints4 = new java.awt.GridBagConstraints();
+    gridBagConstraints4.gridx = 0;
+    gridBagConstraints4.gridy = 0;
+    pnlInFlow.add(lblInFlow, gridBagConstraints4);
+
+    gridBagConstraints4 = new java.awt.GridBagConstraints();
+    gridBagConstraints4.gridx = 2;
+    gridBagConstraints4.gridy = 0;
+    pnlInFlow.add(lblIN, gridBagConstraints4);
+
+    gridBagConstraints4 = new java.awt.GridBagConstraints();
+    gridBagConstraints4.gridx = 0;
+    gridBagConstraints4.gridy = 1;
+    gridBagConstraints4.gridheight = 6;
+    gridBagConstraints4.fill = java.awt.GridBagConstraints.BOTH;
+    //gridBagConstraints4.insets = new java.awt.Insets(0, 0, 0, 5);
+    gridBagConstraints4.weightx = 0;
+    gridBagConstraints4.weighty = 0.5;  // h�r!!!
+    pnlInFlow.add(scrollInFlowList, gridBagConstraints4);
+	//panel6.add(lblInFlow, BorderLayout.NORTH);
+	//panel6.add(scrollInFlowList, BorderLayout.CENTER);
+    gridBagConstraints4 = new java.awt.GridBagConstraints();
+    gridBagConstraints4.gridx = 1;
+    gridBagConstraints4.gridy = 2;
+    gridBagConstraints4.insets = new java.awt.Insets(30, 0, 0, 0);
+    pnlInFlow.add(btnAddin, gridBagConstraints4);
+	//panel7.add(btnAddin, BorderLayout.CENTER);
+    gridBagConstraints4 = new java.awt.GridBagConstraints();
+    gridBagConstraints4.gridx = 1;
+    gridBagConstraints4.gridy = 3;
+    gridBagConstraints4.insets = new java.awt.Insets(5, 0, 0, 0);
+    pnlInFlow.add(btnRemovein, gridBagConstraints4);
+	//panel7.add(btnRemovein, BorderLayout.SOUTH);
+	//panel8.add(lblIN, BorderLayout.NORTH);
+    gridBagConstraints4 = new java.awt.GridBagConstraints();
+    gridBagConstraints4.gridx = 2;
+    gridBagConstraints4.gridy = 1;
+    gridBagConstraints4.gridheight = 6;
+    gridBagConstraints4.fill = java.awt.GridBagConstraints.BOTH;
+    //gridBagConstraints4.insets = new java.awt.Insets(0, 5, 0, 0);
+    gridBagConstraints4.weightx = 0;
+    gridBagConstraints4.weighty = 0.5;
+    pnlInFlow.add(scrollpane1, gridBagConstraints4);
+	//panel8.add(scrollpane1, BorderLayout.CENTER);
+	//panel4.add(panel6);
+	//panel4.add(panel7);
+	//panel4.add(panel8);
+	// Added By Nawzad Mardan 20100326
+    gridBagConstraints4 = new java.awt.GridBagConstraints();
+    gridBagConstraints4.gridx = 0;
+    gridBagConstraints4.gridy = 0;
+    pnlOutFlow.add(lblOutFlow, gridBagConstraints4);
+
+    gridBagConstraints4 = new java.awt.GridBagConstraints();
+    gridBagConstraints4.gridx = 2;
+    gridBagConstraints4.gridy = 0;
+    pnlOutFlow.add(lblOUT, gridBagConstraints4);
+
+    gridBagConstraints4 = new java.awt.GridBagConstraints();
+    gridBagConstraints4.gridx = 0;
+    gridBagConstraints4.gridy = 1;
+    gridBagConstraints4.gridheight = 6;
+    gridBagConstraints4.fill = java.awt.GridBagConstraints.BOTH;
+    gridBagConstraints4.insets = new java.awt.Insets(0, 0, 0, 5);
+    gridBagConstraints4.weightx = 0;
+    gridBagConstraints4.weighty = 0.5;  // h�r!!!
+    pnlOutFlow.add(scrollOutFlowList, gridBagConstraints4);
+	//panel6.add(lblInFlow, BorderLayout.NORTH);
+	//panel6.add(scrollInFlowList, BorderLayout.CENTER);
+    gridBagConstraints4 = new java.awt.GridBagConstraints();
+    gridBagConstraints4.gridx = 1;
+    gridBagConstraints4.gridy = 2;
+    gridBagConstraints4.insets = new java.awt.Insets(30, 0, 0, 0);
+    pnlOutFlow.add(btnAddout, gridBagConstraints4);
+	//panel7.add(btnAddin, BorderLayout.CENTER);
+    gridBagConstraints4 = new java.awt.GridBagConstraints();
+    gridBagConstraints4.gridx = 1;
+    gridBagConstraints4.gridy = 3;
+    gridBagConstraints4.insets = new java.awt.Insets(5, 0, 0, 0);
+    pnlOutFlow.add(btnRemoveout, gridBagConstraints4);
+	//panel7.add(btnRemovein, BorderLayout.SOUTH);
+	//panel8.add(lblIN, BorderLayout.NORTH);
+    gridBagConstraints4 = new java.awt.GridBagConstraints();
+    gridBagConstraints4.gridx = 2;
+    gridBagConstraints4.gridy = 1;
+    gridBagConstraints4.gridheight = 6;
+    gridBagConstraints4.fill = java.awt.GridBagConstraints.BOTH;
+    //gridBagConstraints4.insets = new java.awt.Insets(0, 5, 0, 0);
+    gridBagConstraints4.weightx = 0;
+    gridBagConstraints4.weighty = 0.5;
+    pnlOutFlow.add(scrollpane2, gridBagConstraints4);
+
+    gridBagConstraints4 = new java.awt.GridBagConstraints();
+    gridBagConstraints4.insets = new java.awt.Insets(0, 0, 0, 5);
+    panel12.add(btnOk, gridBagConstraints4);
+
+	gridBagConstraints4 = new java.awt.GridBagConstraints();
+    gridBagConstraints4.insets = new java.awt.Insets(0, 5, 0, 0);
+    panel12.add(btnCancel, gridBagConstraints4);
+
+    panel13.setLayout(new java.awt.GridBagLayout());
+    gridBagConstraints1 = new java.awt.GridBagConstraints();
+    gridBagConstraints1.gridx = 0;
+    gridBagConstraints1.gridy = 0;
+    gridBagConstraints1.gridwidth = 1;
+    panel13.add(lblRHSValue, gridBagConstraints1);
+
+    gridBagConstraints1.gridx = 1;
+    panel13.add(rshConstraintComboBox, gridBagConstraints1);
+
+    gridBagConstraints1.gridx = 2;
+    gridBagConstraints1.weightx = 30;
+    gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints1.insets = new java.awt.Insets(0, 5, 0, 0);
+    panel13.add(txtRHSValue, gridBagConstraints1);
+
+
+	//panel13.add(lblRHSValue);
+    //panel13.add(rshConstraintComboBox);
+	//panel13.add(txtRHSValue);
 	GridBagLayout gridbag = new GridBagLayout();
 	GridBagConstraints gc = new GridBagConstraints();
 	this.getContentPane().setLayout( gridbag);
-	gc.gridy = 0;
-	this.getContentPane().add( panel1, gc);
-	gc.gridy = 1;
+	//gc.gridy = 0;
+    gridBagConstraints5 = new java.awt.GridBagConstraints ();
+	gridBagConstraints5.gridx = 0;
+	gridBagConstraints5.gridy = 0;
+	gridBagConstraints5.gridwidth = 2;
+	gridBagConstraints5.fill = java.awt.GridBagConstraints.HORIZONTAL;
+	gridBagConstraints5.insets = new java.awt.Insets(10, 10, 10, 10);
+	gridBagConstraints5.anchor = java.awt.GridBagConstraints.WEST;
+	getContentPane().add(lblDescription, gridBagConstraints5);
+	//this.getContentPane().add( panel1, gc);
+	gc = new GridBagConstraints();
+    gc.gridy = 1;
 	gc.fill = java.awt.GridBagConstraints.HORIZONTAL;
 	this.getContentPane().add( sep1, gc);
-	gc.gridy = 2;
-	this.getContentPane().add( panel2, gc);
+	//gc.gridy = 2;
+	gridBagConstraints5 = new java.awt.GridBagConstraints ();
+	gridBagConstraints5.insets = new java.awt.Insets (10, 10, 10, 10);
+	gridBagConstraints5.gridx = 0;
+	gridBagConstraints5.gridy = 2;
+	gridBagConstraints5.gridwidth = 2;
+	gridBagConstraints5.fill = java.awt.GridBagConstraints.HORIZONTAL;
+	gridBagConstraints5.insets = new java.awt.Insets (10, 10, 10, 10);
+	gridBagConstraints5.weightx = 1.0;
+	getContentPane ().add (panel2, gridBagConstraints5);
+    //this.getContentPane().add( panel2, gc);
+    gc = new GridBagConstraints();
 	gc.gridy = 3;
 	this.getContentPane().add( sep2, gc);
 	//gc.gridy = 4;
 	//this.getContentPane().add( panel3, gc);
-	gridBagConstraints1 = new java.awt.GridBagConstraints();
+	//Main timestep panel
+	gridBagConstraints1 = new GridBagConstraints();
 	gridBagConstraints1.gridx = 0;
 	gridBagConstraints1.gridy = 4;
-	gridBagConstraints1.insets = new java.awt.Insets(30, 25, 0, 20);
-	gridBagConstraints1.anchor = java.awt.GridBagConstraints.NORTHWEST;
+	//	constraints.weighty = 1.0;
+	gridBagConstraints1.fill = GridBagConstraints.VERTICAL;
+	gridBagConstraints1.insets = new Insets(0, 25, 0, 20);
+	gridBagConstraints1.anchor = GridBagConstraints.NORTHWEST;
 	getContentPane().add(panel3, gridBagConstraints1);
 
-	gc.gridy = 5;
-	this.getContentPane().add( panel4, gc);
-	gc.gridy = 6;
-	this.getContentPane().add( panel5, gc);
+    	for(int i=0; i<c_timesteplevels; i++){
+
+	    //Add timestep labels
+        gridBagConstraints1 = new java.awt.GridBagConstraints();
+	    gridBagConstraints1.gridx = 0;
+	    gridBagConstraints1.gridy = i + 1;
+	    gridBagConstraints1.anchor = java.awt.GridBagConstraints.NORTHWEST;
+
+	    lblTSL[i] = new javax.swing.JLabel();
+	    lblTSL[i].setText(level.getLabel());
+	    panel3.add(lblTSL[i],gridBagConstraints1);
+
+	    //Add timestep spinbuttons
+	    gridBagConstraints1 = new java.awt.GridBagConstraints();
+	    gridBagConstraints1.gridx = 1;
+	    gridBagConstraints1.gridy = i + 1;
+	    gridBagConstraints1.insets = new java.awt.Insets (0, 15, 0, 0);
+	    gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
+	    gridBagConstraints1.weightx = 1.0;
+
+	    spinTSL[i] = new SpinButton(1,level.getMaxTimesteps(),1,1);
+	    panel3.add(spinTSL[i],gridBagConstraints1);
+
+	    //final int button = i;
+	    spinTSL[i].addListener(new SpinButtonListener() {
+		public void valueDecreased()
+		{
+		    updateTimestep();
+            // Added by Nawzad Mardan 20100326
+          saveEquationLables();
+            updateLable();
+
+		}
+		public void valueIncreased()
+		{
+		    updateTimestep();
+            // Added by Nawzad Mardan 20100326
+          saveEquationLables();
+            updateLable();
+		}
+	    });
+	    spinTSL[i].addFocusListener(new SpinButtonUpdateListener(spinTSL[i]) {
+	    	public void valueUpdated() {
+	    		updateTimestep();
+	    	}
+	    });
+	    level = level.getNextLevel();
+	}
+	//getContentPane().add(panel3, gridBagConstraints1);
+    gridBagConstraints1 = new java.awt.GridBagConstraints();
+    gridBagConstraints1.gridx = 0;
+    gridBagConstraints1.gridy = 5;
+    gridBagConstraints1.gridwidth = 2;
+    gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH; // h�r!!!
+    gridBagConstraints1.insets = new java.awt.Insets(10, 10, 10, 10);
+    gridBagConstraints1.weightx = 1.0;
+    gridBagConstraints1.weighty = 0.5;
+    //  pnlInFlow.setBorder(BorderFactory.createTitledBorder("Title is here"));
+    getContentPane().add( pnlInFlow, gridBagConstraints1);
+   
+    gridBagConstraints1 = new java.awt.GridBagConstraints();
+    gridBagConstraints1.gridx = 0;
+    gridBagConstraints1.gridy = 6;
+    gridBagConstraints1.gridwidth = 2;
+    gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH; // h�r!!!
+    gridBagConstraints1.insets = new java.awt.Insets(10, 10, 10, 10);
+    gridBagConstraints1.weightx = 1.0;
+    gridBagConstraints1.weighty = 0.5;
+    getContentPane().add( pnlOutFlow, gridBagConstraints1);
+  
+    gc = new GridBagConstraints();
 	gc.gridy = 7;
 	this.getContentPane().add( sep4, gc);
-	gc.gridy = 8;
-    //gc = new GridBagConstraints();
-    gc.insets = new java.awt.Insets(0, 0, 5, 50);
-   // new java.awt.Insets(WIDTH, WIDTH, WIDTH, WIDTH)
-	//gc.anchor = java.awt.GridBagConstraints.NORTHWEST;
-	this.getContentPane().add( panel13, gc);
+    
+    gridBagConstraints1 = new GridBagConstraints();
+    gridBagConstraints1.gridx = 0;
+    gridBagConstraints1.gridy = 8;
+    gridBagConstraints1.gridwidth = 3;
+    gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints1.insets = new java.awt.Insets(10, 10, 10, 10);
+    getContentPane().add(panel13, gridBagConstraints1);
+    gc = new GridBagConstraints();
 	gc.gridy = 9;
 
 	// Added by Nawzad Mardan 20100307
     lblEquationP1 = new JLabel("");
-    lblEquationP2 = new JLabel("");
-    lblEquationP3 = new JLabel("");
-    lblEquationP1.setFont(new Font("SansSerif", Font.ITALIC, 13));
+    lblEquationP1.setFont(new Font("SansSerif", Font.BOLD, 12));
     lblEquationP1.setBackground(Color.BLUE);
     lblEquationP1.setForeground(Color.BLUE);
-    lblEquationP2.setFont(new Font("SansSerif", Font.ITALIC, 13));
-    lblEquationP2.setBackground(Color.BLUE);
-    lblEquationP2.setForeground(Color.BLUE);
-    lblEquationP3.setFont(new Font("SansSerif", Font.ITALIC, 13));
-    lblEquationP3.setBackground(Color.BLUE);
-    lblEquationP3.setForeground(Color.BLUE);
     updateLable();
     pnlEquation = new JPanel();
     pnlEquation.add(lblEquationP1);
-    pnlEquation.add(lblEquationP2);
-    pnlEquation.add(lblEquationP3);
-    gc.insets = new java.awt.Insets(5, 0, 5, 50);
+ 
+    //gc.insets = new java.awt.Insets(5, 0, 5, 50);
     this.getContentPane().add( pnlEquation, gc);
-    gc.gridy = 10;
-    gc.insets = new java.awt.Insets(5, 0, 5, 0);
+
+   /* gridBagConstraints1 = new java.awt.GridBagConstraints ();
+    gridBagConstraints1.gridx = 0;
+    gridBagConstraints1.gridwidth = 1;
+    gridBagConstraints1.gridy = 10;
+    gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints1.insets = new java.awt.Insets(0, 0, 0, 0);
+    this.getContentPane().add( sep5, gridBagConstraints1);
+*/
+    gridBagConstraints1 = new java.awt.GridBagConstraints();
+    //gridBagConstraints1.gridx = 0;
+    gridBagConstraints1.gridy = 11;
+    gridBagConstraints1.gridwidth = 2;
+    gridBagConstraints1.insets = new java.awt.Insets(2, 10, 5, 10);
+    getContentPane().add(panel12, gridBagConstraints1);
     //gc = new GridBagConstraints();
-    this.getContentPane().add( sep5, gc);
-	gc.gridy = 11;
-	this.getContentPane().add( panel12, gc);
+	
 	//show this dialog window and commit the layout
 	//this.show(); done by parent
 	this.pack();
-    this.setResizable(false);
+    //this.setResizable(false);
 
     }
     /*
@@ -836,14 +1021,41 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
     {
     if(flowValues!=null)
         {
+        //FlowEquationValue  temFlowValues ;//= new FlowEquationValue() ;
+        if( temFlowValues == null)
+            {
+            temFlowValues = new FlowEquationValue();
+            Vector incoeff ,inflow, outcoeff, outflow;
+            incoeff = flowValues.getCoeffIn();
+            for(int i = 0; i< incoeff.size();i++)
+                {
+                temFlowValues.c_coeffIn.add(incoeff.elementAt(i));
+                }
+            outcoeff = flowValues.getCoeffOut();
+            for(int i = 0; i< outcoeff.size();i++)
+                {
+                temFlowValues.c_coeffOut.add(outcoeff.elementAt(i));
+                }
+            temFlowValues.c_equationvalue = flowValues.getEquationValue();
+            inflow = flowValues.getFlowIn();
+            for(int i = 0; i< inflow.size();i++)
+                {
+                temFlowValues.c_flowIn.add(inflow.elementAt(i));
+                }
+            outflow = flowValues.getFlowOut();
+            for(int i = 0; i< outflow.size();i++)
+                {
+                temFlowValues.c_flowOut.add(outflow.elementAt(i));
+                }
+            
+            }
         Vector incoeff ,inflow, outcoeff, outflow;
-        incoeff= flowValues.getCoeffIn();
-        inflow = flowValues.getFlowIn();
-        outcoeff = flowValues.getCoeffOut();
-        outflow = flowValues.getFlowOut();
+        incoeff= temFlowValues.getCoeffIn();
+        inflow = temFlowValues.getFlowIn();
+        outcoeff = temFlowValues.getCoeffOut();
+        outflow = temFlowValues.getFlowOut();
 
         String equation = " ";
-        String tempEquation = "";
         Float o;
         float incoef, outcoef;
         for(int i = 0; i< incoeff.size();i++)
@@ -870,8 +1082,6 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
             }
         for(int i = 0; i< outcoeff.size();i++)
             {
-            if(i== 0)
-                tempEquation = equation;
             o  = (Float)outcoeff.elementAt(i);
             outcoef = o.floatValue();
             outcoef = outcoef * -1;
@@ -879,12 +1089,12 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
                  equation  = equation + "-";
              else if((outcoef == 1))
                 {
-                if(!tempEquation.equals(equation))
+                if(!equation.equals(" "))
                          equation = equation +" +";
                 }
             else if(outcoef > 1)
                 {//&& (i == 0))
-                 if(tempEquation.equals(equation))
+                 if(equation.equals(" "))
                      equation = equation + outcoef + " * ";
                  else
                     equation = equation +" + "+outcoef + " * ";
@@ -895,15 +1105,9 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
                equation = equation +  outflow.elementAt(i) + " ";
 
             }
+        if(!equation.equals(" "))
+            equation = equation+ " "+ getRHS() + " "+ temFlowValues.getEquationValue();
         lblEquationP1.setText(equation);
-        if((lblEquationP1.getText().equals(" ")))
-            lblEquationP2.setText("");
-        else
-            lblEquationP2.setText(getRHS());
-        if((lblEquationP1.getText().equals(" ")) && (lblEquationP2.getText().equals("")) )
-            lblEquationP3.setText("  " + " ");
-        else
-            lblEquationP3.setText("  " + " "+ flowValues.getEquationValue());
         }
 
     }
@@ -915,7 +1119,7 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
    String rhs =" = ";
     if(flowValues!=null)
         {
-        rhs = flowValues.getRhsConstraint();
+        rhs = temFlowValues.getRhsConstraint();
         if(rhs.equals("E"))
             rhs = " = ";
         else if(rhs.equals("G"))
@@ -932,17 +1136,9 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
     {
     public void itemStateChanged(ItemEvent e)
         {
-        if(lblEquationP2 != null)
+        String rhs = "";
+        if(temFlowValues != null)
             {
-            String rhs = (String)rshConstraintComboBox.getSelectedItem();
-            if(lblEquationP1.getText().equals(" "))
-               {
-                lblEquationP2.setText("");
-                return;
-               }
-            else
-                lblEquationP2.setText(rhs);
-
             switch (rshConstraintComboBox.getSelectedIndex())
                 {
                 case 0:
@@ -955,8 +1151,101 @@ public class FlowEquationDialog extends mind.gui.dialog.FunctionDialog{
                     rhs = "L";
                     break;
                 }
-            flowValues.setRhsConstraint(rhs);
+            temFlowValues.setRhsConstraint(rhs);
+            updateLable();
+
             }
         }
+    }
+ 
+  // Added by Nawzad Mardan 20100326
+  // To display the equations
+   //metods
+    //create the FlowEquationValue consisting of data from the in and out tables.
+    private int saveEquationLables(){
+	if(temFlowValues != null){
+	    // clear the flowValues
+        //temFlowValues = new FlowEquationValue();
+	    temFlowValues.clear();
+
+	    //store all ID matching all inFlows
+	    for(int i = 0; i < tblIN.getRowCount(); i++ ){
+		if(tblIN.getValueAt( i, 0) != null && !((String)tblIN.getValueAt( i, 0)).equals("")){
+		    try{
+			Vector flow, coeff, isInteger;
+			flow = temFlowValues.getFlowIn();
+			coeff = temFlowValues.getCoeffIn();
+			isInteger = temFlowValues.getIsIntegerIn();
+			ID theId = null;
+
+			if( (theId = (ID)parseInId((String)tblIN.getValueAt( i, 0))) != null ){
+			    flow.addElement(theId);
+			    float currentCoeff = this.parseValue((String)tblIN.getValueAt( i, 1));
+			    coeff.addElement(new Float(currentCoeff));
+			    isInteger.addElement(new Boolean(false));
+			}
+		    }catch(NullPointerException e){
+			JOptionPane.showMessageDialog( this, "Type a coefficient value for each selected in flow",
+						       "Type coefficient",
+						       JOptionPane.INFORMATION_MESSAGE);
+		    }catch(Exception e){
+			e.printStackTrace();
+			JOptionPane.showMessageDialog( this, e.getMessage(),
+						       "exit and save",
+						       JOptionPane.INFORMATION_MESSAGE);
+		    }
+
+		}
+	    }
+	    //store all ID matching all outFlows
+	    for(int i = 0; i < tblOUT.getRowCount(); i++ ){
+		if(tblOUT.getValueAt( i, 0) != null && !((String)tblOUT.getValueAt( i, 0)).equals("")){
+		    try{
+			Vector flow, coeff, isInteger;
+			flow = temFlowValues.getFlowOut();
+			coeff = temFlowValues.getCoeffOut();
+			isInteger = temFlowValues.getIsIntegerOut();
+			ID theId = null;
+			if( (theId = parseOutId((String)tblOUT.getValueAt( i, 0))) != null ){
+			    flow.addElement(theId);
+			    float currentCoeff = this.parseValue((String)tblOUT.getValueAt( i, 1));
+			    coeff.addElement(new Float(currentCoeff));
+			    isInteger.addElement(new Boolean(false));
+			}
+		    }catch(NullPointerException e){
+			JOptionPane.showMessageDialog( this, "Type a coefficient value for each selected out flow",
+						       "Type coefficient",
+						       JOptionPane.INFORMATION_MESSAGE);
+		    }catch(Exception e){
+			e.printStackTrace();
+			JOptionPane.showMessageDialog( this, e.getMessage(),
+						       "exit and save",
+						       JOptionPane.INFORMATION_MESSAGE);
+		    }
+
+		}
+	    }
+	    //save OUT value
+	    temFlowValues.setEquationValue( txtRHSValue.getFloatValue() );
+	    //set values to function FlowEquation
+
+            String tempstring=null;
+            switch (rshConstraintComboBox.getSelectedIndex()) {
+              case 0:
+                tempstring = "E";
+                break;
+              case 1:
+                tempstring = "G";
+                break;
+              case 2:
+                tempstring = "L";
+                break;
+            }
+
+	    return 0;
+	}
+	else{
+	    return 1;//possibility to send a messagetblIN.getRowCount()
+	}
     }
 }
