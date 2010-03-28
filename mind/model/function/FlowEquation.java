@@ -4,12 +4,12 @@
  *
  * Copyright 2007:
  * Per Fredriksson <perfr775@student.liu.se>
- * David Karlslätt <davka417@student.liu.se>
+ * David Karlslï¿½tt <davka417@student.liu.se>
  * Tor Knutsson	<torkn754@student.liu.se>
- * Daniel Källming <danka053@student.liu.se>
+ * Daniel Kï¿½llming <danka053@student.liu.se>
  * Ted Palmgren <tedpa175@student.liu.se>
  * Freddie Pintar <frepi150@student.liu.se>
- * Mårten Thurén <marth852@student.liu.se> 
+ * Mï¿½rten Thurï¿½n <marth852@student.liu.se> 
  *
  * This file is part of reMIND.
  *
@@ -282,6 +282,29 @@ public class FlowEquation
 	TimestepInfo info = (TimestepInfo) c_timesteps.elementAt( getTimestep() - 1 );
 	return info.getInFlow();
     }
+
+ // Added by Nawzad Mardan 20100328
+ /**
+ * Get the flows and coefficients from this timestep info
+ */
+ public boolean getOutFlow(int index)
+   {
+   TimestepInfo info = (TimestepInfo) c_timesteps.elementAt(index);
+   Vector outFlow = info.getOutFlow();
+   return outFlow.isEmpty();
+   }
+
+ // Added by Nawzad Mardan 20100328
+ /**
+ * Get the flows and coefficients from this timestep info
+ */
+ public boolean getInFlow(int index)
+   {
+   TimestepInfo info = (TimestepInfo) c_timesteps.elementAt(index);
+   Vector inFlow = info.getInFlow();
+   return inFlow.isEmpty();
+   }
+
     public Vector getCoeffIn(){
 	TimestepInfo info = (TimestepInfo) c_timesteps.elementAt( getTimestep() - 1 );
 	return info.getCoeffIn();
@@ -762,6 +785,38 @@ public class FlowEquation
 	}
 	c_timesteps = newTimestepInfo;
     }
+
+     /* Added by Nawzad Mardan 20100328 at 23.00
+    To solve the bug in the FlowEquation function. If the user add a new FlowEquation function in a node
+    which have several levels of time steps and user enter only the values for the first time steps instead for alls
+    time steps and save the model. If the user try to open the model an errer  occur and the model can not be opened
+    */
+   public void setDetailedDataToRemainedTimesteps(int factor)
+    {
+    int oldsize = c_timesteps.size();
+	int newsize = oldsize * factor;
+
+	//Copy old values to new array
+	Vector newTimestepInfo = new Vector(newsize,1);
+	TimestepInfo info;
+	for(int i = 0; i < oldsize; i++) {
+	    info = ((TimestepInfo) c_timesteps.get(i));
+	    for(int k = 0; k < factor; k++) {
+		newTimestepInfo.add( (TimestepInfo)info.clone() );
+	    }
+	}
+    c_timesteps = newTimestepInfo;
+	//int newsize = oldsize * factor;
+
+	 //Copy values from the first time step to new array
+	/*Vector newTimestepInfo = new Vector(factor,1);
+	TimestepInfo info = (TimestepInfo) c_timesteps.get(0);
+	for(int i = 0; i < factor; i++)
+        {
+		newTimestepInfo.add((TimestepInfo)info.clone());
+        }
+	c_timesteps = newTimestepInfo;*/
+   }
 
     public void timestepRemoveAt(int index){
 	c_timesteps.removeElementAt(index);
