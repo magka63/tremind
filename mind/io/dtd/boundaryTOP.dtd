@@ -1,9 +1,11 @@
 <!-- DTD specification for the BoundaryTOP function  -->
 
-<!ELEMENT boundaryTOP (label,inflow?, outflow?, resource.type?, isMin?, isMax?, MinLim?, MaxLim?)>
+<!ELEMENT boundaryTOP (label,inflow?, outflow?, resource.type?, isMin?, isMax?, MinLim?, MaxLim?, NumOfRow?, tableData?)>
 <!ELEMENT inflow  (#PCDATA)>
 <!ELEMENT outflow  (#PCDATA)>
 <!ELEMENT isMin  (#PCDATA)>
 <!ELEMENT isMax  (#PCDATA)>
 <!ELEMENT MinLim (#PCDATA)>
 <!ELEMENT MaxLim (#PCDATA)>
+<!ELEMENT NumOfRow (#PCDATA)>
+<!ELEMENT tableData (#PCDATA)>

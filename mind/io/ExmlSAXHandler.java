@@ -1,13 +1,15 @@
 /*
  * Copyright 2007:
  * Per Fredriksson <perfr775@student.liu.se>
- * David Karlslätt <davka417@student.liu.se>
+ * David KarlslÃ¤tt <davka417@student.liu.se>
  * Tor Knutsson	<torkn754@student.liu.se>
- * Daniel Källming <danka053@student.liu.se>
+ * Daniel KÃ¤llming <danka053@student.liu.se>
  * Ted Palmgren <tedpa175@student.liu.se>
  * Freddie Pintar <frepi150@student.liu.se>
- * Mårten Thurén <marth852@student.liu.se> 
- * 
+ * MÃ¥rten Thuren <marth852@student.liu.se>
+ *
+ * Copyright 2010:
+ * Nawzad Mardan <nawzad.mardan@liu.se>
  * This file is part of reMIND.
  *
  * reMIND is free software; you can redistribute it and/or modify it
@@ -45,7 +47,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * added Pum5 2007
  * 
  * @author Per Fredriksson
- * @author David Karlslätt
+ * @author David Karlslï¿½tt
  * @version 2007-11-28
  */
 public class ExmlSAXHandler extends DefaultHandler {
@@ -68,6 +70,9 @@ public class ExmlSAXHandler extends DefaultHandler {
 	public boolean parsingFunctionEditor;
 	private String currentFlow;
 	private int FErowCount;
+    // Added by Nawzad Mardan 20100401
+    public boolean  boundaryTopFuction;
+    public String dataTabel = "[";
 
 	
 	/**
@@ -145,7 +150,7 @@ public class ExmlSAXHandler extends DefaultHandler {
 			// String name = attrs.getLocalName(0);
 			String value = attrs.getValue(0);
 			//System.out.println(value);
-			// FIXME borde läsa nodLabel från sidan istället.
+			// FIXME borde lï¿½sa nodLabel frï¿½n sidan istï¿½llet.
 			currentNodeLabel = value;
 			functionController = new FunctionControl();
 
@@ -166,7 +171,7 @@ public class ExmlSAXHandler extends DefaultHandler {
 	 * keeps the value of the first Cell on every Row, charStr gets the value of
 	 * every cell.
 	 * 
-	 * FIXME borde skrivas om så den blir lite mer överskådlig och förstålig
+	 * FIXME borde skrivas om sï¿½ den blir lite mer ï¿½verskï¿½dlig och fï¿½rstï¿½lig
 	 */
 
 	/**
@@ -174,7 +179,7 @@ public class ExmlSAXHandler extends DefaultHandler {
 	 * information between the tags with the oldStr and charStr variables oldStr
 	 * keeps the value of the first Cell on every Row, charStr gets the value of
 	 * every cell.
-	 * FIXME borde skrivas om så den blir lite mer överskådlig och förstålig
+	 * FIXME borde skrivas om sï¿½ den blir lite mer ï¿½verskï¿½dlig och fï¿½rstï¿½lig
 	 * Added by PUM5 2007-11-28
 	 * @param namespaceURI
 	 * @param lName The local name.
@@ -199,7 +204,31 @@ public class ExmlSAXHandler extends DefaultHandler {
 			charStr = null;
 			timeStepCounter = 1;
 		}
+        // Added by Nawzad Mardan 20100604
+        if (qName.equals("Data")&& boundaryTopFuction)
+            {
+            if(charStr == null)
+               charStr = " ";
+            if(charStr.equals("EndTableData"))
+                {
+                int sTmplength = dataTabel.length();
+                char c = dataTabel.charAt(sTmplength-1);
+                if(c ==',')
+                  {
+                  String sTmp = (dataTabel.length() < 2) ? "" : dataTabel.substring(0, dataTabel.length() - 1);
+                  sTmp = sTmp +"]";     //}
+                  list.addLast("tableData");
+                  list.addLast(sTmp);
+                  charStr = null;
+                  boundaryTopFuction =false;
+                  }
+                }
+            else
+                dataTabel = dataTabel+charStr+",";
 
+            charStr = null;
+        }
+    
 		if (charStr != null) {
 			if (!inFunction) {
 
@@ -363,7 +392,34 @@ public class ExmlSAXHandler extends DefaultHandler {
 		} else if (oldStr.equals("Max")) {
 			checkBoundaryTOP();
 			addVariable("MaxLim");
-		} else if (oldStr.contains("\n"))
+		}
+       // Added by Nawzad Mardan 20100331
+        else if (oldStr.equals("NumberOfRow"))
+            {
+
+			addVariable("NumOfRow");
+            }
+        else if (oldStr.equals("StartTimestep"))
+            {
+            oldStr = null;
+            //return;
+			//addVariable("NumOfRow");
+            }
+        else if (oldStr.equals("EndTimestep"))
+            {
+            oldStr = null;
+            //return;
+			//addVariable("NumOfRow");
+            }
+        else if (oldStr.equals("Minimum"))
+            {
+            oldStr = null;
+            boundaryTopFuction = true;
+            //return;
+			//addVariable("NumOfRow");
+            }
+        
+        else if (oldStr.contains("\n"))
 			;
 		else
 			throw new SAXException(createErrorMessage("Unknow attribute: \""

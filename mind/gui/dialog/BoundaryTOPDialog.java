@@ -2,6 +2,9 @@
  * Copyright 2002
  * Urban Liljedahl <ul@sm.luth.se>
  *
+ * Copyright 2010:
+ * Nawzad Mardan <nawzad.mardan@liu.se>
+ *
  * This file is part of reMIND.
  *
  * reMIND is free software; you can redistribute it and/or modify it
@@ -31,6 +34,8 @@ import mind.gui.*;
 import mind.model.*;
 import mind.model.function.*;
 import mind.EventHandlerClient;
+import javax.swing.table.AbstractTableModel;
+import java.awt.event.*;
 
 /*
  * BoundaryTOPDialog.java
@@ -47,6 +52,9 @@ public class BoundaryTOPDialog extends mind.gui.dialog.FunctionDialog {
     private GUI c_gui;
     private BoundaryTOP c_function;
     private EventHandlerClient c_eventhandler;
+    private NodeControl c_nodeControl;
+    private String c_currentTimestep = new String("");
+    private int c_maxTimeSteps = 1;
 
 
     /** Creates new form */
@@ -57,6 +65,25 @@ public class BoundaryTOPDialog extends mind.gui.dialog.FunctionDialog {
 	c_gui = gui;
 	c_function = (BoundaryTOP) function;
 	c_eventhandler = c_gui.getEventHandlerClient();
+    //c_nodeControl.getTimesteplevel(c_nodeID);
+    //Timesteplevel tsl = gui.getTopTimesteplevel();
+    NodeControl nodeControl = c_gui.getAllNodes();
+    Timesteplevel tsl = nodeControl.getTimesteplevel(c_nodeID);
+    c_currentTimestep  = tsl.getLabel();
+    Timesteplevel tstl = gui.getTopTimesteplevel();
+
+	if(tstl.getNextLevel() == null)
+            c_maxTimeSteps = 0;
+
+        while ((tstl = tstl.getNextLevel()) != null)
+            {
+             //if(tstl.getNextLevel() == null)
+             //{
+               // c_timeStepValues = tsl.getLengthsVector();
+             //}
+            c_maxTimeSteps *= tstl.getTimesteps();
+            }
+
 	initComponents();
 	updateResources();
 	pack();pack(); // Twice as good!!!
@@ -69,29 +96,88 @@ public class BoundaryTOPDialog extends mind.gui.dialog.FunctionDialog {
 	sep1 = new javax.swing.JSeparator ();
 	sep2 = new javax.swing.JSeparator ();
 	lblMaximumUnit = new javax.swing.JLabel ();
+    if(c_currentTimestep.equals("TOP"))
+    {
 	chkMaximum = new javax.swing.JCheckBox("Maximum");
 	chkMaximum.setSelected( c_function.getIsMaximum() );
 	txtMaximum = new PositiveNumberField();
-	if( c_function.getIsMaximum() ){
-	    txtMaximum.setText( new Float(c_function.getMaximum()).toString() );
-	}
-	else{
-	    txtMaximum.setText( "0.0" );
-	}
+    if(c_function.getTableData()== null)
+        {
+        if( c_function.getIsMaximum() ){
+            txtMaximum.setText( new Float(c_function.getMaximum()).toString() );
+            }
+        else
+            txtMaximum.setText( "" );
+        }
+	else
+        {
+        // Alrady used table data but the curren timestep is TOP and user chose max
+        //if(c_function.getMaximum() != 0)
+          //  {
+            //txtMaximum.setText( new Float(c_function.getMaximum()).toString() );
+            //}
+        //else
+          //  {
+            txtMaximum.setText(c_function.getTabelsMaximum());
+            if(txtMaximum.getFloatValue()!=0)
+              {
+              txtMaximum.setText(c_function.getTabelsMaximum());
+              c_function.setMaximum( txtMaximum.getFloatValue() );
+              chkMaximum.setSelected(true);
+              c_function.setIsMaximum(true);
+              }
+            else
+              {
+              txtMaximum.setText("");
+              chkMaximum.setSelected(false);
+              c_function.setIsMaximum(false);
+              }
+            //} // END ELSE
+    }
 	lblMinimumUnit = new javax.swing.JLabel ();
 	chkMinimum = new javax.swing.JCheckBox("Minimum");
 	chkMinimum.setSelected( c_function.getIsMinimum() );
 	txtMinimum = new PositiveNumberField();
-	if( c_function.getIsMinimum() ){
-	    txtMinimum.setText( new Float(c_function.getMinimum()).toString() );
-	}
-	else{
-	    txtMinimum.setText( "0.0" );
-	}
+	if(c_function.getTableData()== null)
+        {
+        if( c_function.getIsMinimum() ){
+            txtMinimum.setText( new Float(c_function.getMinimum()).toString() );
+            }
+        else
+             txtMinimum.setText( "0.0" );
+        }
+	else
+        {
+        // Alrady used table data but the curren timestep is TOP and user chose min
+        //if(c_function.getMinimum() != 0)
+          //  {
+            //txtMinimum.setText( new Float(c_function.getMinimum()).toString() );
+            //}
+        //else
+          //  {
+            txtMinimum.setText(c_function.getTabelsMinimum());
+            if(txtMinimum.getFloatValue()!=0)
+              {
+              txtMinimum.setText(c_function.getTabelsMinimum() );
+              chkMinimum.setSelected(true);
+              c_function.setIsMinimum(true);
+              c_function.setMinimum( txtMinimum.getFloatValue() );
+              }
+            else
+              {
+              chkMinimum.setSelected(false);
+              c_function.setIsMinimum(false);
+              txtMinimum.setText("");
+              }
+            //}// END ELSE
+         }
+        
+    pnlBoundaries = new javax.swing.JPanel();
+    }
 	pnlLabel = new javax.swing.JPanel ();
 	lblLabel = new javax.swing.JLabel ();
 	txtLabel = new javax.swing.JTextField ();
-	pnlBoundaries = new javax.swing.JPanel();
+	//pnlBoundaries = new javax.swing.JPanel();
 	sep3 = new javax.swing.JSeparator ();
 	pnlButtons = new javax.swing.JPanel ();
 	btnOk = new javax.swing.JButton ();
@@ -200,90 +286,156 @@ public class BoundaryTOPDialog extends mind.gui.dialog.FunctionDialog {
 
 	gridBagConstraints4 = new java.awt.GridBagConstraints ();
 	gridBagConstraints4.gridx = 0;
+    gridBagConstraints1 = new java.awt.GridBagConstraints ();
+	gridBagConstraints1.gridx = 0;
+	gridBagConstraints1.gridy = 6;
 	//      gridBagConstraints4.insets = new java.awt.Insets (4, 10, 9, 10);
 
 	JScrollPane scrollPane = new JScrollPane(listResource);
-	scrollPane.setPreferredSize(new Dimension(150, 100));
+    if(c_currentTimestep.equals("TOP"))
+        {
+        scrollPane.setPreferredSize(new Dimension(150, 100));
+        gridBagConstraints1.insets = new java.awt.Insets (10, 10, 10, 5);
+        }
+    else
+        {
+        scrollPane.setPreferredSize(new Dimension(150, 100));
+        //(int top, int left, int bottom, int right)
+        gridBagConstraints1.insets = new java.awt.Insets (5, 5, 5, 50);
+        }
 	pnlResource.add (scrollPane, gridBagConstraints4);
-
-
-
-	gridBagConstraints1 = new java.awt.GridBagConstraints ();
-	gridBagConstraints1.gridx = 0;
-	gridBagConstraints1.gridy = 6;
-	gridBagConstraints1.insets = new java.awt.Insets (10, 10, 10, 5);
+    
 	getContentPane ().add (pnlResource, gridBagConstraints1);
+    if(c_currentTimestep.equals("TOP"))
+       {
+        pnlBoundaries.setLayout(new GridBagLayout());
+        pnlBoundaries.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-	pnlBoundaries.setLayout(new GridBagLayout());
-	pnlBoundaries.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        gridBagConstraints1 = new GridBagConstraints();
+        gridBagConstraints1.weightx = 1.0;
+        gridBagConstraints1.gridx = 0;
+        gridBagConstraints1.gridy = 0;
+        gridBagConstraints1.gridwidth = 3;
+        gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints1.anchor = GridBagConstraints.WEST;
+        pnlBoundaries.add(chkMinimum, gridBagConstraints1);
 
-	gridBagConstraints1 = new GridBagConstraints();
-	gridBagConstraints1.weightx = 1.0;
-	gridBagConstraints1.gridx = 0;
-	gridBagConstraints1.gridy = 0;
-	gridBagConstraints1.gridwidth = 3;
-	gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
-	gridBagConstraints1.anchor = GridBagConstraints.WEST;
-	pnlBoundaries.add(chkMinimum, gridBagConstraints1);
+        gridBagConstraints1 = new GridBagConstraints();
+        gridBagConstraints1.gridx = 0;
+        gridBagConstraints1.gridy = 1;
+        pnlBoundaries.add(Box.createHorizontalStrut(10), gridBagConstraints1);
 
-	gridBagConstraints1 = new GridBagConstraints();
-	gridBagConstraints1.gridx = 0;
-	gridBagConstraints1.gridy = 1;
-	pnlBoundaries.add(Box.createHorizontalStrut(10), gridBagConstraints1);
+    	txtMinimum.setColumns(20);
+        gridBagConstraints1.gridx = 1;
+    	gridBagConstraints1.gridy = 1;
+    	pnlBoundaries.add(txtMinimum, gridBagConstraints1);
 
-	txtMinimum.setColumns(20);
-	gridBagConstraints1.gridx = 1;
-	gridBagConstraints1.gridy = 1;
-	pnlBoundaries.add(txtMinimum, gridBagConstraints1);
+    	gridBagConstraints1.gridx = 2;
+    	gridBagConstraints1.gridy = 1;
+    	pnlBoundaries.add(lblMinimumUnit);
 
-	gridBagConstraints1.gridx = 2;
-	gridBagConstraints1.gridy = 1;
-	pnlBoundaries.add(lblMinimumUnit);
+        gridBagConstraints1 = new GridBagConstraints();
+        gridBagConstraints1.gridx = 0;
+        gridBagConstraints1.gridy = 2;
+        gridBagConstraints1.gridwidth = 3;
+        pnlBoundaries.add(Box.createHorizontalStrut(10), gridBagConstraints1);
 
-	gridBagConstraints1 = new GridBagConstraints();
-	gridBagConstraints1.gridx = 0;
-	gridBagConstraints1.gridy = 2;
-	gridBagConstraints1.gridwidth = 3;
-	pnlBoundaries.add(Box.createHorizontalStrut(10), gridBagConstraints1);
+        gridBagConstraints1 = new GridBagConstraints();
+        gridBagConstraints1.weightx = 1.0;
+        gridBagConstraints1.gridx = 0;
+        gridBagConstraints1.gridy = 3;
+        gridBagConstraints1.gridwidth = 3;
+        gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints1.anchor = GridBagConstraints.WEST;
+        pnlBoundaries.add(chkMaximum, gridBagConstraints1);
 
-	gridBagConstraints1 = new GridBagConstraints();
-	gridBagConstraints1.weightx = 1.0;
-	gridBagConstraints1.gridx = 0;
-	gridBagConstraints1.gridy = 3;
-	gridBagConstraints1.gridwidth = 3;
-	gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
-	gridBagConstraints1.anchor = GridBagConstraints.WEST;
-	pnlBoundaries.add(chkMaximum, gridBagConstraints1);
+        gridBagConstraints1 = new GridBagConstraints();
+        gridBagConstraints1.gridx = 0;
+        gridBagConstraints1.gridy = 4;
+        pnlBoundaries.add(Box.createHorizontalStrut(10), gridBagConstraints1);
 
-	gridBagConstraints1 = new GridBagConstraints();
-	gridBagConstraints1.gridx = 0;
-	gridBagConstraints1.gridy = 4;
-	pnlBoundaries.add(Box.createHorizontalStrut(10), gridBagConstraints1);
+    	txtMaximum.setColumns(20);
+    	gridBagConstraints1.gridx = 1;
+    	gridBagConstraints1.gridy = 4;
+    	pnlBoundaries.add(txtMaximum, gridBagConstraints1);
 
-	txtMaximum.setColumns(20);
-	gridBagConstraints1.gridx = 1;
-	gridBagConstraints1.gridy = 4;
-	pnlBoundaries.add(txtMaximum, gridBagConstraints1);
+    	gridBagConstraints1.gridx = 1;
+    	gridBagConstraints1.gridy = 4;
+    	pnlBoundaries.add(lblMaximumUnit);
 
-	gridBagConstraints1.gridx = 1;
-	gridBagConstraints1.gridy = 4;
-	pnlBoundaries.add(lblMaximumUnit);
-
-	gridBagConstraints1 = new java.awt.GridBagConstraints ();
-	gridBagConstraints1.gridx = 1;
-	gridBagConstraints1.gridy = 6;
-	gridBagConstraints1.weightx = 1.0;
-	gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
-	gridBagConstraints1.insets = new java.awt.Insets (10, 5, 10, 10);
-	getContentPane ().add (pnlBoundaries, gridBagConstraints1);
+        gridBagConstraints1 = new java.awt.GridBagConstraints ();
+        gridBagConstraints1.gridx = 1;
+        gridBagConstraints1.gridy = 6;
+        gridBagConstraints1.weightx = 1.0;
+        gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints1.insets = new java.awt.Insets (10, 5, 10, 10);
+        getContentPane ().add (pnlBoundaries, gridBagConstraints1);
+        }
 
 	gridBagConstraints1 = new java.awt.GridBagConstraints ();
 	gridBagConstraints1.gridy = 7;
 	gridBagConstraints1.gridwidth = 2;
 	gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
 	getContentPane ().add (sep3, gridBagConstraints1);
+// The table
+    if(!c_currentTimestep.equals("TOP"))
+        {
+        c_tableModel = new MyTableModel();
+        c_table = new JTable(c_tableModel);
+        c_table.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 13));
+        c_table.getTableHeader().setForeground(Color.BLUE);
+        c_table.setFont(new Font("SansSerif", Font.BOLD, 12));
+        //c_table.setBackground(Color.BLUE);
+        c_table.setForeground(Color.BLUE);
+        /* IF the RMD FILE IS AN OLD FILE AND ALRADY CONTAIN INFORMATION
+        if(c_function.getIsMaximum())
+        {
+        c_tableModel.setTablsDataValue(0,3, c_function.getMaximum());
+        c_tableModel.setTablsDataValue(0,0, 1);
+        c_tableModel.setTablsDataValue(0,2, 1);
+        }*/
+        c_table.setRowSelectionAllowed(false);
+        c_table.setColumnSelectionAllowed(false);
+        c_table.setPreferredScrollableViewportSize(new Dimension(400, 100));
+        c_scrollPane = new JScrollPane(c_table,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+        JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        JScrollBar jb = new JScrollBar();
+        c_scrollPane.setHorizontalScrollBar(jb);
+        gridBagConstraints1 = new java.awt.GridBagConstraints();
+        gridBagConstraints1.gridx = 0;
+        gridBagConstraints1.gridy = 8;
+        gridBagConstraints1.gridwidth = 2;
+        gridBagConstraints1.insets = new java.awt.Insets (5, 5, 5, 5);
+        gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        this.getContentPane().add(c_scrollPane, gridBagConstraints1);
 
+        btnAddRow = new JButton("Add Row");
+        btnDeleteRow = new JButton("Delete Row");
+        btnAddRow.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				btnAddRowActionPerformed();
+			}
+		});
 
+        btnDeleteRow.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				btnDeleteRowActionPerformed();
+			}
+		});
+        JPanel showPanel = new JPanel();
+
+        showPanel.add(btnAddRow);
+        showPanel.add(btnDeleteRow);
+        gridBagConstraints1 = new java.awt.GridBagConstraints();
+    //gridBagConstraints1.gridwidth = 1;
+        gridBagConstraints1.gridx = 0;
+        gridBagConstraints1.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints1.anchor = java.awt.GridBagConstraints.WEST;
+        getContentPane().add(showPanel, gridBagConstraints1);
+        updateTable();
+        }
+
+//pnlTable.
 	btnOk.setText ("OK");
 	getRootPane().setDefaultButton(btnOk);
 	btnOk.addActionListener (new java.awt.event.ActionListener () {
@@ -305,7 +457,7 @@ public class BoundaryTOPDialog extends mind.gui.dialog.FunctionDialog {
 
 	gridBagConstraints1 = new java.awt.GridBagConstraints ();
 	gridBagConstraints1.gridx = 0;
-	gridBagConstraints1.gridy = 8;
+	gridBagConstraints1.gridy = 9;
 	gridBagConstraints1.gridwidth = 2;
 	gridBagConstraints1.insets = new java.awt.Insets (10, 10, 10, 10);
 	gridBagConstraints1.anchor = java.awt.GridBagConstraints.EAST;
@@ -322,24 +474,54 @@ public class BoundaryTOPDialog extends mind.gui.dialog.FunctionDialog {
     {
 	// save the function label
 	c_function.setLabel(txtLabel.getText());
-        // Added by Nawzad Mardan 080910
-        c_function.setRadIn(c_radIn.isSelected());
-        // Added by Nawzad Mardan 080910
-        c_function.setRadOut(c_radOut.isSelected());
+    // Added by Nawzad Mardan 080910
+    c_function.setRadIn(c_radIn.isSelected());
+    // Added by Nawzad Mardan 080910
+    c_function.setRadOut(c_radOut.isSelected());
 
 	Resource resource = (Resource)listResource.getSelectedValue();
 	if (resource != null)
 	    c_function.setResource(resource.getID());
-
-	//save boundary values
-	if( chkMinimum.isSelected() ){
+    else
+    {
+         JOptionPane.showMessageDialog(null, "Resource for Source function. not specified.\n\n"+
+					 "Can not optimize.","Input error", JOptionPane.WARNING_MESSAGE);
+                    return;
+    }
+    if(c_currentTimestep.equals("TOP"))
+      {
+      //save boundary values
+      if( chkMinimum.isSelected() ){
 	    c_function.setMinimum( txtMinimum.getFloatValue() );
 	    c_function.setIsMinimum( true );
-	}
-	if( chkMaximum.isSelected() ){
+       }
+      if(!chkMinimum.isSelected() ){
+	    c_function.setMinimum(0);
+	    c_function.setIsMinimum( false );
+       }
+      if( chkMaximum.isSelected() ){
 	    c_function.setMaximum( txtMaximum.getFloatValue() );
 	    c_function.setIsMaximum( true );
-	}
+        }
+      if(!chkMaximum.isSelected() ){
+	    //c_function.setMaximum(0);
+	    c_function.setIsMaximum( false );
+        }
+      }
+    else
+      {
+      // Check table data
+      String check = checkTableData(c_tableModel.getData()) ;
+
+      if(!check.equals("OK"))
+        {
+          JOptionPane.showMessageDialog(null, check+"\nCan not optimize.","Input error", JOptionPane.WARNING_MESSAGE);
+         return;
+        }
+      c_function.setTableData(c_tableModel.getData());
+      c_function.setCurrentTimestep(c_currentTimestep);
+      }
+
 
 	// close the dialog
 	closeDialog(null);
@@ -399,6 +581,13 @@ public class BoundaryTOPDialog extends mind.gui.dialog.FunctionDialog {
     private JRadioButton c_radIn = new JRadioButton("In");
     private JRadioButton c_radOut = new JRadioButton("Out");
     private javax.swing.JPanel pnlRadbut;
+    // 20100121
+    private JScrollPane c_scrollPane;
+    private JTable c_table;
+    // Table to insert timestep numbers
+    private MyTableModel c_tableModel;
+    private JButton btnAddRow;
+    private JButton btnDeleteRow;
     // End of variables declaration
 
     //test
@@ -454,5 +643,336 @@ public class BoundaryTOPDialog extends mind.gui.dialog.FunctionDialog {
 	}
 	return newFlow;
     }
+    
+    
+    /**
+     * MyTableModel is inner klass that hold its data in an array and kan  get the data from an outside source such as a database. 
+     * MyTableModel is simple, can easily determine the data's type, helping the JTable display the data in the best format.
+     * MyTableModel let you edit the name columns; it does, however, let you edit the other columns.  
+*/
 
+   private class MyTableModel extends AbstractTableModel
+    {
+    private String[] columnNames = {"Start Timestep", "End Timestep", "Minimum", "Maximum"};
+    private Object[][] data = { { "TOP ", "TOP", "", ""}};
+
+    public int getColumnCount()
+    {
+    return columnNames.length;
+    }
+
+    public void setColumnName(String [] name)
+    {
+     columnNames = new String[name.length];
+     columnNames = name;
+    }
+
+    public String [] getTableHedar()
+    {
+        return columnNames;
+    }
+
+    public int getRowCount()
+    {
+    return data.length;
+    }
+
+    public String getColumnName(int col)
+    {
+    return columnNames[col];
+    }
+
+    public Object getValueAt(int row, int col)
+    {
+    return data[row][col];
+    }
+
+    public void setTablsDataValue(int row, int col, float value)
+    {
+        data[row][col] = value;
+    }
+    /**
+     * Returns the type of the column appearing in the view at column position column
+     */
+
+    public Class getColumnClass(int c)
+    {
+    return getValueAt(0, c).getClass();
+    }
+
+    /*
+     * Need it to see if the table's
+     * editable.
+     */
+
+    public boolean isCellEditable(int row, int col)
+    {
+       // System.out.println("ROW : "+row+"   COLUM : "+col);
+    if (col>=0)
+    {
+        //CalculateTimestepLength(data, getRowCount() ,getColumnCount());
+        return true;
+    }
+
+    else
+        return false;
+    }
+
+    private boolean lastRow(int row)
+    {
+    return getRowCount() == row + 1;
+    }
+
+    public void setData(Object[][] d)
+    {
+    data = d;
+    }
+
+    public Object[][] getData()
+    {
+    return data;
+    }
+
+    /**
+    * Update table on change
+     */
+    public void setValueAt(Object value, int row, int col)
+    {
+    data[row][col] = value;
+    //CalculateTimestepLength(data, getRowCount() ,getColumnCount());
+    fireTableCellUpdated(row, col);
+
+
+    }
+
+
+    }// END MYTable
+
+private void btnAddRowActionPerformed()
+  {
+  int numberOfColumns = c_tableModel.getColumnCount();
+  int numberOfRows = c_tableModel.getRowCount();
+  Object[][] data = new Object[numberOfRows+1][numberOfColumns];
+ for (int i = 0; i < numberOfRows; i++)
+          {
+          for (int j = 0; j < numberOfColumns; j++)
+              {
+               data[i][j] = c_tableModel.getValueAt(i, j);
+              }
+           }
+
+      for(int i = 0; i < numberOfColumns;i++)
+      {
+       data[numberOfRows][i]= "";
+      }
+
+     c_tableModel.setData(data);
+     c_tableModel.fireTableDataChanged();
+     c_tableModel.fireTableStructureChanged();
+}
+
+/**
+  *Button Delete is pressd
+  */
+
+private void btnDeleteRowActionPerformed()
+{
+      int numberOfColumns = c_tableModel.getColumnCount();
+      int numberOfRows = c_tableModel.getRowCount();
+      //boolean accept = true;
+
+      // Check number of columns
+      if(numberOfRows > 1)
+       {
+          //if(numberOfRows == 1)
+            //  return;
+        Object[][] data = new Object[numberOfRows-1][numberOfColumns];
+
+     	// check if last Row is empty
+    	for ( int col = 1; col < numberOfColumns; col++ )
+        {
+    		String str = (String) c_tableModel.getValueAt(numberOfRows-1, col);//table.getModel().getValueAt(row, lastCol);
+    		if (!(str == null || str.equals("")))
+                {
+    			int sel = JOptionPane.showConfirmDialog(null, "You are trying to " +"delete a row with contents. " +
+    							"Data will be lost.\nDo you want to " +"continue?",
+    						"Warning", JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
+    			if (sel == JOptionPane.YES_OPTION)
+                            break;
+                        else
+                            return;
+    		}
+    	} // END FOR
+
+        // Copy Row //Delete Row
+
+        for (int i = 0; i < numberOfRows-1; i++)
+                {
+                for (int j = 0; j < numberOfColumns; j++)
+                    {
+                    data[i][j] = c_tableModel.getValueAt(i, j);
+                    }
+                }
+
+
+
+        // Update the table
+        //c_tableModel.setColumnName(tableHeder);
+        c_tableModel.setData(data);
+        c_tableModel.fireTableDataChanged();
+        c_tableModel.fireTableStructureChanged();
+      } // END if(numberOfColumns > 2)
+}
+private void updateTable()
+  {
+     
+   if(c_function.getTableData()== null)
+       {
+       String startTimestep = "TOP";
+       String endTimestep = "TOP";
+       String maximumValue = "";
+       String minimumValue = "";
+       if( c_function.getIsMaximum() )
+           {
+           maximumValue = new Float(c_function.getMaximum()).toString();
+           startTimestep = "1";
+           endTimestep = new Integer(c_maxTimeSteps).toString();
+           }
+       else
+           {
+           maximumValue = "";
+           }
+       if( c_function.getIsMinimum() )
+           {
+           minimumValue= new Float(c_function.getMinimum()).toString() ;
+           startTimestep = "1";
+           endTimestep = new Integer(c_maxTimeSteps).toString();
+           }
+       else
+           {
+           minimumValue = "";
+           }
+        
+       if((endTimestep.equals("TOP")) && (startTimestep.equals("TOP")))
+       {
+         if(c_maxTimeSteps>1)
+           {
+           startTimestep = "1";
+           endTimestep = new Integer(c_maxTimeSteps).toString();
+           }
+
+       }
+       Object[][] temp_data = { { startTimestep, endTimestep, minimumValue, maximumValue}}; 
+       c_tableModel.setData(temp_data);
+       c_function.setTableData(temp_data);
+       c_tableModel.fireTableDataChanged();
+       c_tableModel.fireTableStructureChanged();        
+       }
+   else
+      {
+       // Alrady have table data but user changes the minimum och maximum in Top timestep
+       if(c_function.getTableData().length == 1)
+       {
+       String startTimestep = "TOP";
+       String endTimestep = "TOP";
+       String maximumValue = "";
+       String minimumValue = "";
+       if((c_function.getIsMaximum()) || (c_function.getIsMinimum()))
+       {
+       if( c_function.getIsMaximum() )
+           {
+           maximumValue = new Float(c_function.getMaximum()).toString();
+           startTimestep = "1";
+           endTimestep = new Integer(c_maxTimeSteps).toString();
+           }
+       else
+           {
+           maximumValue = "";
+           }
+       if( c_function.getIsMinimum() )
+           {
+           minimumValue= new Float(c_function.getMinimum()).toString() ;
+           startTimestep = "1";
+           endTimestep = new Integer(c_maxTimeSteps).toString();
+           }
+       else
+           {
+           minimumValue = "";
+           }
+       Object[][] temp_data = { { startTimestep, endTimestep, minimumValue, maximumValue}};
+       c_tableModel.setData(temp_data);
+       c_function.setTableData(temp_data);
+       c_tableModel.fireTableDataChanged();
+       c_tableModel.fireTableStructureChanged();
+       }
+      else
+        {
+        c_tableModel.setData(c_function.getTableData());
+        c_tableModel.fireTableDataChanged();
+        c_tableModel.fireTableStructureChanged();
+       }
+        }
+       else
+       {
+       c_tableModel.setData(c_function.getTableData());
+       c_tableModel.fireTableDataChanged();
+       c_tableModel.fireTableStructureChanged();
+       }
+
+      }
+        
+      //}
+      
+  }
+// Added by Nawzad Mardan 20100222
+// Check table data return Ok or an error massage
+private String checkTableData(Object [][]data)
+{
+ String check = "OK";
+ String sts1,sts2;
+ int startTimestep,endTimestep;
+ float min,max;
+if(data != null)
+    {
+    for ( int raw = 0; raw < data.length; raw++ )
+        {
+        sts1= (String)data[raw][0];
+        sts2= (String)data[raw][1];
+        if(!sts1.equals("") && !sts2.equals("") )
+            {
+            startTimestep = new Integer(sts1).intValue();
+            endTimestep = new Integer(sts2).intValue();
+            if(startTimestep > endTimestep)
+                {
+                check = "Start time step should be equal or less than end time step in BoundaryTop function's table data";
+                break;
+                }
+            if(startTimestep > c_maxTimeSteps)
+                {
+                check = "Start time step value should be equal or less than "+c_maxTimeSteps+" in BoundaryTop function's table data";
+                break;
+                }
+            if(endTimestep > c_maxTimeSteps)
+                {
+                check = "End time step value should be equal or less than "+c_maxTimeSteps+" in BoundaryTop function's table data";
+                break;
+                }
+            }
+        sts1= (String)data[raw][2];
+        sts2= (String)data[raw][3];
+         if(!sts1.equals("") && !sts2.equals("") )
+            {
+            min = new Float(sts1).floatValue();
+            max = new Float(sts2).floatValue();
+            if(min > max)
+                {
+                check = "The minumum value should be equal or less than the maximum value in BoundaryTop function's table data";
+                break;
+                }
+            }
+
+        }
+    }
+ return check;
+}
 }
