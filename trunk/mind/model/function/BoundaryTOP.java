@@ -4,12 +4,15 @@
  *
  * Copyright 2007:
  * Per Fredriksson <perfr775@student.liu.se>
- * David Karlslätt <davka417@student.liu.se>
+ * David KarlslÃ¤tt <davka417@student.liu.se>
  * Tor Knutsson	<torkn754@student.liu.se>
- * Daniel Källming <danka053@student.liu.se>
+ * Daniel KÃ¤llming <danka053@student.liu.se>
  * Ted Palmgren <tedpa175@student.liu.se>
  * Freddie Pintar <frepi150@student.liu.se>
- * Mårten Thurén <marth852@student.liu.se> 
+ * MÃ¥rten Thuren <marth852@student.liu.se>
+ *
+ * Copyright 2010:
+ * Nawzad Mardan <nawzad.mardan@liu.se>
  *
  * This file is part of reMIND.
  *
@@ -56,6 +59,11 @@ public class BoundaryTOP
     // Added by Nawzad Mardan 080910
     private boolean c_radin;
     private boolean c_radout;
+    // Added by Nawzad Mardan 20100125
+    private Object [][] c_data ;
+    private String c_currentTimestep = "TOP";
+    private int c_numberOfRow = 0;
+    private boolean usrsetZero=false;
 
     /**
      * Creates an empty function
@@ -96,6 +104,10 @@ public class BoundaryTOP
 
 	EquationControl control = new EquationControl();
 	Vector foundFlows = new Vector(0);
+    Equation lowerbound;
+    Equation upperbound;
+    Equation connection;
+    int eqId =1;
 
 	if (c_resource == null)
 	    throw new ModelException("In BoundaryTop Function: Resource in boundary "
@@ -165,19 +177,20 @@ public class BoundaryTOP
 					 "Can not optimize.");    
         }// END IF outgoing flows
 
-
+if(c_currentTimestep.equals("TOP"))
+    {
 	//make an connection equation with these variables together with the variable
 	//constructed from foundFlows + T0
-	Equation connection = new Equation(node, getID(), 0, 0, Equation.EQUAL, (float)0);
+    connection = new Equation(node, getID(),node.toString()+"BoundaryTopFun", 0, 0, Equation.EQUAL, (float)0);
 
 	//make a boundary equation lower and/or upper bounds
-	Equation lowerbound =
-	    new Equation(node, getID(), 0, 1,
+    lowerbound =
+	    new Equation(node, getID(),node.toString()+"BoundaryTopFun", 0, 1,
 			 Equation.GREATEROREQUAL,
 			 c_minimum);
 
-	Equation upperbound =
-	    new Equation(node, getID(), 0, 2,
+	upperbound =
+	    new Equation(node, getID(),node.toString()+"BoundaryTopFun", 0, 2,
 			 Equation.LOWEROREQUAL,
 			 c_maximum);
 
@@ -223,7 +236,77 @@ public class BoundaryTOP
 
 	if (c_isMaximum) {//max
 	    control.add(upperbound);
-	}
+	}// END IF The node's current timestep is TOP
+   }
+  // IF the current timestep is not Top
+  else
+    {
+    int startTimestep = 0;
+    int endTimestep =0;
+    float minimumBound = 0;
+    float maximumBound = 0;
+    String sts = "";
+    String ets = "";
+    String minBound = "";
+    String maxBound = "";
+
+    for (int i = 0; i < c_data.length; i++)
+        {
+        sts= (String)c_data[i][0];
+        if(!sts.equals(""))
+            startTimestep = new Integer(sts).intValue();
+        ets= (String)c_data[i][1];
+        if(!ets.equals(""))
+            endTimestep = new Integer(ets).intValue();
+        minBound= (String)c_data[i][2];
+        if(!minBound.equals(""))
+            minimumBound = new Float(minBound).floatValue();
+        maxBound= (String)c_data[i][3];
+        if(!maxBound.equals(""))
+            {
+            maximumBound = new Float(maxBound).floatValue();
+            // To distingish between default Zero and user setting to Zero
+            if(maximumBound >= 0)
+                usrsetZero = true;
+            }
+
+
+         upperbound = new Equation(node, getID(),node.toString()+"BoundaryTopFu", i+2, eqId++,Equation.LOWEROREQUAL, maximumBound);
+         lowerbound = new Equation(node, getID(),node.toString()+"BoundaryTopFun", i+1, eqId++,Equation.GREATEROREQUAL,minimumBound);
+         connection = new Equation(node, getID(),node.toString()+"BoundaryTopFun", i+1, eqId++, Equation.EQUAL, (float)0);
+        //make a boundary equation lower and/or upper bounds
+        for (int j = 0; j < foundFlows.size(); j++)
+          {
+
+          //generate variable FjTi for each flow j
+          for (int k = startTimestep; k <= endTimestep ; k++)
+            {
+            //generate a variable FjT(i) for each timestep
+            Variable var = new Variable(((Flow) foundFlows.get(j)).getID(),k, (float) -1);
+            connection.addVariable(var);
+            }
+           }// END FOR NUMBER OF FLOWS
+         //the BoundaryTOP variable for this flow
+          Variable aVar = new Variable("Fsum"+((Flow) foundFlows.get(0)).getID(),eqId++, (float) 1);
+          //add BoundaryTOP variable for this flow
+          connection.addVariable(aVar);
+          control.add(connection);
+
+          //add boundary values to lower and/or upper bound
+          if(minimumBound!=0) {//min
+            lowerbound.addVariable(aVar);
+            control.add(lowerbound);
+            }
+
+          //if(maximumBound >=0) {//max
+          if(usrsetZero)
+            {
+            upperbound.addVariable(aVar);
+            control.add(upperbound);
+            }
+            //}
+        }// END FOR LOOP DATA
+    }// END ELSE
 	return control;
     }
 
@@ -326,6 +409,78 @@ public class BoundaryTOP
                     }
                 }
             }
+            if (tag.equals("NumOfRow")) {
+                try {
+                    c_numberOfRow = Integer.parseInt(value);
+                    c_currentTimestep = "Timesteps";
+
+                } catch (NumberFormatException e) {
+                    throw new RmdParseException("The number of table's row must be a integer > 0");
+                }
+                if (c_numberOfRow < 0) {
+                    throw new RmdParseException("The number of table's row must be a integer > 0");
+                }
+            }
+            if (tag.equals("tableData"))
+               {
+               String[] sVec;
+               Object[][] tableData = { { "", "", "", ""},};
+               boolean emptyStringflag = false;
+               c_currentTimestep = "Timesteps";
+               try
+                 {
+                 int sTmplength = value.length();
+                 // Check if the last string is empty string
+                 // When using split method if the last strings in the array string contain empty string the method
+                 // cann't splited thats why you must chek it and see if you have an empty string'
+                 char c = value.charAt(sTmplength-2);
+                 if (c ==' ')
+                     emptyStringflag = true;
+
+                  String sTmp = (value.length() < 2) ? "" : value.substring(1, value.length() - 1); // sTmp = s without "[]"
+                  sVec = sTmp.split(",");
+                  int x = sVec.length;
+                  int k = 0;
+                  //timestepNum =Integer.parseInt(value)
+                  //datalen = analysPeriod.intValue();
+                  tableData = new Object[c_numberOfRow][4];
+                  for (int i = 0; i < c_numberOfRow; i++)
+                     {
+                     for(int j = 0; j< 4; j++)
+                       {
+                       tableData[i][j]= sVec[k];
+                       k++;
+                       if(k == x)
+                          break;
+                       }
+                     }
+                  if(emptyStringflag)
+                     {
+                     tableData[c_numberOfRow-1][3]= "";
+                     }
+                  // Chek it again and see if the data array have not initiated all cells
+                  for (int i = 0; i < c_numberOfRow; i++)
+                     {
+                     for(int j = 0; j< 4; j++)
+                        {
+                        if (tableData[i][j]==null)
+                           tableData[i][j]="";
+                        }
+                     }
+                  c_data = tableData;
+                  if(c_data.length == 1)
+                  {
+                      c_data = tableData;
+                  }
+
+                 }// END TRY
+
+               catch (NumberFormatException e)
+                 {
+                 throw new RmdParseException("The 'Data' field must be a float > 0");
+                 }
+
+               }// END IF TAG VECTOR
         }
         c_resource = TmpRC;
     }
@@ -350,11 +505,38 @@ public class BoundaryTOP
             xml += sInd1 + "<resource.type>" + XML.toXML(resources.getLabel(c_resource));
             xml += "</resource.type>" + XML.nl();
         }
+        if(c_currentTimestep.equals("TOP"))
+            {
+            xml += sInd1 + "<isMin>"  + (c_isMinimum ? "true" : "false") + "</isMin>"  + XML.nl();
+            xml += sInd1 + "<isMax>"  + (c_isMaximum ? "true" : "false") + "</isMax>"  + XML.nl();
+            xml += sInd1 + "<MinLim>" + Float.toString(c_minimum)        + "</MinLim>" + XML.nl();
+            xml += sInd1 + "<MaxLim>" + Float.toString(c_maximum)        + "</MaxLim>" + XML.nl();
+            }
+        else
+            {
+            if(c_data!=null)
+             {
+             xml += sInd1 + "<NumOfRow>" + c_data.length        + "</NumOfRow>" + XML.nl();
 
-        xml += sInd1 + "<isMin>"  + (c_isMinimum ? "true" : "false") + "</isMin>"  + XML.nl();
-        xml += sInd1 + "<isMax>"  + (c_isMaximum ? "true" : "false") + "</isMax>"  + XML.nl();
-        xml += sInd1 + "<MinLim>" + Float.toString(c_minimum)        + "</MinLim>" + XML.nl();
-        xml += sInd1 + "<MaxLim>" + Float.toString(c_maximum)        + "</MaxLim>" + XML.nl();
+             String str = "[";
+             for (int i = 0; i < c_data.length; i++)
+               {
+               for(int j= 0; j< 4; j++)
+                {
+                str = str+ c_data[i][j]+",";
+                }
+               }
+             String sTmp = (str.length() < 2) ? "" : str.substring(0, str.length() - 1);// sTmp = str without last ","
+
+             // Check if the last data is an empty string
+             if(c_data[c_data.length-1][3].equals(""))
+                sTmp = sTmp+" ]";
+             else
+                sTmp = sTmp+"]";
+             xml += sInd1 + "<tableData>"  + sTmp  + "</tableData>" + XML.nl();
+
+             }//END IF Data ! = null
+            }//END ELSE
 
 
         xml += sInd + "</boundaryTOP>" + XML.nl();
@@ -386,9 +568,29 @@ public class BoundaryTOP
 		sheet.addRow(sheet.addLockedCell("Resource")+sheet.addCell(XML.toXML(resource)));
 		
 		//Add data
-		sheet.addRow(sheet.addLockedCell("Min")+sheet.addCell(c_minimum));
-		sheet.addRow(sheet.addLockedCell("Max")+sheet.addCell(c_maximum));
-		sheet.addRow(sheet.addCell(""));
+        if(c_currentTimestep.equals("TOP"))
+            {
+            sheet.addRow(sheet.addLockedCell("Min")+sheet.addCell(c_minimum));
+            sheet.addRow(sheet.addLockedCell("Max")+sheet.addCell(c_maximum));
+            sheet.addRow(sheet.addCell(""));
+            }
+        else
+        {
+        sheet.addRow(sheet.addLockedCell("NumberOfRow")+sheet.addCell(c_numberOfRow));
+        sheet.addRow(sheet.addLockedCell("StartTimestep")+sheet.addLockedCell("EndTimestep")+sheet.addLockedCell("Minimum")+sheet.addLockedCell("Maximum"));
+         //sheet.addRow(sheet.addCell(""));
+       String cellData;
+       for (int i = 0; i < c_data.length; i++) {
+				cellData = "";
+				for (int j = 0; j < c_data[i].length; j++) {
+					String cellContent = (String) c_data[i][j];
+					cellData += sheet.addCell(((cellContent == null)?"":cellContent));
+				}
+				sheet.addRow(cellData);
+			}
+       sheet.addRow(sheet.addLockedCell("EndTableData"));
+        }
+
     }
 
     public ID getResource(){
@@ -537,5 +739,85 @@ public class BoundaryTOP
     {
         c_radout = b;
     }
-  
+    // Added by Nawzad 2010-01-25
+    /**
+     * Gets the table data.
+     * @return The table's data as a two dimension array of object.
+     */
+
+    public Object [][]getTableData()
+    {
+        return c_data;
+    }
+
+ // Added by Nawzad 2010-01-25
+    /**
+     * Sets the variable's data to the table's data
+     * @param  data The data to be set
+     */
+
+    public void setTableData(Object [][] data)
+    {
+        c_data = data;
+    }
+// Added by Nawzad 2010-01-25
+      /**
+     * Gets the table data. If the tabel have only one row
+     * @return The table data's upper bound.
+     */
+
+    public String getTabelsMaximum()
+    {
+        if(c_data == null)
+            return "";
+        else
+          {
+           String max =  (String)c_data[0][3];
+           if(!max.equals(""))
+           return max;
+           else
+               return "0.0";
+        }
+    }
+
+    // Added by Nawzad 2010-01-25
+      /**
+     * Gets the table data. If the tabel have only one row
+     * @return The table data's lower bound.
+     */
+    public String getTabelsMinimum()
+    {
+    if(c_data == null)
+       return "";
+    else
+       {
+       String min =  (String)c_data[0][2];
+       if(!min.equals(""))
+            return min;
+       else
+            return "0.0";
+       }
+    }
+
+    // Added by Nawzad 2010-01-25
+    /**
+     * Gets the current Timestep for the Nod.
+     * @return The Nod's current Timestep.
+     */
+
+    public String getCurrentTimestep()
+    {
+        return c_currentTimestep;
+    }
+
+ // Added by Nawzad 2010-01-25
+    /**
+     * Sets the variable's cts to the Nod's current Timestep
+     * @param  cts The cts to be set
+     */
+
+    public void setCurrentTimestep(String cts)
+    {
+        c_currentTimestep = cts;
+    }
 }
