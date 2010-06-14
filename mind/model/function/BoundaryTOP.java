@@ -448,7 +448,10 @@ if(c_currentTimestep.equals("TOP"))
                      {
                      for(int j = 0; j< 4; j++)
                        {
-                       tableData[i][j]= sVec[k];
+                       if(sVec[k].equals(" "))
+                           tableData[i][j]= "";
+                       else
+                            tableData[i][j]= sVec[k];
                        k++;
                        if(k == x)
                           break;
