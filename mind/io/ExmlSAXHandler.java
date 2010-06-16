@@ -208,7 +208,7 @@ public class ExmlSAXHandler extends DefaultHandler {
         if (qName.equals("Data")&& boundaryTopFuction)
             {
             if(charStr == null)
-               charStr = " ";
+               charStr = "";
             if(charStr.equals("EndTableData"))
                 {
                 int sTmplength = dataTabel.length();
@@ -221,10 +221,15 @@ public class ExmlSAXHandler extends DefaultHandler {
                   list.addLast(sTmp);
                   charStr = null;
                   boundaryTopFuction =false;
+                  dataTabel = "[";
                   }
                 }
             else
+                {
+                if(charStr.equals(" "))
+                       charStr= "";
                 dataTabel = dataTabel+charStr+",";
+                }
 
             charStr = null;
         }
