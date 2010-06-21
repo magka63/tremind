@@ -4,18 +4,22 @@
  * Martin Hagman <marha189@student.liu.se>
  * Henrik Norin <henno776@student.liu.se>
  * Anna Stjerneby <annst566@student.liu.se>
- * Tim TerlegÂrd <timte878@student.liu.se>
+ * Tim TerlegÔøΩrd <timte878@student.liu.se>
  * Johan Trygg <johtr599@student.liu.se>
- * Peter ≈strand <petas096@student.liu.se>
+ * Peter ÔøΩstrand <petas096@student.liu.se>
  *
  * Copyright 2004
  * Johan Bengtgsson <johbe496@student.liu.se>
  * Daniel Campos <danca226@student.liu.se>
- * Martin Fagerfj‰ll <marfa233@student.liu.se> 
+ * Martin FagerfjÔøΩll <marfa233@student.liu.se> 
  * Daniel Ferm <danfe666@student.liu.se>
  * Able Mahari <ablma616@student.liu.se>
  * Andreas Remar <andre063@student.liu.se> 
  * Haider Shareef <haish292@student.liu.se>
+ *
+ * Copyright 2010:
+ * Nawzad Mardan <nawzad.mardan@liu.se>
+ *
  * 
  * This file is part of reMIND.
  *
@@ -260,8 +264,26 @@ public class CplexOut
 	    m_tokenizer = new StringTokenizer(m_row);
 
 	    try{
-		m_token = m_tokenizer.nextToken();
-	    }
+            m_token = m_tokenizer.nextToken();
+             /*
+            * Added by Nawzad Mardan 20100621
+            When reMIND runs in order to create the MPS file from RMD file ‚ÄúThe model‚Äù
+            and to create OPT file CPLEX runs, the program (reMIND) knows which CPLEX
+            version have been used and therefore right filter method will be used to
+            extract the results (right parameters) from the OPT file. But if CPLEX runs
+            manually, then the program does not know which version of CPLEX has been used.
+            So the outcome from the program will be wrong, because wrong extraction method
+            will be used for filtering. Therefore, the following code has been
+            added in order to use (choose) right method for filtering.
+            */
+            if(m_token.compareTo("<?xml") ==0)
+                {
+                m_fileReader.close();
+                m_result = newVersionload(filename);
+                return m_result;
+                }
+
+            }
 	    catch(NoSuchElementException e) {
 		/* we probably found an empty line, continue */
 	    }
