@@ -303,6 +303,7 @@ if(c_currentTimestep.equals("TOP"))
             {
             upperbound.addVariable(aVar);
             control.add(upperbound);
+            usrsetZero = false;
             }
             //}
         }// END FOR LOOP DATA

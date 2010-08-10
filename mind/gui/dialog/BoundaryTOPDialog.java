@@ -821,6 +821,7 @@ private void btnDeleteRowActionPerformed()
         c_tableModel.setData(data);
         c_tableModel.fireTableDataChanged();
         c_tableModel.fireTableStructureChanged();
+        c_function.setTableData(c_tableModel.getData());
       } // END if(numberOfColumns > 2)
 }
 private void updateTable()
