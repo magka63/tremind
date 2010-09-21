@@ -53,6 +53,8 @@ If you are a user of reMIND and have used the software as basis in a scientific 
 ||Steel industry||SSAB, Luleå||Chuan Wang||Wang, Ryman and Dahl, 2008; <br>Wang, Ryman, Larsson, Wikström and Grip, 2007; <br>Wang, Larsson, Ryman, Grip Wikström, Johnsson and Engdahl, 2008||
 ||Steel industry||SSAB, Luleå||Kimmo Kinnunen||Kinnunen, Wang, Larsson and Perander, 2008||
 ||Steel industry||SSAB, Luleå||Linda Bergman||Bergman, Larsson, Wikström, Ökvist, Zuo, and Jansson, 2008||
+||Pulp and paper mill, <br>biomass gasification||Billerud, Karslborg||Elisabeth Wetterlund||Wetterlund, Karlsson and Harvey, 2010||
+
 
 
 <br>
