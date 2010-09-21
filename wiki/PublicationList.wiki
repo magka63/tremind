@@ -111,8 +111,9 @@ If you are a user of reMIND and have used the software as basis in a scientific 
  # Wang, C., Ryman, C., Larsson, M., Wikström, J-O. and Grip, C-E, A model on CO2 emission reduction in integrated steelmaking by optimization methods, 3rd International Green Energy Conference, June 18-20, 2007, Västerås, Sweden, 2007.
  # Wang, C., Larsson, M., Ryman, C., Grip, C-E., Wikström, J-O., Johnsson, A. and Engdahl, J., A model on CO2 emission reduction in integrated steelmaking by optimization methods, International Journal of Energy Research. In Press, 2008.
  # Wetterlund, E., Difs, K. and Söderström, M. Energy polocoes affecting biomass gasification applications in district heating systems,  The First International Conference on Applied Energy (ICAE09), 5-7 January 2009, Hong Kong, 2009.
+ # Wetterlund, E., Karlsson, M. and Harvey, S. Biomass gasification integrated with a pulp and paper mill – the need for economic policies promoting biofuels., Chemical Engineering Transactions, 21, 1207-1212 DOI:10.3303/CET1021202, 2010.
  # Wolf, A., Karlsson, M., Evaluating the environmental benefits of Industrial Symbiosis - Discussion and demonstration of an approach. Progress in Industrial Ecology - An International Journal, Vol. 5, Nr. 5-6, pp 502-517, Inderscience Enterprises Ltd, 2008.
- # Wetterlund E., Karlsson M. and Harvey S. Biomass gasification integrated with a pulp and paper mill – the need for economic policies promoting biofuels., Chemical Engineering Transactions, 21, 1207-1212 DOI:10.3303/CET1021202, 2010.
+
 
 
 ==Reports based totally or partly on models built in the analysis tool MIND/reMIND (also found in the tables above)==
