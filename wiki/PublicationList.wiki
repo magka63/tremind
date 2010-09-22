@@ -49,11 +49,12 @@ If you are a user of reMIND and have used the software as basis in a scientific 
 ||Pulp mill||FRAM-mill||Inger-Lise Svensson, <br>Johanna Jönsson||Svensson, Jönsson, Berntsson and Moshfegh, 2008; <br>Jönsson, Svensson, Berntsson and Moshfegh, 2008||
 ||Pulp mill||FRAM-mill||Inger-Lise Svensson||Svensson and Moshfegh, 2008||
 ||Pulp mill||FRAM-mill||Johanna Jönsson||Jönsson and Algehed, 2008||
-||District heating system||Tekniska Verken i Linköping||Elisabeth Wetterlund, <br>(Kristina Difs)||Difs, Wetterlund, Trygg, Söderström, 2008; <br>Wetterlund, Difs, Söderström, 2009||
+||District heating system||Tekniska Verken i Linköping||Elisabeth Wetterlund, <br>(Kristina Difs)||Difs, Wetterlund, Trygg, Söderström, 2010; <br>Wetterlund, Difs, Söderström, 2009||
 ||Steel industry||SSAB, Luleå||Chuan Wang||Wang, Ryman and Dahl, 2008; <br>Wang, Ryman, Larsson, Wikström and Grip, 2007; <br>Wang, Larsson, Ryman, Grip Wikström, Johnsson and Engdahl, 2008||
 ||Steel industry||SSAB, Luleå||Kimmo Kinnunen||Kinnunen, Wang, Larsson and Perander, 2008||
 ||Steel industry||SSAB, Luleå||Linda Bergman||Bergman, Larsson, Wikström, Ökvist, Zuo, and Jansson, 2008||
 ||Pulp and paper mill, <br>biomass gasification||Billerud, Karlsborg||Elisabeth Wetterlund||Wetterlund, Karlsson and Harvey, 2010||
+||District heating system||Tekniska Verken i Linköping||Elisabeth Wetterlund||Wetterlund, Söderström, 2010||
 
 
 
@@ -66,7 +67,7 @@ If you are a user of reMIND and have used the software as basis in a scientific 
  # Bengtsson, C., Karlsson, M., Berntsson, T. and Söderström, M., Co-ordination of Pinch Technology and the MIND method – applied to a Swedish board mill, Applied Thermal Engineering 22 (2): 133-144, Pergamon Press, 2002a. 
  # Bengtsson, C., Karlsson, M., Berntsson, T. and Söderström, M., Cost-efficient CO2-reduction in the pulp and paper industry - a case study, In Proceedings of the 1st International Conference on Sustainable Energy Technologies, Porto, Portugal, 12-14 June 2002b.
  # Bergman, L., Larsson, M., Wikström, J-O., Ökvist, L., Zuo, G. and Jansson, B., Oxygen blast furnace process for Swedish conditions, Scanmet - 3rd International Conference on Process Development in Iron and Steelmaking, June 8-11, 2008, Luleå, Sweden, 2008.
- # Difs, K., Wetterlund, E., Trygg, L., Söderström, M., Biomass gasification opportunities in a district heating system, submitted for publication in Biomass & Bioenergy, 2008.
+ # Difs, K., Wetterlund, E., Trygg, L., Söderström, M., Biomass gasification opportunities in a district heating system, Biomass & Bioenergy Vol 34 No 5, pp. 637-651, 2010.
  # Gong, M., Optimization of Industrial Process by Introducing Feedback Loops into MIND Method, Energy - The International Journal, Vol 28, No 15, pp.1655-1669, 2003. 
  # Gong M., Karlsson M., Coordination of exergy analysis and the MIND method - applied to a pulp and board mill, International Journal of Exergy, Vol. 1, No. 3, pp. 289-302, Wiley, 2004.
  # Heidari Tari, M. and Söderström M., Optimisation Modelling of Industrial Energy Systems Using MIND – Introducing the effect of material storage, International Journal of Operational Research, Vol. 142, No. 2, pp. 419-433, 2002a. 
@@ -112,6 +113,7 @@ If you are a user of reMIND and have used the software as basis in a scientific 
  # Wang, C., Larsson, M., Ryman, C., Grip, C-E., Wikström, J-O., Johnsson, A. and Engdahl, J., A model on CO2 emission reduction in integrated steelmaking by optimization methods, International Journal of Energy Research. In Press, 2008.
  # Wetterlund, E., Difs, K. and Söderström, M. Energy polocoes affecting biomass gasification applications in district heating systems,  The First International Conference on Applied Energy (ICAE09), 5-7 January 2009, Hong Kong, 2009.
  # Wetterlund, E., Karlsson, M. and Harvey, S. Biomass gasification integrated with a pulp and paper mill – the need for economic policies promoting biofuels., Chemical Engineering Transactions, 21, 1207-1212 DOI:10.3303/CET1021202, 2010.
+# Wetterlund, E., Söderström, M. Biomass gasification in district heating systems - the effect of economic energy policies. Applied Energy Vol 87 No 9, pp. 2914-2922, 2010.
  # Wolf, A., Karlsson, M., Evaluating the environmental benefits of Industrial Symbiosis - Discussion and demonstration of an approach. Progress in Industrial Ecology - An International Journal, Vol. 5, Nr. 5-6, pp 502-517, Inderscience Enterprises Ltd, 2008.
 
 
