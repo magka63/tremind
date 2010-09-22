@@ -113,7 +113,7 @@ If you are a user of reMIND and have used the software as basis in a scientific 
  # Wang, C., Larsson, M., Ryman, C., Grip, C-E., Wikström, J-O., Johnsson, A. and Engdahl, J., A model on CO2 emission reduction in integrated steelmaking by optimization methods, International Journal of Energy Research. In Press, 2008.
  # Wetterlund, E., Difs, K. and Söderström, M. Energy polocoes affecting biomass gasification applications in district heating systems,  The First International Conference on Applied Energy (ICAE09), 5-7 January 2009, Hong Kong, 2009.
  # Wetterlund, E., Karlsson, M. and Harvey, S. Biomass gasification integrated with a pulp and paper mill – the need for economic policies promoting biofuels., Chemical Engineering Transactions, 21, 1207-1212 DOI:10.3303/CET1021202, 2010.
-# Wetterlund, E., Söderström, M. Biomass gasification in district heating systems - the effect of economic energy policies. Applied Energy Vol 87 No 9, pp. 2914-2922, 2010.
+ # Wetterlund, E., Söderström, M. Biomass gasification in district heating systems - the effect of economic energy policies. Applied Energy Vol 87 No 9, pp. 2914-2922, 2010.
  # Wolf, A., Karlsson, M., Evaluating the environmental benefits of Industrial Symbiosis - Discussion and demonstration of an approach. Progress in Industrial Ecology - An International Journal, Vol. 5, Nr. 5-6, pp 502-517, Inderscience Enterprises Ltd, 2008.
 
 
