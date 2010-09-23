@@ -55,6 +55,7 @@ If you are a user of reMIND and have used the software as basis in a scientific 
 ||Steel industry||SSAB, Luleå||Linda Bergman||Bergman, Larsson, Wikström, Ökvist, Zuo, and Jansson, 2008||
 ||Pulp and paper mill, <br>biomass gasification||Billerud, Karlsborg||Elisabeth Wetterlund||Wetterlund, Karlsson and Harvey, 2010||
 ||District heating system||Tekniska Verken i Linköping||Elisabeth Wetterlund||Wetterlund, Söderström, 2010||
+||SME||Typical average SME||Yaw Sasu-Boakye||Sasu-Boakye, 2010||
 
 
 
@@ -126,6 +127,7 @@ If you are a user of reMIND and have used the software as basis in a scientific 
  # Karlsson, M., Rohdin, P., Karlsson, F. and Moshfegh, B., Energikonsekvenser av strukturerat energieffektivitetstänkande för Arla Foods (EKSET) – slutrapport, LiTH-IKP-R-1364, Linköpings Universitet, 2005.
  # Karlsson, M., Modellering av Sandvik AB värmesystem tillsammans med SEAB, LIU-IEI-R-07/0014--SE, Linköpings Universitet, 2007 
  # Kronman, J., Energikartläggning och modellering av Arla Foods anläggning i Göteborg, LiTH-IKP-R-1333 (Projektarbete), 2004.
+ # Sasu-Boakye, Y., MIND - Modelling in Industry for Increased Energy Efficiency and Reduced Greenhouse Gas Emissions, LIU-IEI-TEK-A—10/00809—SE, Linköpings universitet, 2010.
  # Söderström, M., Energikartläggning och modellering av Arla Foods mejeri i Linköping, LiTH-IKP-Ex-2119 (Examensarbete), 2004.
 
 
