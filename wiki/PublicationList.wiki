@@ -56,7 +56,7 @@ If you are a user of reMIND and have used the software as basis in a scientific 
 ||Pulp and paper mill, <br>biomass gasification||Billerud, Karlsborg||Elisabeth Wetterlund||Wetterlund, Karlsson and Harvey, 2010||
 ||District heating system||Tekniska Verken i Linköping||Elisabeth Wetterlund||Wetterlund, Söderström, 2010||
 ||SME||Typical average SME||Yaw Sasu-Boakye||Sasu-Boakye, 2010||
-||Dairy & <br>Pulp and paper mill||Based on: <br>ArlaFoods, Linköping <br>StoraEnso Skoghall||Magnus Karlsson||Karlsson, 2011||
+||Dairy & <br>Pulp and paper mill||Based on: <br> ArlaFoods, Linköping <br> StoraEnso Skoghall||Magnus Karlsson||Karlsson, 2011||
 
 
 
