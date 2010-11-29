@@ -78,6 +78,7 @@ If you are a user of reMIND and have used the software as basis in a scientific 
  # Heidari Tari, M., Energy Efficiency in Industrial Systems – On Benefits of Using Optimisation Models, Submitted to International Journal of General Systems, 2002b.
  # Jönsson, J., Svensson, I., Berntsson, T., Moshfegh, B., Excess Heat from Chemical Pulp Mills: Trade-offs between Internal and External Use in the Case of Sweden – Part 2: Results, Energy Policy, Vol. 36, No. 11, pp 4186-4197, 2008.
  # Jönsson, J., Algehed, J., Economic trade-offs between internal and external use of excess heat from kraft pulp mills in Sweden, ECOS, Krakow, 2008.
+ # Karlsson M. The MIND method: A decision support for optimization of industrial energy systems - Principles and case studies, Applied Energy, Vol. 88, Nr. 3, pp 577-589, Elsevier, 2011 
  # Karlsson, M. and Söderström M., Sensitivity analysis of investments in the pulp and paper industry - on investments in the chemical recovery cycle at a board mill, International Journal of Energy Research 26 (14): 1253-1267, Wiley, 2002.
  # Karlsson, M. and Carlson, A., Increasing the use of wood fuel in a pulp and paper mill – investment opportunity and external costs, In Proceedings of the 10th Biennal Bioenergy Conference, Boise, Idaho, USA, 22-26 September 2002.
  # Karlsson, M., A pulp and paper mill in the deregulated electricity market – strategies for electricity production, Submitted to Energy Conversion and Management, Elsevier, 2002.
