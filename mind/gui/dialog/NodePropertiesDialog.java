@@ -4,9 +4,9 @@
  * Martin Hagman <marha189@student.liu.se>
  * Henrik Norin <henno776@student.liu.se>
  * Anna Stjerneby <annst566@student.liu.se>
- * Tim Terlegård <timte878@student.liu.se>
+ * Tim Terlegï¿½rd <timte878@student.liu.se>
  * Johan Trygg <johtr599@student.liu.se>
- * Peter Åstrand <petas096@student.liu.se>
+ * Peter ï¿½strand <petas096@student.liu.se>
  *
  * This file is part of reMIND.
  *
@@ -38,7 +38,7 @@ import mind.model.*;
 /**
  * Dialog to keep track of a nodes properties and change them at need
  *
- * @author  Tim Terlegård
+ * @author  Tim Terlegï¿½rd
  * @version 2001-07-24
  */
 public class NodePropertiesDialog
@@ -87,7 +87,7 @@ public class NodePropertiesDialog
 	listFunctions = new JList ();
 	//2002-12-16 scrollbars for listFunctions
 	listpane = new JScrollPane();
-	btnAdd = new JButton ();
+//	btnAdd = new JButton ();
 	btnRemove = new JButton ();
 	btnProperties = new JButton ();
 	pnlProperties = new JPanel ();
@@ -205,19 +205,19 @@ public class NodePropertiesDialog
 	gridBagConstraints4.insets = new java.awt.Insets (10, 10, 10, 10);
 	pnlButtons.add (listpane, gridBagConstraints4);
 
-	btnAdd.setPreferredSize (new java.awt.Dimension(85, 27));
-	btnAdd.setMaximumSize (new java.awt.Dimension(85, 27));
-	btnAdd.setText ("Add...");
-	btnAdd.setMinimumSize (new java.awt.Dimension(85, 27));
-	btnAdd.addActionListener (new java.awt.event.ActionListener () {
-		public void actionPerformed (java.awt.event.ActionEvent evt) {
-		    btnAddActionPerformed (evt);
-		}
-	    });
+//	btnAdd.setPreferredSize (new java.awt.Dimension(85, 27));
+//	btnAdd.setMaximumSize (new java.awt.Dimension(85, 27));
+//	btnAdd.setText ("Add...");
+//	btnAdd.setMinimumSize (new java.awt.Dimension(85, 27));
+//	btnAdd.addActionListener (new java.awt.event.ActionListener () {
+//		public void actionPerformed (java.awt.event.ActionEvent evt) {
+//		    btnAddActionPerformed (evt);
+//		}
+//	    });
 
-	gridBagConstraints4 = new java.awt.GridBagConstraints ();
-	gridBagConstraints4.insets = new java.awt.Insets (10, 0, 0, 10);
-	pnlButtons.add (btnAdd, gridBagConstraints4);
+//	gridBagConstraints4 = new java.awt.GridBagConstraints ();
+//	gridBagConstraints4.insets = new java.awt.Insets (10, 0, 0, 10);
+//	pnlButtons.add (btnAdd, gridBagConstraints4);
 
 	btnRemove.setPreferredSize (new java.awt.Dimension(85, 27));
 	btnRemove.setMaximumSize (new java.awt.Dimension(85, 27));
@@ -450,7 +450,7 @@ public class NodePropertiesDialog
 						  c_gui);
 
             }
-	    /* Added by Johan Sjöstrand 2003-11-20 */
+	    /* Added by Johan Sjï¿½strand 2003-11-20 */
 	    else if (functionType.equals("InvestmentCost")) {
 		dialog = new InvestmentCostDialog(this, true, c_nodeID,
 						  c_gui.getFunction(c_nodeID,
@@ -458,7 +458,7 @@ public class NodePropertiesDialog
 						  c_gui);
 
             }
-            /* Added by  Jonas Sääv 2004-04-25 */
+            /* Added by  Jonas Sï¿½ï¿½v 2004-04-25 */
             else if (functionType.equals("StorageEquation")) {
                 dialog = new StorageDialog(this, true, c_nodeID,
                                                   c_gui.getFunction(c_nodeID,
@@ -566,7 +566,7 @@ public class NodePropertiesDialog
     private JPanel pnlFunctions;
     private JPanel pnlButtons;
     private JList listFunctions;
-    private JButton btnAdd;
+   // private JButton btnAdd;
     private JButton btnRemove;
     private JButton btnProperties;
     private JPanel pnlProperties;
