@@ -33,7 +33,7 @@ package mind;
 
 public interface GlobalStringConstants {
 
-  final public String reMIND_version = "2.7";
+  final public String reMIND_version = "3.0";
 
   // Strings used in optimization automation
   final public static String OPT_NONE  = "None";
