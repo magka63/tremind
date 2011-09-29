@@ -1,18 +1,18 @@
 /*
  * Copyright 2004:
  * Marcus Bergendorff <amaebe-1@student.luth.se>
- * Jan Sköllermark <jansok-1@student.luth.se>
+ * Jan Skï¿½llermark <jansok-1@student.luth.se>
  * Nils-Oskar Spett <nilspe-1@student.luth.se>
  * Richard Harju <richar-1@student.luth.se>
  *
  * Copyright 2007:
  * Per Fredriksson <perfr775@student.liu.se>
- * David Karlslätt <davka417@student.liu.se>
+ * David Karlslï¿½tt <davka417@student.liu.se>
  * Tor Knutsson	<torkn754@student.liu.se>
- * Daniel Källming <danka053@student.liu.se>
+ * Daniel Kï¿½llming <danka053@student.liu.se>
  * Ted Palmgren <tedpa175@student.liu.se>
  * Freddie Pintar <frepi150@student.liu.se>
- * Mårten Thurén <marth852@student.liu.se> 
+ * Mï¿½rten Thurï¿½n <marth852@student.liu.se> 
  *
  * This file is part of reMIND.
  *
@@ -59,7 +59,7 @@ import mind.model.function.parser.SFParser;
 /**
  * FunctionEditor
  * @version 2007-12-12
- * @author Marcus Bergendorff and Jan Sköllermark
+ * @author Marcus Bergendorff and Jan Skï¿½llermark
  * @author Freddie Pintar
  * @author Tor Knutsson
  */
@@ -539,74 +539,85 @@ public class FunctionEditor extends NodeFunction {
 		c_timeStepInfo = newTSinfo;
 	}
 
+	/**
+	 * Creates a String with xml code.
+	 * 
+	 * Changed to use StringBuilder for speeding up
+	 * the string concat. By Elias NÃ¤slund - 2011-09-16
+	 */
 	public String toXML(ResourceControl resource, int indent) {
-		String xml = XML.indent(indent) + "<functionEditor>" + XML.nl();
+		StringBuilder sb = new StringBuilder(97);
+		// The magic number 97 is the least number of chars, change accordingly 
+		// if the code is changed.
+		sb.append(XML.indent(indent)).append("<functionEditor>").append(XML.nl());
 		//save label
 		if (getLabel() != null) {
-			xml = xml + XML.indent(indent + 1) + "<label>" + getLabel()
-					+ "</label>" + XML.nl();
+			sb.append(XML.indent(indent + 1)).append("<label>").append(getLabel())
+					.append("</label>").append(XML.nl());
 		}
 
 		//---intVar
-		xml = xml + XML.indent(indent + 1) + "<intVar>[";
+		sb.append(XML.indent(indent + 1)).append("<intVar>[");
 		for (Enumeration e = c_intVars.elements(); e.hasMoreElements();) {
-			xml += e.nextElement();
+			sb.append(e.nextElement());
 			if (e.hasMoreElements())
-				xml += ",";
+				sb.append(",");
 		}
-		xml += "]</intVar>" + XML.nl();
+		sb.append("]</intVar>").append(XML.nl());
 
 		//---floatVar
-		xml = xml + XML.indent(indent + 1) + "<floatVar>[";
+		sb.append(XML.indent(indent + 1)).append("<floatVar>[");
 		for (Enumeration e = c_floatVars.elements(); e.hasMoreElements();) {
-			xml += e.nextElement();
+			sb.append(e.nextElement());
 			if (e.hasMoreElements())
-				xml += ",";
+				sb.append(",");
 		}
-		xml += "]</floatVar>" + XML.nl();
+		sb.append("]</floatVar>").append(XML.nl());
 
 		//maxIntVar
-		xml = xml + XML.indent(indent + 1) + "<maxIntVar>"
-				+ String.valueOf(maxIntVar) + "</maxIntVar>" + XML.nl();
+		sb.append(XML.indent(indent + 1)).append("<maxIntVar>")
+				.append(String.valueOf(maxIntVar)).append("</maxIntVar>").append(XML.nl());
 
 		//maxFloatVar
-		xml = xml + XML.indent(indent + 1) + "<maxFloatVar>"
-				+ String.valueOf(maxFloatVar) + "</maxFloatVar>" + XML.nl();
-
-		//----timestep
+		sb.append(XML.indent(indent + 1)).append("<maxFloatVar>")
+				.append(String.valueOf(maxFloatVar)).append("</maxFloatVar>").append(XML.nl());
+		
+		DefaultTableModel model;
+		String cellContent;
 		for (Enumeration e = c_timeStepInfo.elements(); e.hasMoreElements();) {
-			DefaultTableModel model = (DefaultTableModel) e.nextElement();
-			xml += XML.indent(indent + 1) + "<timestep>" + XML.nl();
+			model = (DefaultTableModel) e.nextElement();
+			sb.append(XML.indent(indent + 1)).append("<timestep>").append(XML.nl());
 
 			//save number of rows and columns
-			xml += XML.indent(indent + 2) + "<rows>" + model.getRowCount()
-					+ "</rows>" + XML.nl();
+			sb.append(XML.indent(indent + 2)).append("<rows>").append(model.getRowCount())
+					.append("</rows>").append(XML.nl());
 
-			xml += XML.indent(indent + 2) + "<columns>"
-					+ model.getColumnCount() + "</columns>" + XML.nl();
+			sb.append(XML.indent(indent + 2)).append("<columns>")
+					.append(model.getColumnCount()).append("</columns>").append(XML.nl());
 
 			//save cell contents
 			for (int i = 0; i < model.getRowCount(); i++) {
-				xml += XML.indent(indent + 2) + "<row>" + XML.nl();
+				sb.append(XML.indent(indent + 2)).append("<row>").append(XML.nl());
 				for (int j = 0; j < model.getColumnCount(); j++) {
-					String cellContent = (String) model.getValueAt(i, j);
+					cellContent = (String) model.getValueAt(i, j);
 
 					//replaces '<' and '>'
 					if (cellContent != null) {
 						cellContent = cellContent.replaceAll(">", "&gt;");
 						cellContent = cellContent.replaceAll("<", "&lt;");
 					}
-					xml += XML.indent(indent + 3) + "<cell>" + cellContent
-							+ "</cell>" + XML.nl();
+					sb.append(XML.indent(indent + 3)).append("<cell>").append(cellContent)
+							.append("</cell>").append(XML.nl());
 				}
-				xml += XML.indent(indent + 2) + "</row>" + XML.nl();
+				sb.append(XML.indent(indent + 2)).append("</row>").append(XML.nl());
 			}
-			//----/timestep
-			xml += XML.indent(indent + 1) + "</timestep>" + XML.nl();
-		}
 
-		xml = xml + XML.indent(indent) + "</functionEditor>" + XML.nl();
-		return xml;
+			//----/timestep
+			sb.append(XML.indent(indent + 1)).append("</timestep>").append(XML.nl());
+		}
+		
+		sb.append(XML.indent(indent)).append("</functionEditor>").append(XML.nl());
+		return sb.toString();
 	}
 
 	/**
@@ -679,7 +690,7 @@ public class FunctionEditor extends NodeFunction {
 	}
 
     /**
-    * Implementera den här den som kan!!!!
+    * Implementera den hï¿½r den som kan!!!!
     * Should return the answer to the question: "does this function use the Flow 'flow'
     * by any means in any timestep?" This info is needed to find out if it is okey to delete the flow without causing
     * any problems. This function however, shall not perform any actual deletion, just check for any relations.
