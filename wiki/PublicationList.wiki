@@ -56,8 +56,9 @@ If you are a user of reMIND and have used the software as basis in a scientific 
 ||Pulp and paper mill, <br>biomass gasification||Billerud, Karlsborg||Elisabeth Wetterlund||Wetterlund, Karlsson and Harvey, 2010||
 ||District heating system||Tekniska Verken i Linköping||Elisabeth Wetterlund||Wetterlund, Söderström, 2010||
 ||SME||Typical average SME||Yaw Sasu-Boakye||Sasu-Boakye, 2010||
-||N/A||N/A||Magnus Karlsson||Karlsson and Mardan, 2010||
+||N/A||N/A||Nawzad Mardan||Karlsson and Mardan, 2010||
 ||Dairy <br>Pulp and paper mill||Arla Foods, Linköping <br> Stora Enso Skoghall||Magnus Karlsson||Karlsson, 2011||
+||Dairy||Arla Foods, Linköping||Nawzad Mardan||Mardan and Karlsson, 2011||
 
 
 
@@ -97,6 +98,7 @@ If you are a user of reMIND and have used the software as basis in a scientific 
  # Larsson, M., Dahl, J. and Grip, C-E, Process integration in the steel industry, Proceedings of the 2nd International Conference on New Developments in Metallurgical Process Technology, 19-21 September 2004 - Riva del Garda, Italy, 2004.
  # Larsson, M. and Dahl, J., Development of an integrated method for analysing energy, environmental and economic efficiency for an integrated steel plant, , Proceedings of the 7th Conference on Process Integration, Modelling and Optimisation for Energy Saving and Pollution Reduction, 22-26 August 2004, Prague – Czech Republic, 2004.
  # Larsson, M., Wang, C., Dahl, J., Wedholm, C., Samuelsson, M., Magnusson, H-O, Lampinen, F., Su, F. and Grip, C-E, Improved energy and material efficiency using new tools for global optimisation of residue material flows, Scanmet II, Proceedings of the 2nd International Conference on Process Development in Iron and Steelmaking, 6-9 June, Luleå, Sweden, 2004.
+ # Mardan N. and Karlsson M., and Klahr, R., Industrial decision-making for energy efficiency – combining optimization and simulation. ECOS2011, 24rd International Conference on Efficiency, Cost, Optimization, Simulation and Environmental Impact of Energy Systems, Novi Sad, Serbia, pp. 1442-1452. 2011.
  # Nilsson, K., Söderström, M. and Karlsson B.G., Non linear relationships in industrial energy systems analysis, European Simulation Multiconference, Rome, Italy, June 7-9, 1989.
  # Nilsson, K. and Söderström, M., Optimizing the Operating Strategy of A Pulp and Paper Mill using the MIND Method, Energy – The International Journal, Vol. 17, No. 10, pp. 945-953, 1992.
  # Nilsson, K. and Söderström, M., Industrial Applications of Production Planning with Optimal Electricity Demand, Applied Energy, Vol. 46, No. 2, pp. 181-192, 1993.
