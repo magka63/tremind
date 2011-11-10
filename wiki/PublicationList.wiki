@@ -48,7 +48,7 @@ If you are a user of reMIND and have used the software as basis in a scientific 
 ||Foundry industry||SKF||Patrik Thollander, <br>Nawzad Mardan, <br>Magnus Karlsson||Thollander, Mardan and Karlsson, 2009||
 ||Pulp mill||FRAM-mill||Inger-Lise Svensson, <br>Johanna Jönsson||Svensson, Jönsson, Berntsson and Moshfegh, 2008; <br>Jönsson, Svensson, Berntsson and Moshfegh, 2008||
 ||Pulp mill||FRAM-mill||Inger-Lise Svensson||Svensson and Moshfegh, 2008||
-||Pulp mill||FRAM-mill||Johanna Jönsson||Jönsson and Algehed, 2008||
+||Pulp mill||FRAM-mill||Johanna Jönsson||Jönsson and Algehed, 2008; <br>Jönsson and Algehed, 2010||
 ||District heating system||Tekniska Verken i Linköping||Elisabeth Wetterlund, <br>(Kristina Difs)||Difs, Wetterlund, Trygg, Söderström, 2010; <br>Wetterlund, Difs, Söderström, 2009||
 ||Steel industry||SSAB, Luleå||Chuan Wang||Wang, Ryman and Dahl, 2008; <br>Wang, Ryman, Larsson, Wikström and Grip, 2007; <br>Wang, Larsson, Ryman, Grip Wikström, Johnsson and Engdahl, 2008||
 ||Steel industry||SSAB, Luleå||Kimmo Kinnunen||Kinnunen, Wang, Larsson and Perander, 2008||
@@ -79,6 +79,7 @@ If you are a user of reMIND and have used the software as basis in a scientific 
  # Heidari Tari, M., Energy Efficiency in Industrial Systems – On Benefits of Using Optimisation Models, Submitted to International Journal of General Systems, 2002b.
  # Jönsson, J., Svensson, I., Berntsson, T., Moshfegh, B., Excess Heat from Chemical Pulp Mills: Trade-offs between Internal and External Use in the Case of Sweden – Part 2: Results, Energy Policy, Vol. 36, No. 11, pp 4186-4197, 2008.
  # Jönsson, J., Algehed, J., Economic trade-offs between internal and external use of excess heat from kraft pulp mills in Sweden, ECOS, Krakow, 2008.
+ # Jönsson, J., Algehed, J., Pathways to a sustainable European kraft pulp industry: Trade-offs between economy and CO2 emissions for different technologies and system solutions. Applied Thermal Engineering Vol. 30, pp 2315-2325, 2010.
  # Karlsson M. The MIND method: A decision support for optimization of industrial energy systems - Principles and case studies, Applied Energy, Vol. 88, Nr. 3, pp 577-589, Elsevier, 2011 
  # Karlsson, M. and Söderström M., Sensitivity analysis of investments in the pulp and paper industry - on investments in the chemical recovery cycle at a board mill, International Journal of Energy Research 26 (14): 1253-1267, Wiley, 2002.
  # Karlsson, M. and Carlson, A., Increasing the use of wood fuel in a pulp and paper mill – investment opportunity and external costs, In Proceedings of the 10th Biennal Bioenergy Conference, Boise, Idaho, USA, 22-26 September 2002.
