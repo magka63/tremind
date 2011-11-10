@@ -56,6 +56,7 @@ If you are a user of reMIND and have used the software as basis in a scientific 
 ||Pulp and paper mill, <br>biomass gasification||Billerud, Karlsborg||Elisabeth Wetterlund||Wetterlund, Karlsson and Harvey, 2010||
 ||District heating system||Tekniska Verken i Linköping||Elisabeth Wetterlund||Wetterlund, Söderström, 2010||
 ||SME||Typical average SME||Yaw Sasu-Boakye||Sasu-Boakye, 2010||
+||N/A||N/A||Magnus Karlsson||Karlsson and Mardan, 2010||
 ||Dairy <br>Pulp and paper mill||Arla Foods, Linköping <br> Stora Enso Skoghall||Magnus Karlsson||Karlsson, 2011||
 
 
@@ -85,6 +86,7 @@ If you are a user of reMIND and have used the software as basis in a scientific 
  # Karlsson, M. and Carlson, A., Increasing the use of wood fuel in a pulp and paper mill – investment opportunity and external costs, In Proceedings of the 10th Biennal Bioenergy Conference, Boise, Idaho, USA, 22-26 September 2002.
  # Karlsson, M., A pulp and paper mill in the deregulated electricity market – strategies for electricity production, Submitted to Energy Conversion and Management, Elsevier, 2002.
  # Karlsson, M., A systems approach to the reduction of oil demand in a Swedish board mill, Energy – The International Journal 29 (1): 103-124, Elsevier, 2004.
+ # Karlsson M. and Mardan N., Timing and sizing of investments in industrial processes– the use of an optimization tool. ECOS2010, 23rd International Conference on Efficiency, Cost, Optimization, Simulation and Environmental Impact of Energy Systems, Lausanne, Switzerland, Book 4, pp. 263-270, 2010.
  # Karlsson, M., Wolf, A., Using an optimization model to evaluate the economic benefits of industrial symbiosis in the forest industry. Journal of Cleaner Production, Vol. 16, Nr. 14, pp 1536-1544, Elsevier, 2008.
  # Kinnunen, K., Wang, C., Larsson, M. and Perander J., Factory scale energy optimisation of coke oven gas production at Raahe Steelworks, Scanmet - 3rd International Conference on Process Development in Iron and Steelmaking, June 8-11, 2008, Luleå, Sweden, 2008.
  # Klugman, S., Karlsson, M., Moshfegh, B., Modeling an industrial energy system: perspectives on regional heat cooperation, The International Journal of Energy Research, Vol. 32, Nr. 9, pp 793-807, Wiley, 2008.
